@@ -4,6 +4,6 @@
   "name": "Panasonic Smart App",
   "documentation": "https://github.com/PhantasWeng/panasonic_smart_app.git",
   "dependencies": [],
-  "codeowners": [],
+  "codeowners": ["@PhantasWeng"],
   "requirements": []
 }

@@ -1,24 +1,16 @@
 """
-The "hello world" custom component.
-
-This component implements the bare minimum that a component should implement.
-
-Configuration:
-
-To use the hello_word component you will need to add the following to your
-configuration.yaml file.
-
-hello_world:
+panasonic_smart_app
+climate:
+  - platform: panasonic_smart_app
+    username: test_username
+    password: test_password
+    access_token: test_access_token
 """
+import logging
+import voluptuous as vol
 
-# The domain of your component. Should be equal to the name of your component.
-DOMAIN = "panasonic_smart_app"
-
+_LOGGER = logging.getLogger(__name__)
 
 def setup(hass, config):
-    """Set up a skeleton component."""
-    # States are in the format DOMAIN.OBJECT_ID.
-    hass.states.set('panasonic_smart_app.status', 'Works!')
-
-    # Return boolean to indicate that initialization was successfully.
-    return True
+  _LOGGER.debug('The panasonic_smart_app is setup.')
+  return True

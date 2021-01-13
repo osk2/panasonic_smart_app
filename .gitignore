@@ -1,2 +1,4 @@
 _test
 __pycache__
+secrets.py
+*.pyc

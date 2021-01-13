@@ -1,5 +1,6 @@
 import logging
 import voluptuous as vol
+from typing import Any, Dict, Optional, List
 from datetime import timedelta
 import homeassistant.helpers.config_validation as cv
 
@@ -82,7 +83,12 @@ class PanasonicDevice(ClimateEntity):
         self._outside_temp = None
         self._mode = None
         self._eco = 'Auto'
-        self._preset_mode = 'Auto'
+        self._preset_mode = 'off'
+
+    @property
+    def name(self):
+        """Return the display name of this climate."""
+        return 'panasonic_test'
 
     @property
     def temperature_unit(self):
@@ -100,18 +106,23 @@ class PanasonicDevice(ClimateEntity):
         return list(OPERATION_LIST.keys())
 
     @property
-    def preset_mode(self):
+    def preset_mode(self) -> Optional[str]:
         """Return the current preset mode, e.g., home, away, temp.
         Requires SUPPORT_PRESET_MODE.
         """
-        return 'Auto'
+        for key, value in PRESET_LIST.items():
+            if value == self._eco:
+                _LOGGER.debug("Preset mode is {0}".format(key))
+                return key
+
 
     @property
-    def preset_modes(self):
+    def preset_modes(self) -> Optional[List[str]]:
         """Return a list of available preset modes.
         Requires SUPPORT_PRESET_MODE.
         """
-        return SUPPORT_PRESET_MODE
+        _LOGGER.debug("Preset modes are {0}".format(",".join(PRESET_LIST.keys())))
+        return list(PRESET_LIST.keys())
 
     @property
     def fan_mode(self):

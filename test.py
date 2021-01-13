@@ -1,13 +1,35 @@
 """ Panasonic Smart App API """
-import logging, requests, json, pprint
-import voluptuous as vol
+# import logging, requests, json, pprint
+# import voluptuous as vol
 
-def test(hass, config):
-  username = config.get(CONF_USERNAME)
-  password = config.get(CONF_PASSWORD)
-  print(username, password)
+# def test(hass, config):
+#   username = config.get(CONF_USERNAME)
+#   password = config.get(CONF_PASSWORD)
+#   print(username, password)
+from smartApp import SmartApp
+api = SmartApp('account', 'password')
+api.login()
+devices = api.getDevices()
+print(devices)
 
-# test()
+# from api import url
+# print(url.login)
+
+# def smart_app_login(func):
+#   def wrap(*args, **kwargs):
+#     try:
+#       print('smart_app_login try')
+#       print(args, kwargs)
+#     except:
+#       print('smart_app_login except')
+#       print(args, kwargs)
+#   return wrap
+
+# @smart_app_login
+# def test(a):
+#   print('test')
+
+# test('a', id=3)
 
 # logging.basicConfig(level=logging.DEBUG)
 

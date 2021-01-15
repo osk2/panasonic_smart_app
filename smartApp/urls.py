@@ -1,6 +1,4 @@
 """ Panasonic Smart App API """
-import logging, requests, json, pprint
-
 BASE_URL = 'https://ems2.panasonic.com.tw/api'
 
 def login():
@@ -9,4 +7,12 @@ def login():
 
 def getDevices():
   url = f'{BASE_URL}/UserGetRegisteredGWList1'
+  return url
+
+def getDeviceInfo():
+  url = f'{BASE_URL}/DeviceGetInfo'
+  return url
+
+def setCommand():
+  url = f'{BASE_URL}/DeviceSetCommand'
   return url

@@ -1,6 +1,5 @@
 {
     "name": "Panasonic Smart App",
-    "content_in_root": true,
     "render_readme": true,
     "domains": ["climate"],
     "iot_class": "Cloud Polling"

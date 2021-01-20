@@ -140,7 +140,8 @@ class PanasonicDevice(ClimateEntity):
             options = self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01')
             value = list(options.keys())[list(options.values()).index(hvac_mode)]
             self._api.setCommand(self._auth, 1, value)
-            self._api.setCommand(self._auth, 0, 1)
+            if not self._is_on:
+                self._api.setCommand(self._auth, 0, 1)
 
     @property
     def preset_mode(self) -> Optional[str]:

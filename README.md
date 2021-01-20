@@ -34,10 +34,8 @@ climate:
 This project only test with `Panasonic air conditioner - PX series` which use `CZ-T007` wifi adapater. `CZ-T005`, `CZ-T006` or `PXGD` series might occurs some error.
 
 
-[python-panasonic-comfort-cloud]: https://github.com/lostfields/python-panasonic-comfort-cloud
+---
+## And..
+### You can also...
 
-[panasonic_ac]: https://github.com/djbulsink/panasonic_ac
-
-[python-panasonic-smart-app]: https://github.com/PhantasWeng/python-panasonic-smart-app
-
-[panasonic_smart_app]: https://github.com/PhantasWeng/panasonic_smart_app
+<a href="https://www.buymeacoffee.com/phantas"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phantas&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff"></a>

@@ -47,6 +47,15 @@ SUPPORT_FLAGS = (
     # SUPPORT_SWING_MODE
 )
 
+def tryApiStatus(func):
+    def wrapper_call(*args, **kwargs):
+        try:
+            func(*args, **kwargs)
+        except:
+            args[0]._api.login()
+            func(*args, **kwargs)
+    return wrapper_call
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the panasonic cloud components."""
     _LOGGER.debug('The panasonic_smart_app is setting up Platform.')
@@ -86,6 +95,7 @@ class PanasonicDevice(ClimateEntity):
         # self._eco = 'Auto'
         # self._preset_mode = 'off'
 
+    @tryApiStatus
     def update(self):
         _LOGGER.debug('-----------UPDATING-----------')
         """Update the state of this climate device."""
@@ -134,6 +144,7 @@ class PanasonicDevice(ClimateEntity):
             modes_list.append(self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01').get(str(mode[1])))
         return modes_list
 
+    @tryApiStatus
     def set_hvac_mode(self, hvac_mode):
         _LOGGER.debug(f"{self._name} set_hvac_mode: {hvac_mode}")
         if hvac_mode == HVAC_MODE_OFF:
@@ -212,6 +223,7 @@ class PanasonicDevice(ClimateEntity):
         """Return the current temperature."""
         return self._current_temperature
 
+    @tryApiStatus
     def set_temperature(self, **kwargs):
         """Set new target temperature."""
         target_temp = kwargs.get(ATTR_TEMPERATURE)

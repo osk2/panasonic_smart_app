@@ -20,8 +20,8 @@ class SmartApp(object):
       'AppToken': self.app_token
     }
     response = requests.post(urls.login(), json = data)
-    response.raise_for_status()
-    print(response.json().get('CPToken'))
+    # response.raise_for_status()
+    # print(response.json().get('CPToken'))
     self.CPToken = response.json().get('CPToken')
     self.header = {
       'Content-Type': 'application/json',
@@ -46,6 +46,7 @@ class SmartApp(object):
       commands['CommandTypes'].append({ "CommandType": option })
 
     response = requests.post(urls.getDeviceInfo(), headers = self.header, json = [commands])
+    response.raise_for_status()
     result = {}
     if (response.status_code == 200):
       for device in response.json().get('devices', []):
@@ -65,5 +66,6 @@ class SmartApp(object):
       "Value": value
     }
     response = requests.get(urls.setCommand(), headers = self.header, params = payload)
-    pprint(vars(response))
+    response.raise_for_status()
+    # pprint(vars(response))
     return True

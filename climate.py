@@ -35,16 +35,16 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 })
 
 PRESET_LIST = {
-    PRESET_NONE: 'Auto',
-    PRESET_BOOST: 'Powerful',
-    PRESET_ECO: 'Quiet'
+    # PRESET_NONE: 'Auto',
+    # PRESET_BOOST: 'Powerful',
+    # PRESET_ECO: 'Quiet'
 }
 
 SUPPORT_FLAGS = (
-    SUPPORT_TARGET_TEMPERATURE |
-    SUPPORT_FAN_MODE |
-    SUPPORT_PRESET_MODE |
-    SUPPORT_SWING_MODE
+    SUPPORT_TARGET_TEMPERATURE
+    # SUPPORT_FAN_MODE |
+    # SUPPORT_PRESET_MODE |
+    # SUPPORT_SWING_MODE
 )
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -73,20 +73,21 @@ class PanasonicDevice(ClimateEntity):
 
         self._is_on = False
         self._hvac_mode = HVAC_MODE_COOL
-        self._current_fan = 'Auto'
-        self._airswing_hor = 'Auto'
-        self._airswing_vert = 'Auto'
-        self._eco = 'Auto'
+        # self._current_fan = 'Auto'
+        # self._airswing_hor = 'Auto'
+        # self._airswing_vert = 'Auto'
+        # self._eco = 'Auto'
 
         self._unit = TEMP_CELSIUS
         self._target_temperature = None
         self._current_temperature = None
         self._outside_temperature = None
-        self._mode = None
-        self._eco = 'Auto'
-        self._preset_mode = 'off'
+        # self._mode = None
+        # self._eco = 'Auto'
+        # self._preset_mode = 'off'
 
     def update(self):
+        _LOGGER.debug('-----------UPDATING-----------')
         """Update the state of this climate device."""
         self._status = self._api.getDeviceInfo(self._device['auth'], options=['0x00', '0x01', '0x03', '0x04', '0x21'])
         _LOGGER.debug(f"{self._name} Status: {self._status}")
@@ -102,6 +103,7 @@ class PanasonicDevice(ClimateEntity):
 
         self._outside_temperature = float(self._status.get('0x21'))
         _LOGGER.debug(f"{self._name} _outside_temperature: {self._outside_temperature}")
+        _LOGGER.debug('-----------UPDATED-----------')
 
     @property
     def name(self):
@@ -148,10 +150,10 @@ class PanasonicDevice(ClimateEntity):
         """Return the current preset mode, e.g., home, away, temp.
         Requires SUPPORT_PRESET_MODE.
         """
-        for key, value in PRESET_LIST.items():
-            if value == self._eco:
+        # for key, value in PRESET_LIST.items():
+            # if value == self._eco:
                 # _LOGGER.debug("Preset mode is {0}".format(key))
-                return key
+                # return key
 
 
     @property
@@ -160,7 +162,7 @@ class PanasonicDevice(ClimateEntity):
         Requires SUPPORT_PRESET_MODE.
         """
         # _LOGGER.debug("Preset modes are {0}".format(",".join(PRESET_LIST.keys())))
-        return list(PRESET_LIST.keys())
+        return []
 
     @property
     def fan_mode(self):
@@ -170,11 +172,11 @@ class PanasonicDevice(ClimateEntity):
     @property
     def fan_modes(self):
         """Return the list of available fan modes."""
-        return ['Auto', 'Low', 'LowMid', 'Mid', 'HighMid', 'High']
+        return []
 
-    def set_fan_mode(self, fan_mode):
-        """Set new fan mode."""
-        _LOGGER.debug("Set %s focus mode %s", self.name, fan_mode)
+    # def set_fan_mode(self, fan_mode):
+        # """Set new fan mode."""
+        # _LOGGER.debug("Set %s focus mode %s", self.name, fan_mode)
 
     @property
     def swing_mode(self):
@@ -186,9 +188,9 @@ class PanasonicDevice(ClimateEntity):
         """Return the list of available swing modes."""
         return ['Auto', 'Up', 'UpMid', 'Mid', 'DownMid', 'Down']
 
-    def set_swing_mode(self, swing_mode):
-        """Set swing mode."""
-        _LOGGER.debug("Set %s swing mode %s", self.name, swing_mode)
+    # def set_swing_mode(self, swing_mode):
+    #     """Set swing mode."""
+    #     _LOGGER.debug("Set %s swing mode %s", self.name, swing_mode)
 
     @property
     def supported_features(self):

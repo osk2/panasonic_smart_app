@@ -11,8 +11,14 @@ All notable changes to this project will be documented in this file.
 ### Security -->
 
 ## [Unreleased]
-### Removed
+### Deprecated
 - Remove access_token from config check
+
+### Changed
+- Modified Logger infomation
+
+### Add
+- Login Checking
 
 ## [0.1.1] - 2021-01-20
 ### Add

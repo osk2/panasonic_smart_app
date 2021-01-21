@@ -99,23 +99,23 @@ class PanasonicDevice(ClimateEntity):
 
     @tryApiStatus
     def update(self):
-        _LOGGER.debug('-----------UPDATING-----------')
+        _LOGGER.debug(f"------- UPDATING {self._name} -------")
         """Update the state of this climate device."""
         self._status = self._api.getDeviceInfo(self._device['auth'], options=['0x00', '0x01', '0x03', '0x04', '0x21'])
-        _LOGGER.debug(f"{self._name} Status: {self._status}")
+        _LOGGER.debug(f"Status: {self._status}")
         # _is_on
         self._is_on = bool(int(self._status.get('0x00')))
-        _LOGGER.debug(f"{self._name} _is_on: {self._is_on}")
+        _LOGGER.debug(f"_is_on: {self._is_on}")
         # _current_temperature
         self._target_temperature = float(self._status.get('0x03'))
-        _LOGGER.debug(f"{self._name} _current_temperature: {self._target_temperature}")
+        _LOGGER.debug(f"_current_temperature: {self._target_temperature}")
 
         self._current_temperature = float(self._status.get('0x04'))
-        _LOGGER.debug(f"{self._name} _current_temperature: {self._current_temperature}")
+        _LOGGER.debug(f"_current_temperature: {self._current_temperature}")
 
         self._outside_temperature = float(self._status.get('0x21'))
-        _LOGGER.debug(f"{self._name} _outside_temperature: {self._outside_temperature}")
-        _LOGGER.debug('-----------UPDATED-----------')
+        _LOGGER.debug(f"_outside_temperature: {self._outside_temperature}")
+        _LOGGER.debug(f"[{self._name}] is UPDATED.")
 
     @property
     def name(self):

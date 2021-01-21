@@ -22,7 +22,7 @@ class SmartApp(object):
       'AppToken': self.app_token
     }
     response = requests.post(urls.login(), json = data)
-    # response.raise_for_status()
+    response.raise_for_status()
     # print(response.json().get('CPToken'))
     self.CPToken = response.json().get('CPToken')
     self.header = {

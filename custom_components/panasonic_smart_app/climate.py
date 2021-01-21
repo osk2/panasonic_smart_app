@@ -62,12 +62,16 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     password = config.get(CONF_PASSWORD)
     # _LOGGER.debug(f'The panasonic_smart_app info {username} {password}.')
     api = SmartApp(username, password)
-    api.login()
-    devices = []
-    for device in api.getDevices().get('GWList'):
-        _LOGGER.debug(f'The panasonic_smart_app devices {device}.')
-        devices.append(PanasonicDevice(device, api))
-    add_entities(devices, True)
+    try:
+        api.login()
+    except:
+        _LOGGER.error('Please Check Your UserName and Password.')
+    else:
+        devices = []
+        for device in api.getDevices().get('GWList'):
+            _LOGGER.debug(f'The panasonic_smart_app devices {device}.')
+            devices.append(PanasonicDevice(device, api))
+        add_entities(devices, True)
 
 
 class PanasonicDevice(ClimateEntity):

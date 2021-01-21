@@ -15,7 +15,6 @@ climate:
   - platform: panasonic_smart_app
     username: !secret smart_app_account
     password: !secret smart_app_password
-    access_token: !secret smart_app_token
 ```
 
 ## Entities Available

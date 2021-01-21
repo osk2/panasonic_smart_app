@@ -11,7 +11,7 @@ from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateEntity
 
 from homeassistant.const import (
     TEMP_CELSIUS, ATTR_TEMPERATURE,
-    CONF_ACCESS_TOKEN, CONF_USERNAME, CONF_PASSWORD
+    CONF_USERNAME, CONF_PASSWORD
 )
 
 from homeassistant.components.climate.const import (
@@ -30,8 +30,7 @@ SCAN_INTERVAL = timedelta(seconds=300)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_USERNAME): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Required(CONF_ACCESS_TOKEN): cv.string
+    vol.Required(CONF_PASSWORD): cv.string
 })
 
 PRESET_LIST = {
@@ -61,9 +60,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.debug('The panasonic_smart_app is setting up Platform.')
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
-    app_token = config.get(CONF_ACCESS_TOKEN)
-    # _LOGGER.debug(f'The panasonic_smart_app info {username} {password} {app_token}.')
-    api = SmartApp(username, password, app_token)
+    # _LOGGER.debug(f'The panasonic_smart_app info {username} {password}.')
+    api = SmartApp(username, password)
     api.login()
     devices = []
     for device in api.getDevices().get('GWList'):

@@ -5,12 +5,14 @@ from . import urls
 # from .secrets import *
 from . import _taiseia as taiSEIA
 
+APP_TOKEN = 'D8CBFF4C-2824-4342-B22D-189166FEF503'
+
 class SmartApp(object):
-  def __init__(self, account, password, app_token):
+  def __init__(self, account, password):
     self.host = 'https://ems2.panasonic.com.tw/api'
     self.account = account
     self.password = password
-    self.app_token = app_token
+    self.app_token = APP_TOKEN
     self.taiSEIA = taiSEIA
 
   def login(self):

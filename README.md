@@ -39,3 +39,18 @@ This project only test with `Panasonic air conditioner - PX series` which use `C
 ### You can also...
 
 <a href="https://www.buymeacoffee.com/phantas"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phantas&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff"></a>
+
+
+--
+
+# Logs
+How to open the logs record?
+
+Set config in `configuration.yaml` like below:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.panasonic_smart_app: debug
+```

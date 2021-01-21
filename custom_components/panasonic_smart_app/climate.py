@@ -57,7 +57,7 @@ def tryApiStatus(func):
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the panasonic cloud components."""
-    _LOGGER.debug('The panasonic_smart_app is setting up Platform.')
+    _LOGGER.info('The panasonic_smart_app is setting up Platform.')
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
     # _LOGGER.debug(f'The panasonic_smart_app info {username} {password}.')
@@ -72,6 +72,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             _LOGGER.debug(f'The panasonic_smart_app devices {device}.')
             devices.append(PanasonicDevice(device, api))
         add_entities(devices, True)
+        _LOGGER.info('The panasonic_smart_app setup is done.')
 
 
 class PanasonicDevice(ClimateEntity):

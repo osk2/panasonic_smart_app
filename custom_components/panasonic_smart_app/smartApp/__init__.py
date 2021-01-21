@@ -5,6 +5,8 @@ from . import urls
 # from .secrets import *
 from . import _taiseia as taiSEIA
 
+_LOGGER = logging.getLogger(__name__)
+
 APP_TOKEN = 'D8CBFF4C-2824-4342-B22D-189166FEF503'
 
 class SmartApp(object):
@@ -33,6 +35,7 @@ class SmartApp(object):
   def getDevices(self):
     response = requests.get(urls.getDevices(), headers = self.header)
     response.raise_for_status()
+    _LOGGER.debug(f"[getDevices {response.status_code}] - {response.json()}")
     self._devices = response.json()
     return self._devices
 

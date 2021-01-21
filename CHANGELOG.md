@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Add
 - Login Checking
+- Devices List
 
 ## [0.1.1] - 2021-01-20
 ### Add

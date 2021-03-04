@@ -1,7 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 # Panasonic Smart App
-Home Assistant integration for Panasonic Smart App.
+Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
 # Installation
 
@@ -14,10 +14,10 @@ Copy `custom_components/panasonic_smart_app` into `custom_components/` folder.
 # Configuration
 Add following configuration in `configuration.yaml`:
 
-```
+```yaml
 panasonic_smart_app:
-    username: !secret smart_app_account
-    password: !secret smart_app_password
+  username: !secret smart_app_account
+  password: !secret smart_app_password
 ```
 
 # Note

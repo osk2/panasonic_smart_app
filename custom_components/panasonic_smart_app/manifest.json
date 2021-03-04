@@ -5,7 +5,8 @@
   "issue_tracker": "https://github.com/PhantasWeng/panasonic_smart_app/issues",
   "dependencies": [],
   "codeowners": [
-    "@PhantasWeng"
+    "@PhantasWeng",
+    "@osk2"
   ],
   "requirements": []
 }

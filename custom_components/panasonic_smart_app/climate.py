@@ -3,35 +3,40 @@ import logging
 import voluptuous as vol
 from typing import Any, Dict, Optional, List
 from datetime import timedelta
-import homeassistant.helpers.config_validation as cv
-
 from .smartApp import SmartApp
+from .const import DOMAIN, DEVICE_TYPE_AC
 
 from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateEntity
 
 from homeassistant.const import (
-    TEMP_CELSIUS, ATTR_TEMPERATURE,
-    CONF_USERNAME, CONF_PASSWORD
+    TEMP_CELSIUS,
+    ATTR_TEMPERATURE,
 )
 
 from homeassistant.components.climate.const import (
-    HVAC_MODE_COOL, HVAC_MODE_HEAT, HVAC_MODE_HEAT_COOL, HVAC_MODE_DRY, HVAC_MODE_FAN_ONLY, HVAC_MODE_OFF,
-    SUPPORT_TARGET_TEMPERATURE, SUPPORT_FAN_MODE, SUPPORT_SWING_MODE, SUPPORT_PRESET_MODE,
-    PRESET_ECO, PRESET_NONE, PRESET_BOOST,
-    ATTR_CURRENT_TEMPERATURE, ATTR_FAN_MODE,
-    ATTR_HVAC_MODE, ATTR_SWING_MODE, ATTR_PRESET_MODE
+    HVAC_MODE_COOL,
+    HVAC_MODE_HEAT,
+    HVAC_MODE_HEAT_COOL,
+    HVAC_MODE_DRY,
+    HVAC_MODE_FAN_ONLY,
+    HVAC_MODE_OFF,
+    SUPPORT_TARGET_TEMPERATURE,
+    SUPPORT_FAN_MODE,
+    SUPPORT_SWING_MODE,
+    SUPPORT_PRESET_MODE,
+    PRESET_ECO,
+    PRESET_NONE,
+    PRESET_BOOST,
+    ATTR_CURRENT_TEMPERATURE,
+    ATTR_FAN_MODE,
+    ATTR_HVAC_MODE,
+    ATTR_SWING_MODE,
+    ATTR_PRESET_MODE,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = 'panasonic_smart_app'
-
-SCAN_INTERVAL = timedelta(seconds=300)
-
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_USERNAME): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string
-})
+SCAN_INTERVAL = timedelta(seconds=60)
 
 PRESET_LIST = {
     # PRESET_NONE: 'Auto',
@@ -46,6 +51,7 @@ SUPPORT_FLAGS = (
     # SUPPORT_SWING_MODE
 )
 
+
 def tryApiStatus(func):
     def wrapper_call(*args, **kwargs):
         try:
@@ -53,35 +59,35 @@ def tryApiStatus(func):
         except:
             args[0]._api.login()
             func(*args, **kwargs)
+
     return wrapper_call
 
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the panasonic cloud components."""
-    _LOGGER.info('The panasonic_smart_app is setting up Platform.')
-    username = config.get(CONF_USERNAME)
-    password = config.get(CONF_PASSWORD)
-    # _LOGGER.debug(f'The panasonic_smart_app info {username} {password}.')
-    api = SmartApp(username, password)
+    """Set up the panasonic smart app components."""
+    _LOGGER.info("The panasonic_smart_app is setting up climate Platform.")
+    api = hass.data[DOMAIN]["api"]
     try:
         api.login()
     except:
-        _LOGGER.error('Please Check Your UserName and Password.')
+        _LOGGER.error("Please Check Your UserName and Password.")
     else:
         devices = []
-        for device in api.getDevices().get('GWList'):
-            _LOGGER.debug(f'The panasonic_smart_app devices {device}.')
-            devices.append(PanasonicDevice(device, api))
+        for device in api.getDevices().get("GWList"):
+            if device["Devices"][0]["DeviceType"] == DEVICE_TYPE_AC:
+                _LOGGER.debug(f"The panasonic_smart_app AC {device}.")
+                devices.append(PanasonicAC(device, api))
         add_entities(devices, True)
-        _LOGGER.info('The panasonic_smart_app setup is done.')
+        _LOGGER.info("AC setup is done.")
 
 
-class PanasonicDevice(ClimateEntity):
+class PanasonicAC(ClimateEntity):
     def __init__(self, device, api):
         self._api = api
-        self._commandList = api._devices['CommandList'][0]['JSON'][0]['list']
+        self._commandList = api._devices["CommandList"][0]["JSON"][0]["list"]
         self._device = device
-        self._name = device['Devices'][0]['NickName']
-        self._auth = device['auth']
+        self._name = device["Devices"][0]["NickName"]
+        self._auth = device["auth"]
 
         self._is_on = False
         self._hvac_mode = HVAC_MODE_COOL
@@ -102,19 +108,22 @@ class PanasonicDevice(ClimateEntity):
     def update(self):
         _LOGGER.debug(f"------- UPDATING {self._name} -------")
         """Update the state of this climate device."""
-        self._status = self._api.getDeviceInfo(self._device['auth'], options=['0x00', '0x01', '0x03', '0x04', '0x21'])
+        self._status = self._api.getDeviceInfo(
+            self._device["auth"],
+            options=["0x00", "0x01", "0x04", "0x03", "0x02", "0x0f", "0x21"],
+        )
         _LOGGER.debug(f"Status: {self._status}")
         # _is_on
-        self._is_on = bool(int(self._status.get('0x00')))
+        self._is_on = bool(int(self._status.get("0x00")))
         _LOGGER.debug(f"_is_on: {self._is_on}")
         # _current_temperature
-        self._target_temperature = float(self._status.get('0x03'))
+        self._target_temperature = float(self._status.get("0x03"))
         _LOGGER.debug(f"_current_temperature: {self._target_temperature}")
 
-        self._current_temperature = float(self._status.get('0x04'))
+        self._current_temperature = float(self._status.get("0x04"))
         _LOGGER.debug(f"_current_temperature: {self._current_temperature}")
 
-        self._outside_temperature = float(self._status.get('0x21'))
+        self._outside_temperature = float(self._status.get("0x21"))
         _LOGGER.debug(f"_outside_temperature: {self._outside_temperature}")
         _LOGGER.debug(f"[{self._name}] is UPDATED.")
 
@@ -134,17 +143,23 @@ class PanasonicDevice(ClimateEntity):
         if not self._is_on:
             return HVAC_MODE_OFF
         else:
-            value = self._status.get('0x01')
-            _LOGGER.debug(f"{self._name} hvac_mode is {value} - {self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01').get(str(value))}")
-            return self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01').get(str(value))
+            value = self._status.get("0x01")
+            _LOGGER.debug(
+                f"{self._name} hvac_mode is {value} - {self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01').get(str(value))}"
+            )
+            return self._api.taiSEIA.COMMANDS_OPTIONS.get("0x01").get(str(value))
 
     @property
     def hvac_modes(self):
         """Return the list of available operation modes."""
-        avaiable_modes = list(filter(lambda x: x.get('CommandType') == '0x01', self._commandList))[0].get('Parameters')
+        avaiable_modes = list(
+            filter(lambda x: x.get("CommandType") == "0x01", self._commandList)
+        )[0].get("Parameters")
         modes_list = [HVAC_MODE_OFF]
         for mode in avaiable_modes:
-            modes_list.append(self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01').get(str(mode[1])))
+            modes_list.append(
+                self._api.taiSEIA.COMMANDS_OPTIONS.get("0x01").get(str(mode[1]))
+            )
         return modes_list
 
     @tryApiStatus
@@ -153,7 +168,7 @@ class PanasonicDevice(ClimateEntity):
         if hvac_mode == HVAC_MODE_OFF:
             self._api.setCommand(self._auth, 0, 0)
         else:
-            options = self._api.taiSEIA.COMMANDS_OPTIONS.get('0x01')
+            options = self._api.taiSEIA.COMMANDS_OPTIONS.get("0x01")
             value = list(options.keys())[list(options.values()).index(hvac_mode)]
             self._api.setCommand(self._auth, 1, value)
             if not self._is_on:
@@ -165,10 +180,9 @@ class PanasonicDevice(ClimateEntity):
         Requires SUPPORT_PRESET_MODE.
         """
         # for key, value in PRESET_LIST.items():
-            # if value == self._eco:
-                # _LOGGER.debug("Preset mode is {0}".format(key))
-                # return key
-
+        # if value == self._eco:
+        # _LOGGER.debug("Preset mode is {0}".format(key))
+        # return key
 
     @property
     def preset_modes(self) -> Optional[List[str]]:
@@ -181,7 +195,7 @@ class PanasonicDevice(ClimateEntity):
     @property
     def fan_mode(self):
         """Return the fan setting."""
-        return 'Auto'
+        return "Auto"
 
     @property
     def fan_modes(self):
@@ -189,8 +203,8 @@ class PanasonicDevice(ClimateEntity):
         return []
 
     # def set_fan_mode(self, fan_mode):
-        # """Set new fan mode."""
-        # _LOGGER.debug("Set %s focus mode %s", self.name, fan_mode)
+    # """Set new fan mode."""
+    # _LOGGER.debug("Set %s focus mode %s", self.name, fan_mode)
 
     @property
     def swing_mode(self):
@@ -200,7 +214,7 @@ class PanasonicDevice(ClimateEntity):
     @property
     def swing_modes(self):
         """Return the list of available swing modes."""
-        return ['Auto', 'Up', 'UpMid', 'Mid', 'DownMid', 'Down']
+        return ["Auto", "Up", "UpMid", "Mid", "DownMid", "Down"]
 
     # def set_swing_mode(self, swing_mode):
     #     """Set swing mode."""
@@ -216,6 +230,7 @@ class PanasonicDevice(ClimateEntity):
     def target_temperature(self):
         """Return the target temperature."""
         return self._target_temperature
+
     @property
     def outside_temperature(self):
         """Return the current temperature."""
@@ -231,7 +246,7 @@ class PanasonicDevice(ClimateEntity):
         """Set new target temperature."""
         target_temp = kwargs.get(ATTR_TEMPERATURE)
         # if target_temp is None:
-            # return
+        # return
         _LOGGER.debug("Set %s temperature %s", self.name, target_temp)
         self._api.setCommand(self._auth, 3, int(target_temp))
 

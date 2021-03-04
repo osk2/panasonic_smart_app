@@ -7,7 +7,7 @@ from homeassistant.components.climate.const import (
     ATTR_HVAC_MODE, ATTR_SWING_MODE, ATTR_PRESET_MODE
 )
 
-COMMANDS_NAME = {
+AC_COMMANDS_NAME = {
     "0x00": "power",
     "0x01": "mode",
     "0x02": "fan_speed",
@@ -23,6 +23,18 @@ COMMANDS_NAME = {
     "0x1B": "econavi",
     "0x1F": "亮度",
     "0x1E": "音量"
+}
+
+DH_COMMAND_NAME = {
+  "0x00": "電源",
+  "0x01": "功能選擇",
+  "0x04": "濕度設定",
+  "0x0E": "風量設定",
+  "0x0D": "nanoe 脫臭",
+  "0x02": "定時關機",
+  "0x55": "定時開機",
+  "0x09": "風向設定",
+  "0x18": "提示音"
 }
 
 COMMANDS_OPTIONS = {

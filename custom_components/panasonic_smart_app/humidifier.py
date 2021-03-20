@@ -83,7 +83,8 @@ class PanasonicDehumidifier(HumidifierEntity):
         _LOGGER.debug(f"------- UPDATING {self._name} -------")
         try:
             self._status = self._api.getDeviceInfo(
-                self._device["auth"], options=["0x50", "0x00", "0x01", "0x07", "0x0a"]
+                self._device["auth"],
+                options=["0x50", "0x00", "0x01", "0x07", "0x0a", "0x04"],
             )
         except:
             _LOGGER.error(f"Error occured while updating status for {self._name}")
@@ -102,8 +103,11 @@ class PanasonicDehumidifier(HumidifierEntity):
             self._current_humd = self._status.get("0x07")
             _LOGGER.debug(f"_current_humd: {self._current_humd}")
 
-            _LOGGER.debug(f"[{self._name}] is UPDATED.")
+            # _target_humd
+            self._target_humd = AVAILABLE_HUMD[int(self._status.get("0x04"))]
+            _LOGGER.debug(f"[{self._name}] _target_humd: {self._target_humd}")
 
+            _LOGGER.debug(f"[{self._name}] update completed.")
     @property
     def name(self):
         """Return the display name of this dehumidifier."""
@@ -111,7 +115,7 @@ class PanasonicDehumidifier(HumidifierEntity):
 
     @property
     def target_humidity(self):
-        return self._current_humd
+        return self._target_humd
 
     @property
     def max_humidity(self):

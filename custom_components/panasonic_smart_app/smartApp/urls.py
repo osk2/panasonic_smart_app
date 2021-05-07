@@ -8,16 +8,21 @@ def login():
     return url
 
 
-def getDevices():
+def get_devices():
     url = f"{BASE_URL}/UserGetRegisteredGWList1"
     return url
 
 
-def getDeviceInfo():
+def get_device_info():
     url = f"{BASE_URL}/DeviceGetInfo"
     return url
 
 
-def setCommand():
+def set_command():
     url = f"{BASE_URL}/DeviceSetCommand"
+    return url
+
+
+def refresh_token():
+    url = f"{BASE_URL}/RefreshToken1"
     return url

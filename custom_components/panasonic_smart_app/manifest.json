@@ -2,6 +2,7 @@
   "domain": "panasonic_smart_app",
   "name": "Panasonic Smart App",
   "version": "0.2.1",
+  "config_flow": true,
   "documentation": "https://github.com/PhantasWeng/panasonic_smart_app",
   "issue_tracker": "https://github.com/PhantasWeng/panasonic_smart_app/issues",
   "dependencies": [],
@@ -9,5 +10,6 @@
     "@PhantasWeng",
     "@osk2"
   ],
+  "iot_class": "cloud_polling",
   "requirements": []
 }

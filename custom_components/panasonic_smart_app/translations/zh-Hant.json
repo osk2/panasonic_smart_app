@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Panasonic Smart App 帳戶驗證",
+        "description": "登入您的 Panasonic Smart App 帳戶",
+        "data": {
+          "username": "Panasonic Smart App 帳號",
+          "password": "Panasonic Smart App 密碼"
+        }
+      }
+    },
+    "error": {
+      "auth": "帳號或密碼有誤。"
+    },
+    "abort": {
+      "single_instance_allowed": "重複設定。僅能建立一個實例"
+    }
+  }
+}

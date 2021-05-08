@@ -1,39 +1,47 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
+[繁體中文](README-zh.md) | [English](README.md)
+
 # Panasonic Smart App
+
 Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
 # Installation
 
-### Via HACS
-Install this component via HACS is highly recommended
+### Via HACS (highly recommended)
+
+You will need to add this repository into HACS first
+
+1. Click HACS 3-dots button at top right corner
+2. Click "Custom repositories"
+3. Paste `https://github.com/osk2/panasonic_smart_app` into URL field
+4. Change `Category` to "Integration"
 
 ### Manually
-Copy `custom_components/panasonic_smart_app` into `custom_components/` folder.
+
+Copy `custom_components/panasonic_smart_app` into your `custom_components/`
 
 # Configuration
-Add following configuration in `configuration.yaml`:
 
-```yaml
-panasonic_smart_app:
-  username: !secret smart_app_account
-  password: !secret smart_app_password
-```
+1. Search `Panasonic Smart App` in integration list
+2. Follow steps on UI to finish configuration
 
 # Note
 
-## Slow Startup
-As you may already know, the API is so slow at processing our request.
+### Available Entities
 
-It may takes up to 30 seconds to boot up Home Assistant (depend on device count), so just be patient.
+| Device Type  | Entity Type   | Note                         |
+| ------------ | ------------- | ---------------------------- |
+| AC           | climate       |                              |
+|              | sensor        | Outdoor temperature sensor   |
+| Dehumidifier | humidifier    |                              |
+|              | number        | On timer (Only if supported) |
+|              | number        | Off timer                    |
+|              | sensor        | Environment humidity sensor  |
+|              | binary_sensor | Water tank status sensor     |
 
-## Available Entities
-Following devices are tested and supported by this component:
+### Enable Logs
 
-- **climate**: AC with `CZ-T007` wifi module.
-- **humidifier**: Dehumidifier with `CZ-T006` wifi module.
-
-## Enable Logs
 Add following configs to `configuration.yaml`:
 
 ```yaml
@@ -42,3 +50,7 @@ logger:
   logs:
     custom_components.panasonic_smart_app: debug
 ```
+
+# License
+
+This project is licensed under MIT license. See [LICENSE](LICENSE) file for details.

@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Panasonic Smart App authentication",
+        "description": "Login with your Panasonic Smart App credentials.",
+        "data": {
+          "username": "Panasonic Smart App username",
+          "password": "Panasonic Smart App password"
+        }
+      }
+    },
+    "error": {
+      "auth": "Username/Password is incorrect."
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single instance is allowed."
+    }
+  }
+}

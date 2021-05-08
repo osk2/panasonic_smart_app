@@ -3,41 +3,60 @@ Please note that this is a beta version which is still undergoing final testing 
 
 Following documentation may be out-dated or not for beta release
 
+---
+
 請注意，目前版本為 Beta 版，此版本仍在開發或測試中，可能會發生某些未預期的情況或錯誤，且下列文件可能不適用於此版本，請斟酌使用
 {% endif %}
 
 # Panasonic Smart App
 
-This is a home assistant's integration for panasonic smart app.
+Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
-## Why do I Need this?
+# Installation
 
-Due to Panasonic climates' api in Taiwan are separate to global.
-We can't use [python-panasonic-comfort-cloud] and [panasonic_ac] in `Home Assistant`.
+### Via HACS (highly recommended)
 
-So I create [python-panasonic-smart-app] and [panasonic_smart_app] integration.
+You will need to add this repository into HACS first
 
-## Configuration
+1. Click HACS 3-dots button at top right corner
+2. Click "Custom repositories"
+3. Paste `https://github.com/osk2/panasonic_smart_app` into URL field
+4. Change `Category` to "Integration"
 
-Add the following configuration in configuration.yaml:
+### Manually
 
+Copy `custom_components/panasonic_smart_app` into your `custom_components/`
+
+# Configuration
+
+1. Search `Panasonic Smart App` in integration list
+2. Follow steps on UI to finish configuration
+
+# Note
+
+### Available Entities
+
+| Device Type  | Entity Type   | Note                         |
+| ------------ | ------------- | ---------------------------- |
+| AC           | climate       |                              |
+|              | sensor        | Outdoor temperature sensor   |
+| Dehumidifier | humidifier    |                              |
+|              | number        | On timer (Only if supported) |
+|              | number        | Off timer                    |
+|              | sensor        | Environment humidity sensor  |
+|              | binary_sensor | Water tank status sensor     |
+
+### Enable Logs
+
+Add following configs to `configuration.yaml`:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.panasonic_smart_app: debug
 ```
-climate:
-  - platform: panasonic_smart_app
-    username: !secret smart_app_account
-    password: !secret smart_app_password
-```
 
-## Entities Available
+# License
 
-- **climate**: Air Condition with `CZ-T007` wifi model.
-
-# Attention
-
-This project only test with `Panasonic air conditioner - PX series` which use `CZ-T007` wifi adapater. `CZ-T005`, `CZ-T006` or `PXGD` series might occurs some error.
-
-## And..
-
-### You can also...
-
-<a href="https://www.buymeacoffee.com/phantas"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phantas&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff"></a>
+This project is licensed under MIT license. See [LICENSE](LICENSE) file for details.

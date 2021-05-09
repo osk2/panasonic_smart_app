@@ -12,21 +12,6 @@ Following documentation may be out-dated or not for beta release
 
 Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
-# Installation
-
-### Via HACS (highly recommended)
-
-You will need to add this repository into HACS first
-
-1. Click HACS 3-dots button at top right corner
-2. Click "Custom repositories"
-3. Paste `https://github.com/osk2/panasonic_smart_app` into URL field
-4. Change `Category` to "Integration"
-
-### Manually
-
-Copy `custom_components/panasonic_smart_app` into your `custom_components/`
-
 # Configuration
 
 1. Search `Panasonic Smart App` in integration list
@@ -56,7 +41,3 @@ logger:
   logs:
     custom_components.panasonic_smart_app: debug
 ```
-
-# License
-
-This project is licensed under MIT license. See [LICENSE](LICENSE) file for details.

@@ -582,7 +582,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     async def async_set_swing_mode(self, swing_mode):
         _LOGGER.debug("Set %s swing mode %s", self.name, swing_mode)
-        mode_id = int(getKeyFromDict(CLIMATE_AVAILABLE_FAN_MODE, swing_mode))
+        mode_id = int(getKeyFromDict(CLIMATE_AVAILABLE_SWING_MODE, swing_mode))
         await self.client.set_command(self.auth, 143, mode_id)
 
     @property

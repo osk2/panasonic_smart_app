@@ -227,7 +227,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         if mode is None:
             return
 
-        _LOGGER.debug("Set %s mode %s", self.name, mode)
+        _LOGGER.debug(f" [{self.nickname}] Set mode to {mode}")
 
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x01", self.commands)
@@ -248,17 +248,17 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         )
         targetKey = getKeyFromDict(DEHUMIDIFIER_AVAILABLE_HUMIDITY, targetValue)
 
-        _LOGGER.debug("Set %s humidity to %s", self.name, targetValue)
+        _LOGGER.debug(f"[{self.nickname}] Set humidity to {targetValue}")
         await self.client.set_command(self.auth, 132, int(targetKey))
 
     async def async_turn_on(self):
         """ Turn on dehumidifier """
-        _LOGGER.debug("Turn %s on", self.name)
+        _LOGGER.debug(f"[{self.nickname}] Turning on")
         await self.client.set_command(self.auth, 128, 1)
 
     async def async_turn_off(self):
         """ Turn off dehumidifier """
-        _LOGGER.debug("Turn %s off", self.name)
+        _LOGGER.debug(f"[{self.nickname}] Turning off")
         await self.client.set_command(self.auth, 128, 0)
 
 
@@ -271,14 +271,11 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
         try:
             self._status = await self.client.get_device_info(
                 self.auth,
-                options=["0x07", "0x0a"],
+                options=["0x07"],
             )
 
             self._current_humd = self._status.get("0x07")
             _LOGGER.debug(f"[{self.nickname}] _current_humd: {self._current_humd}")
-
-            self._is_tank_full = self._status.get("0x0a")
-            _LOGGER.debug(f"[{self.nickname}] _is_tank_full: {self._is_tank_full}")
         except:
             _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
         else:
@@ -417,8 +414,8 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
         except:
             _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
         else:
-            self._tank_status = bool(int(self._status.get("0x0a")))
-            _LOGGER.debug(f"[{self.nickname}] _tank_status: {self._tank_status}")
+            self._is_tank_full = bool(int(self._status.get("0x0a")))
+            _LOGGER.debug(f"[{self.nickname}] _is_tank_full: {self._is_tank_full}")
 
     @property
     def label(self) -> str:
@@ -430,7 +427,7 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._tank_status
+        return self._is_tank_full
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
@@ -451,22 +448,26 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
             self.auth,
             options=["0x00", "0x01", "0x04", "0x03", "0x02", "0x0f", "0x21"],
         )
-        _LOGGER.debug(f"Status: {self._status}")
+        _LOGGER.debug(f"[{self.nickname}] Status: {self._status}")
 
         self._is_on = bool(int(self._status.get("0x00")))
-        _LOGGER.debug(f"_is_on: {self._is_on}")
+        _LOGGER.debug(f"[{self.nickname}] _is_on: {self._is_on}")
 
         self._target_temperature = float(self._status.get("0x03"))
-        _LOGGER.debug(f"_current_temperature: {self._target_temperature}")
+        _LOGGER.debug(
+            f"[{self.nickname}] _current_temperature: {self._target_temperature}"
+        )
 
         self._current_temperature = float(self._status.get("0x04"))
-        _LOGGER.debug(f"_current_temperature: {self._current_temperature}")
+        _LOGGER.debug(
+            f"[{self.nickname}] _current_temperature: {self._current_temperature}"
+        )
 
         self._fan_mode = int(self._status.get("0x02"))
-        _LOGGER.debug(f"_fan_mode: {self._fan_mode}")
+        _LOGGER.debug(f"[{self.nickname}] _fan_mode: {self._fan_mode}")
 
         self._swing_mode = int(self._status.get("0x0f"))
-        _LOGGER.debug(f"_swing_mode: {self._swing_mode}")
+        _LOGGER.debug(f"[{self.nickname}] _swing_mode: {self._swing_mode}")
 
         _LOGGER.debug(f"[{self.nickname}] is UPDATED.")
 
@@ -495,7 +496,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
                 filter(lambda m: m["mappingCode"] == value, CLIMATE_AVAILABLE_MODE)
             )[0]
             _LOGGER.debug(
-                f"{self.nickname} hvac_mode is {value} - {mode_mapping['key']}"
+                f"[{self.nickname}] hvac_mode is {value} - {mode_mapping['key']}"
             )
             return mode_mapping["key"]
 
@@ -519,7 +520,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         return modes
 
     async def async_set_hvac_mode(self, hvac_mode) -> None:
-        _LOGGER.debug(f"{self.nickname} set_hvac_mode: {hvac_mode}")
+        _LOGGER.debug(f"[{self.nickname}] set_hvac_mode: {hvac_mode}")
         if hvac_mode == HVAC_MODE_OFF:
             await self.client.set_command(self.auth, 128, 0)
         else:
@@ -539,7 +540,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         else:
             value = int(self._status.get("0x01"))
             _LOGGER.debug(
-                f"{self.nickname} hvac_mode is {value} - {CLIMATE_AVAILABLE_PRESET[value]}"
+                f"[{self.nickname}] hvac_mode is {value} - {CLIMATE_AVAILABLE_PRESET[value]}"
             )
             return CLIMATE_AVAILABLE_PRESET[value]
 
@@ -548,7 +549,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         return list(CLIMATE_AVAILABLE_PRESET.values())
 
     async def set_preset_mode(self, preset_mode) -> None:
-        _LOGGER.debug(f"{self.nickname} set_preset_mode: {preset_mode}")
+        _LOGGER.debug(f"[{self.nickname}] set_preset_mode: {preset_mode}")
         value = getKeyFromDict(CLIMATE_AVAILABLE_PRESET, preset_mode)
         self.client.set_command(self.auth, 1, value)
         if not self._is_on:
@@ -566,7 +567,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     async def async_set_fan_mode(self, fan_mode):
         """Set new fan mode."""
-        _LOGGER.debug("Set %s focus mode %s", self.name, fan_mode)
+        _LOGGER.debug(f"[{self.nickname}] Set fan mode to {fan_mode}")
         mode_id = int(getKeyFromDict(CLIMATE_AVAILABLE_FAN_MODE, fan_mode))
         await self.client.set_command(self.auth, 130, mode_id)
 
@@ -581,7 +582,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         return list(CLIMATE_AVAILABLE_SWING_MODE.values())
 
     async def async_set_swing_mode(self, swing_mode):
-        _LOGGER.debug("Set %s swing mode %s", self.name, swing_mode)
+        _LOGGER.debug(f"[{self.nickname}] Set swing mode to {swing_mode}")
         mode_id = int(getKeyFromDict(CLIMATE_AVAILABLE_SWING_MODE, swing_mode))
         await self.client.set_command(self.auth, 143, mode_id)
 
@@ -593,7 +594,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs):
         """ Set new target temperature """
         target_temp = kwargs.get(ATTR_TEMPERATURE)
-        _LOGGER.debug("Set %s temperature %s", self.name, target_temp)
+        _LOGGER.debug(f"[{self.nickname}] Set temperature to {target_temp}")
         await self.client.set_command(self.auth, 3, int(target_temp))
 
     @property
@@ -644,7 +645,9 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
             )
 
             self._outside_temperature = float(self._status.get("0x21"))
-            _LOGGER.debug(f"_outside_temperature: {self._outside_temperature}")
+            _LOGGER.debug(
+                f"[{self.nickname}] _outside_temperature: {self._outside_temperature}"
+            )
         except:
             _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
         else:

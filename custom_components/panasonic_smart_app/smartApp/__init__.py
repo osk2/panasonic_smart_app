@@ -90,7 +90,6 @@ class SmartApp(object):
             endpoint=urls.get_device_info(),
             data=[commands],
         )
-        _LOGGER.debug(response)
         result = {}
         for device in response["devices"]:
             for info in device.get("Info"):

@@ -31,6 +31,8 @@ Home Assistant integration for [Panasonic Smart App](https://play.google.com/sto
 |              | sensor        | Environment humidity sensor  |
 |              | binary_sensor | Water tank status sensor     |
 
+For missing entities, open an [issue](https://github.com/osk2/panasonic_smart_app/issues) or submit a PR 💪
+
 ### Enable Logs
 
 Add following configs to `configuration.yaml`:

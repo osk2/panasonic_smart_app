@@ -6,6 +6,17 @@
 
 Home Assistant 的 [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US) 整合套件
 
+## 注意
+
+本整合套件僅支援 Panasonic Smart App，若你是使用 Panasonic Comfort Cloud，請改用 [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc)
+
+本專案修改自 [PhantasWeng](https://github.com/PhantasWeng/) 開發的 [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app)，主要差異為：
+
+1. 支援更多裝置類型
+2. 實作 config flow 以大幅簡化設定流程
+
+_完整的實體清單請見 [可用的實體](#可用的實體)_
+
 # 安裝方法
 
 ### 透過 HACS 安裝 (建議)

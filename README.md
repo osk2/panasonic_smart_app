@@ -6,6 +6,19 @@
 
 Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
+This integration allows you to control your Panasonic appliances.
+
+## Note
+
+Only Panasonic Smart App is supported. If you are using Panasonic Comfort Cloud. Use [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc) instead.
+
+This project is forked from [PhantasWeng's](https://github.com/PhantasWeng/) [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app). Main differences are:
+
+1. Implement more platforms
+2. Add config flow to make setup much more easier
+
+_For all supported entities, check out [Available Entities](#available-entities)._
+
 # Installation
 
 ### Via HACS (highly recommended)
@@ -19,7 +32,7 @@ You will need to add this repository into HACS first
 
 ### Manually
 
-Copy `custom_components/panasonic_smart_app` into your `custom_components/`
+Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 
 # Configuration
 

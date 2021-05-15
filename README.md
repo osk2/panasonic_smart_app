@@ -12,10 +12,15 @@ This integration allows you to control your Panasonic appliances.
 
 Only Panasonic Smart App is supported. If you are using Panasonic Comfort Cloud. Use [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc) instead.
 
+| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) |
+| :------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
+|                                                  ✅ Supported                                                  |                                                     ❌ Unsupported                                                     |
+
 This project is forked from [PhantasWeng's](https://github.com/PhantasWeng/) [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app). Main differences are:
 
 1. Implement more platforms
 2. Add config flow to make setup much more easier
+3. Support device info
 
 _For all supported entities, check out [Available Entities](#available-entities)._
 
@@ -52,6 +57,8 @@ Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 |              | number        | Off timer                    |
 |              | sensor        | Environment humidity sensor  |
 |              | binary_sensor | Water tank status sensor     |
+
+For missing entities, open an issue or submit a PR 💪
 
 ### Enable Logs
 

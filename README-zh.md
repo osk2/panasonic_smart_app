@@ -8,12 +8,17 @@ Home Assistant 的 [Panasonic Smart App](https://play.google.com/store/apps/deta
 
 ## 注意
 
-本整合套件僅支援 Panasonic Smart App，若你是使用 Panasonic Comfort Cloud，請改用 [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc)
+本整合套件僅支援 Panasonic Smart App，若你使用的是 Panasonic Comfort Cloud，請改用 [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc)
+
+| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) |
+| :------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
+|                                                    ✅ 支援                                                     |                                                       ❌ 不支援                                                        |
 
 本專案修改自 [PhantasWeng](https://github.com/PhantasWeng/) 開發的 [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app)，主要差異為：
 
 1. 支援更多裝置類型
 2. 實作 config flow 以大幅簡化設定流程
+3. 加入裝置資訊(Device Info)的支援
 
 _完整的實體清單請見 [可用的實體](#可用的實體)_
 
@@ -50,6 +55,8 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |          | number        | 定時關機               |
 |          | sensor        | 環境溼度偵測器         |
 |          | binary_sensor | 水箱滿水偵測器         |
+
+更多實體支援請至 [Issue](https://github.com/osk2/panasonic_smart_app/issues) 頁面許願，也歡迎發送 PR 💪
 
 ### 啟用除錯紀錄
 

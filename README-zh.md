@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/osk2/panasonic_smart_app?style=for-the-badge)
 [![GitHub license](https://img.shields.io/github/license/osk2/panasonic_smart_app?style=for-the-badge)](https://github.com/osk2/panasonic_smart_app/blob/master/LICENSE)
 
@@ -28,12 +28,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 ### 透過 HACS 安裝 (建議)
 
-你需要先將本 repo 加入 HACS
-
-1. 點擊 HACS 頁面右上的三點選單鈕
-2. 選擇 "Custom repositories"
-3. 將 `https://github.com/osk2/panasonic_smart_app` 貼入網址欄位
-4. 將 `Category` 設定為 "Integration"
+在 HACS 中搜尋 `Panasonic Smart App` 並安裝
 
 ### 手動安裝
 

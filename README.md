@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/osk2/panasonic_smart_app?style=for-the-badge)
 [![GitHub license](https://img.shields.io/github/license/osk2/panasonic_smart_app?style=for-the-badge)](https://github.com/osk2/panasonic_smart_app/blob/master/LICENSE)
 
@@ -28,14 +28,9 @@ _For all supported entities, check out [Available Entities](#available-entities)
 
 # Installation
 
-### Via HACS (highly recommended)
+### Via HACS (recommended)
 
-You will need to add this repository into HACS first
-
-1. Click HACS 3-dots button at top right corner
-2. Click "Custom repositories"
-3. Paste `https://github.com/osk2/panasonic_smart_app` into URL field
-4. Change `Category` to "Integration"
+Search and install `Panasonic Smart App` in HACS
 
 ### Manually
 

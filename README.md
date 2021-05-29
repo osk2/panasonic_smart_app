@@ -48,6 +48,8 @@ Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 | Device Type  | Entity Type   | Note                         |
 | ------------ | ------------- | ---------------------------- |
 | AC           | climate       |                              |
+|              | number        | On timer (Only if supported) |
+|              | number        | Off timer                    |
 |              | sensor        | Outdoor temperature sensor   |
 | Dehumidifier | humidifier    |                              |
 |              | number        | On timer (Only if supported) |

@@ -1,16 +1,21 @@
 """ Panasonic Smart App API """
-import json
 from typing import Literal
 import logging
 
 from homeassistant.const import HTTP_OK
+from homeassistant.util import Throttle
 from .exceptions import (
     PanasonicRefreshTokenNotFound,
     PanasonicTokenExpired,
     PanasonicInvalidRefreshToken,
     PanasonicLoginFailed,
 )
-from .const import APP_TOKEN, HTTP_EXPECTATION_FAILED, EXCEPTION_INVALID_REFRESH_TOKEN
+from .const import (
+    APP_TOKEN,
+    REQUEST_THROTTLE,
+    HTTP_EXPECTATION_FAILED,
+    EXCEPTION_INVALID_REFRESH_TOKEN,
+)
 from . import urls
 
 _LOGGER = logging.getLogger(__name__)
@@ -38,6 +43,7 @@ class SmartApp(object):
         self._devices = []
         self._commands = []
 
+    @Throttle(REQUEST_THROTTLE)
     async def login(self):
         _LOGGER.info("Attemping to login...")
         data = {"MemId": self.account, "PW": self.password, "AppToken": APP_TOKEN}
@@ -48,6 +54,7 @@ class SmartApp(object):
         self._refresh_token = response["RefreshToken"]
         self._cp_token = response["CPToken"]
 
+    @Throttle(REQUEST_THROTTLE)
     async def refresh_token(self):
         _LOGGER.info("Attemping to refresh token...")
         if self._refresh_token is None:

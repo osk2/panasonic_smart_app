@@ -1,4 +1,5 @@
 """ Panasonic Smart App API """
+from datetime import timedelta
 from typing import Literal
 import logging
 
@@ -12,13 +13,14 @@ from .exceptions import (
 )
 from .const import (
     APP_TOKEN,
-    REQUEST_THROTTLE,
+    SECONDS_BETWEEN_REQUEST,
     HTTP_EXPECTATION_FAILED,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
 from . import urls
 
 _LOGGER = logging.getLogger(__name__)
+REQUEST_THROTTLE = timedelta(seconds=SECONDS_BETWEEN_REQUEST)
 
 
 def tryApiStatus(func):

@@ -43,6 +43,20 @@ Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 
 # Note
 
+### Tested Devices
+
+Following devices were tested.
+
+Feel free to report working device by opening an [issue](https://github.com/osk2/panasonic_smart_app/issues)
+
+| Device     | Module       |
+| ---------- | ------------ |
+| F-Y28EX    | CZ-T006      |
+| F-Y24GX    | CZ-T006      |
+| F-Y26JH    | _(Built-in)_ |
+| CS-PX50BA2 | CZ-T007      |
+| CS-QX40FA2 | CZ-T007      |
+
 ### Available Entities
 
 | Device Type  | Entity Type   | Note                         |

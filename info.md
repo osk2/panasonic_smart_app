@@ -19,11 +19,27 @@ Home Assistant integration for [Panasonic Smart App](https://play.google.com/sto
 
 # Note
 
+### Tested Devices
+
+Following devices were tested.
+
+Feel free to report working device by opening an [issue](https://github.com/osk2/panasonic_smart_app/issues)
+
+| Device     | Module       |
+| ---------- | ------------ |
+| F-Y28EX    | CZ-T006      |
+| F-Y24GX    | CZ-T006      |
+| F-Y26JH    | _(Built-in)_ |
+| CS-PX50BA2 | CZ-T007      |
+| CS-QX40FA2 | CZ-T007      |
+
 ### Available Entities
 
 | Device Type  | Entity Type   | Note                         |
 | ------------ | ------------- | ---------------------------- |
 | AC           | climate       |                              |
+|              | number        | On timer (Only if supported) |
+|              | number        | Off timer                    |
 |              | sensor        | Outdoor temperature sensor   |
 | Dehumidifier | humidifier    |                              |
 |              | number        | On timer (Only if supported) |

@@ -25,13 +25,17 @@ Following devices were tested.
 
 Feel free to report working device by opening an [issue](https://github.com/osk2/panasonic_smart_app/issues)
 
-| Device     | Module       |
-| ---------- | ------------ |
-| F-Y28EX    | CZ-T006      |
-| F-Y24GX    | CZ-T006      |
-| F-Y26JH    | _(Built-in)_ |
-| CS-PX50BA2 | CZ-T007      |
-| CS-QX40FA2 | CZ-T007      |
+| Device Type | Module Type  |
+| ----------- | ------------ |
+| F-Y28EX     | CZ-T006      |
+| F-Y24GX     | CZ-T006      |
+| F-Y26JH     | _(Built-in)_ |
+| CS-PX50BA2  | CZ-T007      |
+| CS-QX40FA2  | CZ-T007      |
+| CS-RX28GA2  | _(Built-in)_ |
+| CS-RX36GA2  | _(Built-in)_ |
+| CS-RX50GA2  | _(Built-in)_ |
+| CS-RX71GA2  | _(Built-in)_ |
 
 ### Available Entities
 

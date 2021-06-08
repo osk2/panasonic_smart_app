@@ -6,6 +6,7 @@ from homeassistant.const import (
     DEVICE_CLASS_HUMIDITY,
     DEVICE_CLASS_TEMPERATURE,
     TEMP_CELSIUS,
+    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
 )
 
@@ -17,8 +18,10 @@ from .const import (
     DEVICE_TYPE_AC,
     DATA_CLIENT,
     DATA_COORDINATOR,
+    LABEL_PM25,
     LABEL_HUMIDITY,
     LABEL_OUTDOOR_TEMPERATURE,
+    ICON_PM25,
     ICON_THERMOMETER,
     ICON_HUMIDITY,
 )
@@ -31,10 +34,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
+    commands = client.get_commands()
     sensors = []
 
     for device in devices:
         device_type = int(device["Devices"][0]["DeviceType"])
+        current_device_commands = [
+            command
+            for command in commands
+            if command["ModelType"] == device["Devices"][0]["ModelType"]
+        ]
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
@@ -43,6 +52,26 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     device,
                 )
             )
+
+            if len(current_device_commands) > 0:
+                is_pm25_supported = (
+                    len(
+                        [
+                            command
+                            for command in current_device_commands[0]["JSON"][0]["list"]
+                            if command["CommandType"] == "0x53"
+                        ]
+                    )
+                    > 0
+                )
+
+                if is_pm25_supported:
+                    sensors.append(
+                        PanasonicPM25Sensor(
+                            client,
+                            device,
+                        )
+                    )
 
         if device_type == DEVICE_TYPE_AC:
             sensors.append(
@@ -95,6 +124,42 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     @property
     def unit_of_measurement(self) -> str:
         return PERCENTAGE
+
+
+class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic dehumidifer PM2.5 sensor """
+
+    async def async_update(self):
+        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
+
+        try:
+            self._status = await self.client.get_device_info(
+                self.auth,
+                options=["0x53"],
+            )
+
+            self._pm25 = float(self._status.get("0x53"))
+            _LOGGER.debug(f"[{self.nickname}] _pm25: {self._pm25}")
+        except:
+            _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
+        else:
+            _LOGGER.debug(f"[{self.nickname}] status: {self._status}")
+
+    @property
+    def label(self) -> str:
+        return LABEL_PM25
+
+    @property
+    def icon(self) -> str:
+        return ICON_PM25
+
+    @property
+    def state(self) -> int:
+        return self._pm25 if self._pm25 else STATE_UNAVAILABLE
+
+    @property
+    def unit_of_measurement(self) -> str:
+        return CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 
 
 class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):

@@ -34,16 +34,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
-    commands = client.get_commands()
     sensors = []
 
     for device in devices:
         device_type = int(device["Devices"][0]["DeviceType"])
-        current_device_commands = [
-            command
-            for command in commands
-            if command["ModelType"] == device["Devices"][0]["ModelType"]
-        ]
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
@@ -52,26 +46,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     device,
                 )
             )
-
-            if len(current_device_commands) > 0:
-                is_pm25_supported = (
-                    len(
-                        [
-                            command
-                            for command in current_device_commands[0]["JSON"][0]["list"]
-                            if command["CommandType"] == "0x53"
-                        ]
-                    )
-                    > 0
+            sensors.append(
+                PanasonicPM25Sensor(
+                    client,
+                    device,
                 )
-
-                if is_pm25_supported:
-                    sensors.append(
-                        PanasonicPM25Sensor(
-                            client,
-                            device,
-                        )
-                    )
+            )
 
         if device_type == DEVICE_TYPE_AC:
             sensors.append(
@@ -132,13 +112,16 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     async def async_update(self):
         _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
 
+        self._pm25 = False
         try:
             self._status = await self.client.get_device_info(
                 self.auth,
                 options=["0x53"],
             )
 
-            self._pm25 = float(self._status.get("0x53"))
+            pm25 = int(self._status.get("0x53"))
+            if pm25 >= 0:
+                self._pm25 = pm25
             _LOGGER.debug(f"[{self.nickname}] _pm25: {self._pm25}")
         except:
             _LOGGER.error(f"[{self.nickname}] Error occured while updating status")

@@ -68,6 +68,8 @@ ICON_HUMIDITY = "mdi:water-percent"
 ICON_ON_TIMER = "mdi:alarm"
 ICON_OFF_TIMER = "mdi:alarm-snooze"
 ICON_THERMOMETER = "mdi:thermometer"
+ICON_PM25 = "mdi:dots-hexagon"
+
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -78,3 +80,4 @@ LABEL_DEHUMIDIFIER_OFF_TIMER = "定時關機(時)"
 LABEL_CLIMATE_ON_TIMER = "定時開機(分)"
 LABEL_CLIMATE_OFF_TIMER = "定時關機(分)"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
+LABEL_PM25 = "PM2.5"

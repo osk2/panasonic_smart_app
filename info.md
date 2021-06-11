@@ -49,6 +49,7 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 |              | number        | On timer (Only if supported) |
 |              | number        | Off timer                    |
 |              | sensor        | Environment humidity sensor  |
+|              | sensor        | PM2.5 sensor                 |
 |              | binary_sensor | Water tank status sensor     |
 
 For missing entities, open an [issue](https://github.com/osk2/panasonic_smart_app/issues) or submit a PR 💪

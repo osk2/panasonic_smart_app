@@ -13,6 +13,7 @@ from .exceptions import (
 )
 from .const import (
     APP_TOKEN,
+    USER_AGENT,
     SECONDS_BETWEEN_REQUEST,
     HTTP_EXPECTATION_FAILED,
     EXCEPTION_INVALID_REFRESH_TOKEN,
@@ -128,7 +129,7 @@ class SmartApp(object):
         """Shared request method"""
 
         resp = None
-
+        headers["user-agent"] = USER_AGENT
         _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
         async with self._session.request(
             method, url=endpoint, json=data, params=params, headers=headers

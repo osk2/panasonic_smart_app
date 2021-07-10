@@ -18,6 +18,7 @@ class PanasonicBaseEntity(ABC):
     ):
         self.client = client
         self.device = device
+        self.status = device["status"]
 
     @property
     @abstractmethod

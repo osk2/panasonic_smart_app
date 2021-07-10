@@ -1,5 +1,5 @@
 """ Panasonic Smart App API """
-from datetime import timedelta
+from datetime import time, timedelta
 from typing import Literal
 import logging
 
@@ -10,12 +10,15 @@ from .exceptions import (
     PanasonicTokenExpired,
     PanasonicInvalidRefreshToken,
     PanasonicLoginFailed,
+    PanasonicDeviceOffline,
 )
 from .const import (
     APP_TOKEN,
     USER_AGENT,
     SECONDS_BETWEEN_REQUEST,
+    REQUEST_TIMEOUT,
     HTTP_EXPECTATION_FAILED,
+    EXCEPTION_COMMAND_NOT_FOUND,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
 from . import urls
@@ -28,10 +31,13 @@ def tryApiStatus(func):
     async def wrapper_call(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
+        except PanasonicDeviceOffline as exception:
+            _LOGGER.info(exception.message)
+            return {}
         except PanasonicTokenExpired:
             await args[0].refresh_token()
             return await func(*args, **kwargs)
-        except (PanasonicInvalidRefreshToken, PanasonicLoginFailed, Exception):
+        except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
             await args[0].login()
             return await func(*args, **kwargs)
 
@@ -51,7 +57,10 @@ class SmartApp(object):
         _LOGGER.info("Attemping to login...")
         data = {"MemId": self.account, "PW": self.password, "AppToken": APP_TOKEN}
         response = await self.request(
-            method="POST", headers={}, endpoint=urls.login(), data=data
+            method="POST",
+            headers={},
+            endpoint=urls.login(),
+            data=data
         )
 
         self._refresh_token = response["RefreshToken"]
@@ -129,10 +138,10 @@ class SmartApp(object):
         """Shared request method"""
 
         resp = None
-        headers["user-agent"] = USER_AGENT
+        headers['user-agent'] = USER_AGENT
         _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
         async with self._session.request(
-            method, url=endpoint, json=data, params=params, headers=headers
+            method, url=endpoint, json=data, params=params, headers=headers, timeout=REQUEST_TIMEOUT
         ) as response:
             if response.status == HTTP_OK:
                 try:
@@ -141,11 +150,14 @@ class SmartApp(object):
                     resp = {}
             elif response.status == HTTP_EXPECTATION_FAILED:
                 returned_raw_data = await response.text()
-                _LOGGER.error(
-                    "Failed to access API. Returned" " %d: %s",
-                    response.status,
-                    returned_raw_data,
-                )
+                if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
+                    raise PanasonicDeviceOffline
+                else:
+                    _LOGGER.error(
+                        "Failed to access API. Returned" " %d: %s",
+                        response.status,
+                        returned_raw_data,
+                    )
                 try:
                     resp = await response.json()
                     if resp["StateMsg"] == EXCEPTION_INVALID_REFRESH_TOKEN:

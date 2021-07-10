@@ -52,47 +52,30 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
-    def __init__(self, client, device):
 
-        super().__init__(client, device)
-
-        self._is_on_status = False
-        self._mode = ""
-        self._current_humd = 0
-        self._target_humd = 0
-
-    async def async_update(self):
+    def update(self):
         _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-        try:
-            self._status = await self.client.get_device_info(
-                self.auth,
-                options=["0x50", "0x00", "0x01", "0x0a", "0x04"],
-            )
+        # _is_on
+        self._is_on_status = bool(int(self.status.get("0x00") or 0))
+        _LOGGER.debug(f"[{self.nickname}] _is_on: {self._is_on_status}")
 
-        except:
-            _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
-        else:
-            _LOGGER.debug(f"[{self.nickname}] status: {self._status}")
-            # _is_on
-            self._is_on_status = bool(int(self._status.get("0x00")))
-            _LOGGER.debug(f"[{self.nickname}] _is_on: {self._is_on_status}")
+        # _mode
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x01", self.commands)
+        )[0]["Parameters"]
+        target_mode = list(
+            filter(lambda m: m[1] == int(self.status.get("0x01") or 0), raw_mode_list)
+        )
+        self._mode = target_mode[0] if len(target_mode) > 0 else ""
+        _LOGGER.debug(f"[{self.nickname}] _mode: {self._mode}")
 
-            # _mode
-            raw_mode_list = list(
-                filter(lambda c: c["CommandType"] == "0x01", self.commands)
-            )[0]["Parameters"]
-            self._mode = list(
-                filter(lambda m: m[1] == int(self._status.get("0x01")), raw_mode_list)
-            )[0][0]
-            _LOGGER.debug(f"[{self.nickname}] _mode: {self._mode}")
+        # _target_humd
+        self._target_humd = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
+            int(self.status.get("0x04") or 0)
+        ]
+        _LOGGER.debug(f"[{self.nickname}] _target_humd: {self._target_humd}")
 
-            # _target_humd
-            self._target_humd = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
-                int(self._status.get("0x04"))
-            ]
-            _LOGGER.debug(f"[{self.nickname}] _target_humd: {self._target_humd}")
-
-            _LOGGER.debug(f"[{self.nickname}] update completed.")
+        _LOGGER.debug(f"[{self.nickname}] update completed.")
 
     @property
     def label(self):

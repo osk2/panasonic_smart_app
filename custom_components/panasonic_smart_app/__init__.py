@@ -1,4 +1,5 @@
 import asyncio
+import async_timeout
 from datetime import timedelta
 import logging
 
@@ -17,6 +18,7 @@ from .const import (
     DEFAULT_NAME,
     PLATFORMS,
     UPDATE_INTERVAL,
+    DEVICE_STATUS_CODES,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -32,13 +34,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = async_get_clientsession(hass)
     client = SmartApp(session, username, password)
 
-    await client.login()
+    _LOGGER.info(
+        "\nLoading your Panasonic devices. This may takes few minutes to complete.\n"
+    )
+
+    async def async_update_data():
+        await client.login()
+        devices = await client.get_devices()
+        for device in devices:
+            device_type = int(device["Devices"][0]["DeviceType"])
+            status_codes = DEVICE_STATUS_CODES[device_type]
+            device["status"] = await client.get_device_info(
+                device["auth"], status_codes
+            )
+        return devices
 
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
         name=DEFAULT_NAME,
-        update_method=client.get_devices,
+        update_method=async_update_data,
         update_interval=timedelta(seconds=UPDATE_INTERVAL),
     )
 

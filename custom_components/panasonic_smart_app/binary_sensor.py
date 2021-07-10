@@ -38,19 +38,14 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
-    async def async_update(self):
+    def update(self):
         _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-        try:
-            self._status = await self.client.get_device_info(
-                self.auth,
-                options=["0x0a"],
-            )
 
-        except:
-            _LOGGER.error(f"[{self.nickname}] Error occured while updating status")
-        else:
-            self._is_tank_full = bool(int(self._status.get("0x0a")))
-            _LOGGER.debug(f"[{self.nickname}] _is_tank_full: {self._is_tank_full}")
+        self._is_on_status = bool(int(self.status.get("0x00") or 0))
+        _LOGGER.debug(f"[{self.nickname}] _is_on_status: {self._is_on_status}")
+
+        self._is_tank_full = bool(int(self.status.get("0x0a") or 0))
+        _LOGGER.debug(f"[{self.nickname}] _is_tank_full: {self._is_tank_full}")
 
     @property
     def label(self) -> str:

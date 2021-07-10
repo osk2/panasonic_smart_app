@@ -61,45 +61,33 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
-    def __init__(self, client, device):
-        super().__init__(client, device)
-
-        self._is_on = False
-        self._hvac_mode = HVAC_MODE_COOL
-
-        self._unit = TEMP_CELSIUS
-        self._target_temperature = None
-        self._current_temperature = None
-
-    async def async_update(self):
+    def update(self):
         _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label}-------")
         """Update the state of this climate device."""
-        self._status = await self.client.get_device_info(
-            self.auth,
-            options=["0x00", "0x01", "0x04", "0x03", "0x02", "0x0f", "0x21"],
-        )
-        _LOGGER.debug(f"[{self.nickname}] Status: {self._status}")
 
-        self._is_on = bool(int(self._status.get("0x00")))
+        self._is_on = bool(int(self.status.get("0x00") or 0))
         _LOGGER.debug(f"[{self.nickname}] _is_on: {self._is_on}")
 
-        self._target_temperature = float(self._status.get("0x03"))
+        self._target_temperature = float(self.status.get("0x03") or 0)
         _LOGGER.debug(
             f"[{self.nickname}] _current_temperature: {self._target_temperature}"
         )
 
-        self._current_temperature = float(self._status.get("0x04"))
+        self._current_temperature = float(self.status.get("0x04") or 0)
         _LOGGER.debug(
             f"[{self.nickname}] _current_temperature: {self._current_temperature}"
         )
 
-        self._fan_mode = int(self._status.get("0x02"))
+        self._hvac_mode = CLIMATE_AVAILABLE_PRESET[int(self.status.get("0x01"))]
+        _LOGGER.debug(f"[{self.nickname}] _hvac_mode is {self._hvac_mode}")
+
+        self._fan_mode = int(self.status.get("0x02") or 0)
         _LOGGER.debug(f"[{self.nickname}] _fan_mode: {self._fan_mode}")
 
-        self._swing_mode = int(self._status.get("0x0f"))
+        self._swing_mode = int(self.status.get("0x0f") or 0)
         _LOGGER.debug(f"[{self.nickname}] _swing_mode: {self._swing_mode}")
 
-        _LOGGER.debug(f"[{self.nickname}] is UPDATED.")
+        _LOGGER.debug(f"[{self.nickname}] is updated.")
 
     @property
     def label(self):
@@ -121,7 +109,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         if not self._is_on:
             return HVAC_MODE_OFF
         else:
-            value = int(self._status.get("0x01"))
+            value = int(self.status.get("0x01"))
             mode_mapping = list(
                 filter(lambda m: m["mappingCode"] == value, CLIMATE_AVAILABLE_MODE)
             )[0]
@@ -168,11 +156,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         if not self._is_on:
             return HVAC_MODE_OFF
         else:
-            value = int(self._status.get("0x01"))
-            _LOGGER.debug(
-                f"[{self.nickname}] hvac_mode is {value} - {CLIMATE_AVAILABLE_PRESET[value]}"
-            )
-            return CLIMATE_AVAILABLE_PRESET[value]
+            return self._hvac_mode
 
     @property
     def preset_modes(self) -> list:

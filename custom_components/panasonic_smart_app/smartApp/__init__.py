@@ -164,6 +164,7 @@ class SmartApp(object):
                 )
             else:
                 raise PanasonicDeviceOffline
+
         if response.status == HTTP_OK:
             try:
                 resp = await response.json()
@@ -171,18 +172,16 @@ class SmartApp(object):
                 resp = {}
         elif response.status == HTTP_EXPECTATION_FAILED:
             returned_raw_data = await response.text()
-            _LOGGER.error(
-                "Failed to access API. Returned" " %d: %s",
-                response.status,
-                returned_raw_data,
-            )
+
             if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
                 auth = headers["auth"]
-                device = list(filter(lambda device: device["auth"] == auth, self._devices))
-                raise PanasonicDeviceOffline(
-                  f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
-                )
-                """ raise PanasonicDeviceOffline """
+                if auth:
+                    device = list(filter(lambda device: device["auth"] == auth, self._devices))
+                    raise PanasonicDeviceOffline(
+                      f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                    )
+                else:
+                    raise PanasonicDeviceOffline
             else:
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",

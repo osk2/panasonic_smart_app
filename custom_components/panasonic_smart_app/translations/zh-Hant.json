@@ -11,7 +11,8 @@
       }
     },
     "error": {
-      "auth": "帳號或密碼有誤。"
+      "auth": "帳號或密碼有誤。",
+      "rate_limit": "API 已達用量上限，請稍候重試一次"
     },
     "abort": {
       "single_instance_allowed": "重複設定。僅能建立一個實例"

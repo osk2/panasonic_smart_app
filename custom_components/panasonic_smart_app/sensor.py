@@ -36,18 +36,22 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     devices = coordinator.data
     sensors = []
 
-    for device in devices:
+    for index, device in enumerate(devices):
         device_type = int(device["Devices"][0]["DeviceType"])
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
                 PanasonicHumiditySensor(
+                    coordinator,
+                    index,
                     client,
                     device,
                 )
             )
             sensors.append(
                 PanasonicPM25Sensor(
+                    coordinator,
+                    index,
                     client,
                     device,
                 )
@@ -56,6 +60,8 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         if device_type == DEVICE_TYPE_AC:
             sensors.append(
                 PanasonicOutdoorTemperatureSensor(
+                    coordinator,
+                    index,
                     client,
                     device,
                 )
@@ -68,12 +74,6 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic dehumidifier current humidity sensor """
-
-    def update(self):
-        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-
-        self._current_humd = self.status.get("0x07") or 0
-        _LOGGER.debug(f"[{self.nickname}] _current_humd: {self._current_humd}")
 
     @property
     def label(self) -> str:
@@ -89,7 +89,10 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def state(self) -> int:
-        return self._current_humd if self._current_humd else STATE_UNAVAILABLE
+        status = self.coordinator.data[self.index]["status"]
+        _current_humd = status.get("0x07") or None
+        _LOGGER.debug(f"[{self.label}] state: {_current_humd}")
+        return _current_humd if _current_humd else STATE_UNAVAILABLE
 
     @property
     def unit_of_measurement(self) -> str:
@@ -98,15 +101,6 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
 
 class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic dehumidifer PM2.5 sensor """
-
-    def update(self):
-        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-
-        self._pm25 = False
-        pm25 = int(self.status.get("0x53") or -1)
-        if pm25 >= 0:
-            self._pm25 = pm25
-        _LOGGER.debug(f"[{self.nickname}] _pm25: {self._pm25}")
 
     @property
     def label(self) -> str:
@@ -118,7 +112,10 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def state(self) -> int:
-        return self._pm25 if self._pm25 else STATE_UNAVAILABLE
+        status = self.coordinator.data[self.index]["status"]
+        _pm25 = int(status.get("0x53") or -1)
+        _LOGGER.debug(f"[{self.label}] state: {_pm25}")
+        return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
 
     @property
     def unit_of_measurement(self) -> str:
@@ -127,14 +124,6 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
 
 class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic AC outdoor temperature sensor """
-
-    def update(self):
-        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-
-        self._outside_temperature = float(self.status.get("0x21"))
-        _LOGGER.debug(
-            f"[{self.nickname}] _outside_temperature: {self._outside_temperature}"
-        )
 
     @property
     def label(self) -> str:
@@ -150,9 +139,12 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def state(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        _outside_temperature = float(status.get("0x21") or -1)
+        _LOGGER.debug(f"[{self.label}] state: {_outside_temperature}")
         return (
-            self._outside_temperature
-            if self._outside_temperature
+            _outside_temperature
+            if _outside_temperature >= 0
             else STATE_UNAVAILABLE
         )
 

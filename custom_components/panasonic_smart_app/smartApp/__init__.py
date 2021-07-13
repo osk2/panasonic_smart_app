@@ -1,16 +1,16 @@
 """ Panasonic Smart App API """
-from datetime import time, timedelta
 from typing import Literal
+import asyncio
 import logging
 
 from homeassistant.const import HTTP_OK
-from homeassistant.util import Throttle
 from .exceptions import (
     PanasonicRefreshTokenNotFound,
     PanasonicTokenExpired,
     PanasonicInvalidRefreshToken,
     PanasonicLoginFailed,
     PanasonicDeviceOffline,
+    PanasonicExceedRateLimit,
 )
 from .const import (
     APP_TOKEN,
@@ -18,28 +18,38 @@ from .const import (
     SECONDS_BETWEEN_REQUEST,
     REQUEST_TIMEOUT,
     HTTP_EXPECTATION_FAILED,
+    HTTP_TOO_MANY_REQUESTS,
     EXCEPTION_COMMAND_NOT_FOUND,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
 from . import urls
 
 _LOGGER = logging.getLogger(__name__)
-REQUEST_THROTTLE = timedelta(seconds=SECONDS_BETWEEN_REQUEST)
 
 
 def tryApiStatus(func):
     async def wrapper_call(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
-        except PanasonicDeviceOffline as exception:
-            _LOGGER.info(exception.message)
-            return {}
         except PanasonicTokenExpired:
             await args[0].refresh_token()
             return await func(*args, **kwargs)
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
             await args[0].login()
             return await func(*args, **kwargs)
+        except (PanasonicDeviceOffline, Exception) as exception:
+            _LOGGER.info(exception.message)
+            return {}
+
+    return wrapper_call
+
+def delay(func):
+    async def wrapper_call(*args, **kwargs):
+        results = await asyncio.gather(*[
+          func(*args, **kwargs),
+          asyncio.sleep(SECONDS_BETWEEN_REQUEST)
+        ])
+        return results[0]
 
     return wrapper_call
 
@@ -52,7 +62,6 @@ class SmartApp(object):
         self._devices = []
         self._commands = []
 
-    @Throttle(REQUEST_THROTTLE)
     async def login(self):
         _LOGGER.info("Attemping to login...")
         data = {"MemId": self.account, "PW": self.password, "AppToken": APP_TOKEN}
@@ -66,7 +75,6 @@ class SmartApp(object):
         self._refresh_token = response["RefreshToken"]
         self._cp_token = response["CPToken"]
 
-    @Throttle(REQUEST_THROTTLE)
     async def refresh_token(self):
         _LOGGER.info("Attemping to refresh token...")
         if self._refresh_token is None:
@@ -76,6 +84,7 @@ class SmartApp(object):
         response = await self.request(
             method="POST", headers={}, endpoint=urls.refresh_token(), data=data
         )
+
         self._refresh_token = response["RefreshToken"]
         self._cp_token = response["CPToken"]
 
@@ -127,6 +136,7 @@ class SmartApp(object):
         )
         return True
 
+    @delay
     async def request(
         self,
         method: Literal["GET", "POST"],
@@ -137,41 +147,69 @@ class SmartApp(object):
     ):
         """Shared request method"""
 
-        resp = None
-        headers['user-agent'] = USER_AGENT
-        _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
-        async with self._session.request(
-            method, url=endpoint, json=data, params=params, headers=headers, timeout=REQUEST_TIMEOUT
-        ) as response:
-            if response.status == HTTP_OK:
-                try:
-                    resp = await response.json()
-                except:
-                    resp = {}
-            elif response.status == HTTP_EXPECTATION_FAILED:
-                returned_raw_data = await response.text()
-                if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
-                    raise PanasonicDeviceOffline
-                else:
-                    _LOGGER.error(
-                        "Failed to access API. Returned" " %d: %s",
-                        response.status,
-                        returned_raw_data,
-                    )
-                try:
-                    resp = await response.json()
-                    if resp["StateMsg"] == EXCEPTION_INVALID_REFRESH_TOKEN:
-                        raise PanasonicTokenExpired
-                    else:
-                        raise PanasonicLoginFailed
-                except:
-                    raise PanasonicInvalidRefreshToken
 
+        resp = None
+        headers["user-agent"] = USER_AGENT
+        _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
+        try:
+            response = await self._session.request(
+                method, url=endpoint, json=data, params=params, headers=headers, timeout=REQUEST_TIMEOUT
+            )
+        except:
+            auth = headers["auth"]
+            if auth:
+                device = list(filter(lambda device: device["auth"] == auth, self._devices))
+                raise PanasonicDeviceOffline(
+                  f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                )
+            else:
+                raise PanasonicDeviceOffline
+        if response.status == HTTP_OK:
+            try:
+                resp = await response.json()
+            except:
+                resp = {}
+        elif response.status == HTTP_EXPECTATION_FAILED:
+            returned_raw_data = await response.text()
+            _LOGGER.error(
+                "Failed to access API. Returned" " %d: %s",
+                response.status,
+                returned_raw_data,
+            )
+            if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
+                auth = headers["auth"]
+                device = list(filter(lambda device: device["auth"] == auth, self._devices))
+                raise PanasonicDeviceOffline(
+                  f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                )
+                """ raise PanasonicDeviceOffline """
             else:
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",
                     response.status,
-                    await response.text(),
+                    returned_raw_data,
                 )
+            try:
+                resp = await response.json()
+                if resp["StateMsg"] == EXCEPTION_INVALID_REFRESH_TOKEN:
+                    raise PanasonicTokenExpired
+                else:
+                    raise PanasonicLoginFailed
+            except:
+                raise PanasonicInvalidRefreshToken
+        elif response.status == HTTP_TOO_MANY_REQUESTS:
+            _LOGGER.error(
+                "Failed to access API. Returned" " %d: %s",
+                response.status,
+                await response.text(),
+            )
+            raise PanasonicExceedRateLimit
+        else:
+            _LOGGER.error(
+                "Failed to access API. Returned" " %d: %s",
+                response.status,
+                await response.text(),
+            )
 
         return resp
+

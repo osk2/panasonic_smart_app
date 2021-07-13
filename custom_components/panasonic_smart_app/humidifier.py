@@ -37,10 +37,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     devices = coordinator.data
     humidifiers = []
 
-    for device in devices:
+    for index, device in enumerate(devices):
         if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
             humidifiers.append(
                 PanasonicDehumidifier(
+                    coordinator,
+                    index,
                     client,
                     device,
                 )
@@ -53,52 +55,48 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
-    def update(self):
-        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
-        # _is_on
-        self._is_on_status = bool(int(self.status.get("0x00") or 0))
-        _LOGGER.debug(f"[{self.nickname}] _is_on: {self._is_on_status}")
-
-        # _mode
-        raw_mode_list = list(
-            filter(lambda c: c["CommandType"] == "0x01", self.commands)
-        )[0]["Parameters"]
-        target_mode = list(
-            filter(lambda m: m[1] == int(self.status.get("0x01") or 0), raw_mode_list)
-        )
-        self._mode = target_mode[0] if len(target_mode) > 0 else ""
-        _LOGGER.debug(f"[{self.nickname}] _mode: {self._mode}")
-
-        # _target_humd
-        self._target_humd = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
-            int(self.status.get("0x04") or 0)
-        ]
-        _LOGGER.debug(f"[{self.nickname}] _target_humd: {self._target_humd}")
-
-        _LOGGER.debug(f"[{self.nickname}] update completed.")
+    @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on_status = bool(int(status.get("0x00") or 0))
+        return _is_on_status
 
     @property
     def label(self):
         return LABEL_DEHUMIDIFIER
 
     @property
-    def target_humidity(self):
-        return self._target_humd
+    def target_humidity(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        _target_humidity = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
+            int(status.get("0x04") or 0)
+        ]
+        _LOGGER.debug(f"[{self.label}] target_humidity: {_target_humidity}")
+        return _target_humidity
 
     @property
-    def max_humidity(self):
+    def max_humidity(self) -> int:
         return DEHUMIDIFIER_MAX_HUMD
 
     @property
-    def min_humidity(self):
+    def min_humidity(self) -> int:
         return DEHUMIDIFIER_MIN_HUMD
 
     @property
-    def mode(self):
-        return self._mode
+    def mode(self) -> str:
+        status = self.coordinator.data[self.index]["status"]
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x01", self.commands)
+        )[0]["Parameters"]
+        target_mode = list(
+            filter(lambda m: m[1] == int(status.get("0x01") or 0), raw_mode_list)
+        )
+        _mode = target_mode[0] if len(target_mode) > 0 else ""
+        _LOGGER.debug(f"[{self.label}] _mode: {_mode}")
+        return _mode
 
     @property
-    def available_modes(self):
+    def available_modes(self) -> list:
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x01", self.commands)
         )[0]["Parameters"]
@@ -110,23 +108,25 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         return mode_list
 
     @property
-    def supported_features(self):
+    def supported_features(self) -> int:
         return SUPPORT_MODES
 
     @property
-    def is_on(self):
-        return self._is_on_status
+    def is_on(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on_status = bool(int(status.get("0x00") or 0))
+        return _is_on_status
 
     @property
-    def device_class(self):
+    def device_class(self) -> str:
         return DEVICE_CLASS_DEHUMIDIFIER
 
-    async def async_set_mode(self, mode):
+    async def async_set_mode(self, mode) -> None:
         """ Set operation mode """
         if mode is None:
             return
 
-        _LOGGER.debug(f" [{self.nickname}] Set mode to {mode}")
+        _LOGGER.debug(f" [{self.label}] Set mode to {mode}")
 
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x01", self.commands)
@@ -134,8 +134,9 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         mode_info = list(filter(lambda m: m[0] == mode, raw_mode_list["Parameters"]))[0]
 
         await self.client.set_command(self.auth, 129, int(mode_info[1]))
+        await self.coordinator.async_request_refresh()
 
-    async def async_set_humidity(self, humidity):
+    async def async_set_humidity(self, humidity) -> None:
         """ Set target humidity """
         if humidity is None:
             return
@@ -147,15 +148,18 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         )
         targetKey = getKeyFromDict(DEHUMIDIFIER_AVAILABLE_HUMIDITY, targetValue)
 
-        _LOGGER.debug(f"[{self.nickname}] Set humidity to {targetValue}")
+        _LOGGER.debug(f"[{self.label}] Set humidity to {targetValue}")
         await self.client.set_command(self.auth, 132, int(targetKey))
+        await self.coordinator.async_request_refresh()
 
-    async def async_turn_on(self):
+    async def async_turn_on(self) -> None:
         """ Turn on dehumidifier """
-        _LOGGER.debug(f"[{self.nickname}] Turning on")
+        _LOGGER.debug(f"[{self.label}] Turning on")
         await self.client.set_command(self.auth, 128, 1)
+        await self.coordinator.async_request_refresh()
 
-    async def async_turn_off(self):
+    async def async_turn_off(self) -> None:
         """ Turn off dehumidifier """
-        _LOGGER.debug(f"[{self.nickname}] Turning off")
+        _LOGGER.debug(f"[{self.label}] Turning off")
         await self.client.set_command(self.auth, 128, 0)
+        await self.coordinator.async_request_refresh()

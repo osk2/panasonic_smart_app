@@ -32,3 +32,12 @@ class PanasonicDeviceOffline(PanasonicBaseException):
     ):
         super().__init__(message)
         self.message = message
+
+class PanasonicExceedRateLimit(PanasonicBaseException):
+    """ API reaches rate limit """
+
+    def __init__(
+        self, message="Reached API rate limit. Please try again later."
+    ):
+        super().__init__(message)
+        self.message = message

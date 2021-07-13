@@ -23,10 +23,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     devices = coordinator.data
     sensors = []
 
-    for device in devices:
+    for index, device in enumerate(devices):
         if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
                 PanasonoicTankSensor(
+                    coordinator,
+                    index,
                     client,
                     device,
                 )
@@ -38,14 +40,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
-    def update(self):
-        _LOGGER.debug(f"------- UPDATING {self.nickname} {self.label} -------")
 
-        self._is_on_status = bool(int(self.status.get("0x00") or 0))
-        _LOGGER.debug(f"[{self.nickname}] _is_on_status: {self._is_on_status}")
-
-        self._is_tank_full = bool(int(self.status.get("0x0a") or 0))
-        _LOGGER.debug(f"[{self.nickname}] _is_tank_full: {self._is_tank_full}")
+    @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on_status = bool(int(status.get("0x00") or 0))
+        return _is_on_status
 
     @property
     def label(self) -> str:
@@ -57,4 +57,7 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._is_tank_full
+        status = self.coordinator.data[self.index]["status"]
+        _is_tank_full = bool(int(status.get("0x0a") or 0))
+        _LOGGER.debug(f"[{self.label}] is_on: {_is_tank_full}")
+        return _is_tank_full

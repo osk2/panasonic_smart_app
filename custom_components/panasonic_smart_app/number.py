@@ -14,6 +14,8 @@ from .const import (
     LABEL_DEHUMIDIFIER_OFF_TIMER,
     LABEL_CLIMATE_ON_TIMER,
     LABEL_CLIMATE_OFF_TIMER,
+    UNIT_HOUR,
+    UNIT_MINUTE,
     ICON_ON_TIMER,
     ICON_OFF_TIMER,
     CLIMATE_ON_TIMER_MIN,
@@ -147,6 +149,10 @@ class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
     def max_value(self) -> int:
         return DEHUMIDIFIER_ON_TIMER_MAX
 
+    @property
+    def unit_of_measurement(self) -> str:
+        return UNIT_HOUR
+
     async def async_set_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 213, int(value))
         await self.coordinator.async_request_refresh()
@@ -183,6 +189,10 @@ class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
     @property
     def max_value(self) -> int:
         return DEHUMIDIFIER_OFF_TIMER_MAX
+
+    @property
+    def unit_of_measurement(self) -> str:
+        return UNIT_HOUR
 
     async def async_set_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 130, int(value))
@@ -221,6 +231,10 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
     def max_value(self) -> int:
         return CLIMATE_ON_TIMER_MAX
 
+    @property
+    def unit_of_measurement(self) -> str:
+        return UNIT_MINUTE
+
     async def async_set_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 139, int(value))
         await self.coordinator.async_request_refresh()
@@ -257,6 +271,10 @@ class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
     @property
     def max_value(self) -> int:
         return CLIMATE_OFF_TIMER_MAX
+
+    @property
+    def unit_of_measurement(self) -> str:
+        return UNIT_MINUTE
 
     async def async_set_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 140, int(value))

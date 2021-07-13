@@ -1,4 +1,5 @@
 import asyncio
+import async_timeout
 from datetime import timedelta
 import logging
 
@@ -7,7 +8,10 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import (
+  DataUpdateCoordinator,
+  UpdateFailed
+)
 
 from .smartApp import SmartApp
 from .const import (
@@ -17,6 +21,7 @@ from .const import (
     DEFAULT_NAME,
     PLATFORMS,
     UPDATE_INTERVAL,
+    DEVICE_STATUS_CODES,
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -32,20 +37,34 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     session = async_get_clientsession(hass)
     client = SmartApp(session, username, password)
 
+    _LOGGER.info("\n\
+      Loading your Panasonic devices. This may takes few minutes to complete.\n\
+    ")
     await client.login()
+
+    async def async_update_data():
+        try:
+            _LOGGER.info('Updating device info...')
+            devices = await client.get_devices()
+            for device in devices:
+                device_type = int(device["Devices"][0]["DeviceType"])
+                status_codes = DEVICE_STATUS_CODES[device_type]
+                device["status"] = await client.get_device_info(
+                  device["auth"], status_codes
+                )
+            return devices
+        except:
+            raise UpdateFailed("Failed on initialize")
 
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
         name=DEFAULT_NAME,
-        update_method=client.get_devices,
+        update_method=async_update_data,
         update_interval=timedelta(seconds=UPDATE_INTERVAL),
     )
 
-    await coordinator.async_refresh()
-
-    if not coordinator.last_update_success:
-        raise ConfigEntryNotReady
+    await coordinator.async_config_entry_first_refresh()
 
     hass.data[DOMAIN][entry.entry_id] = {
         DATA_CLIENT: client,

@@ -1,5 +1,6 @@
 from datetime import timedelta
 from abc import ABC, abstractmethod
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     DOMAIN,
@@ -9,15 +10,18 @@ from .const import (
 
 SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
-
-class PanasonicBaseEntity(ABC):
+class PanasonicBaseEntity(CoordinatorEntity, ABC):
     def __init__(
         self,
+        coordinator,
+        index,
         client,
         device,
     ):
+        super().__init__(coordinator)
         self.client = client
         self.device = device
+        self.index = index
 
     @property
     @abstractmethod
@@ -49,7 +53,7 @@ class PanasonicBaseEntity(ABC):
 
     @property
     def name(self) -> str:
-        return f"{self.nickname} {self.label}"
+        return self.label
 
     @property
     def auth(self) -> str:
@@ -60,7 +64,7 @@ class PanasonicBaseEntity(ABC):
         return self.auth + self.label
 
     @property
-    def device_info(self):
+    def device_info(self) -> dict:
         return {
             "identifiers": {(DOMAIN, self.auth)},
             "name": self.nickname,

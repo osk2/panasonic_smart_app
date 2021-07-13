@@ -11,7 +11,8 @@
       }
     },
     "error": {
-      "auth": "Username/Password is incorrect."
+      "auth": "Username/Password is incorrect.",
+      "rate_limit": "API rate limit is reached. Please retry later."
     },
     "abort": {
       "single_instance_allowed": "Only a single instance is allowed."

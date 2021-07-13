@@ -22,3 +22,22 @@ class PanasonicInvalidRefreshToken(PanasonicBaseException):
 
 class PanasonicLoginFailed(PanasonicBaseException):
     """ Any other login exception """
+
+
+class PanasonicDeviceOffline(PanasonicBaseException):
+    """ Target device is offline """
+
+    def __init__(
+        self, message="Device is offline. Retry later..."
+    ):
+        super().__init__(message)
+        self.message = message
+
+class PanasonicExceedRateLimit(PanasonicBaseException):
+    """ API reaches rate limit """
+
+    def __init__(
+        self, message="Reached API rate limit. Please try again later."
+    ):
+        super().__init__(message)
+        self.message = message

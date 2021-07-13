@@ -10,7 +10,13 @@ from homeassistant.components.climate.const import (
 )
 
 DOMAIN = "panasonic_smart_app"
-PLATFORMS = ["humidifier", "sensor", "number", "binary_sensor", "climate"]
+PLATFORMS = [
+    "humidifier",
+    "sensor",
+    "number",
+    "binary_sensor",
+    "climate",
+]
 MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"
 
@@ -21,6 +27,33 @@ DATA_CLIENT = "client"
 DATA_COORDINATOR = "coordinator"
 
 UPDATE_INTERVAL = 60
+
+DEVICE_STATUS_CODES = {
+    DEVICE_TYPE_AC: [
+        "0x00",
+        "0x01",
+        "0x04",
+        "0x03",
+        "0x02",
+        "0x0f",
+        "0x21",
+        "0x0b",
+        "0x0c",
+    ],
+    DEVICE_TYPE_DEHUMIDIFIER: [
+        "0x00",
+        "0x01",
+        "0x50",
+        "0x0a",
+        "0x04",
+        "0x0e",
+        "0x09",
+        "0x55",
+        "0x02",
+        "0x53",
+        "0x07",
+    ],
+}
 
 DEHUMIDIFIER_MAX_HUMD = 70
 DEHUMIDIFIER_MIN_HUMD = 40

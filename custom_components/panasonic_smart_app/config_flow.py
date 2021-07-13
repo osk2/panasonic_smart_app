@@ -1,10 +1,8 @@
 """Adds config flow for Panasonic Smart App"""
 from __future__ import annotations
 
-import logging
 from typing import Any
 
-from requests.exceptions import RequestException
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -12,9 +10,8 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 
 from .smartApp import SmartApp
+from .smartApp.exceptions import PanasonicExceedRateLimit
 from .const import DOMAIN
-
-_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -45,6 +42,8 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 await self._test_credentials(client)
                 return self.async_create_entry(title=username, data=user_input)
+            except PanasonicExceedRateLimit:
+                self._errors["base"] = "rate_limit"
             except:
                 self._errors["base"] = "auth"
 
@@ -53,7 +52,7 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _show_config_form(
         self, _user_input: dict[str, Any] | None
     ) -> dict[str, Any]:
-        """Show the configuration form to edit location data."""
+        """ Show the configuration form. """
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
@@ -65,10 +64,6 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def _test_credentials(self, client) -> bool | None:
-        try:
-            await client.login()
-            return True
-        except (RequestException) as exception:
-            _LOGGER.error(exception)
-        return None
+    async def _test_credentials(self, client) -> True:
+        await client.login()
+        return True

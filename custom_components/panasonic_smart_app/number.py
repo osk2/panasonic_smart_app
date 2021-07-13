@@ -125,7 +125,7 @@ class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_DEHUMIDIFIER_ON_TIMER
+        return f"{self.nickname} {LABEL_DEHUMIDIFIER_ON_TIMER}"
 
     @property
     def icon(self) -> str:
@@ -162,7 +162,7 @@ class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_DEHUMIDIFIER_OFF_TIMER
+        return f"{self.nickname} {LABEL_DEHUMIDIFIER_OFF_TIMER}"
 
     @property
     def icon(self) -> str:
@@ -199,7 +199,7 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_CLIMATE_ON_TIMER
+        return f"{self.nickname} {LABEL_CLIMATE_ON_TIMER}"
 
     @property
     def icon(self) -> str:
@@ -236,7 +236,7 @@ class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_CLIMATE_OFF_TIMER
+        return f"{self.nickname} {LABEL_CLIMATE_OFF_TIMER}"
 
     @property
     def icon(self) -> str:

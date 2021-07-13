@@ -64,8 +64,8 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     @property
-    def label(self):
-        return LABEL_CLIMATE
+    def label(self) -> str:
+        return f"{self.nickname} {LABEL_CLIMATE}"
 
     @property
     def supported_features(self) -> int:

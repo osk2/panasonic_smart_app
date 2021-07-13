@@ -76,8 +76,8 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic dehumidifier current humidity sensor """
 
     @property
-    def label(self) -> str:
-        return LABEL_HUMIDITY
+    def label(self):
+        return f"{self.nickname} {LABEL_HUMIDITY}"
 
     @property
     def icon(self) -> str:
@@ -104,7 +104,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_PM25
+        return f"{self.nickname} {LABEL_PM25}"
 
     @property
     def icon(self) -> str:
@@ -127,7 +127,7 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_OUTDOOR_TEMPERATURE
+        return f"{self.nickname} {LABEL_OUTDOOR_TEMPERATURE}"
 
     @property
     def icon(self) -> str:

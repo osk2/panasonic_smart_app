@@ -49,7 +49,7 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
 
     @property
     def label(self) -> str:
-        return LABEL_TANK
+        return f"{self.nickname} {LABEL_TANK}"
 
     @property
     def icon(self) -> str:

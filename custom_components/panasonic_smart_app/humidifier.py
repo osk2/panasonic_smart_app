@@ -62,8 +62,8 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         return _is_on_status
 
     @property
-    def label(self):
-        return LABEL_DEHUMIDIFIER
+    def label(self) -> str:
+        return f"{self.nickname} {LABEL_DEHUMIDIFIER}"
 
     @property
     def target_humidity(self) -> int:

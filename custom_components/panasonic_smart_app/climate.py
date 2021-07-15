@@ -62,7 +62,6 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
-
     @property
     def label(self) -> str:
         return f"{self.nickname} {LABEL_CLIMATE}"
@@ -88,9 +87,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
             mode_mapping = list(
                 filter(lambda m: m["mappingCode"] == value, CLIMATE_AVAILABLE_MODE)
             )[0]
-            _LOGGER.debug(
-                f"[{self.label}] hvac_mode: {mode_mapping['key']}"
-            )
+            _LOGGER.debug(f"[{self.label}] hvac_mode: {mode_mapping['key']}")
             return mode_mapping["key"]
 
     @property
@@ -115,7 +112,11 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         return _hvac_modes
 
     async def async_set_hvac_mode(self, hvac_mode) -> None:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on = bool(int(status.get("0x00") or 0))
+
         _LOGGER.debug(f"[{self.label}] set_hvac_mode: {hvac_mode}")
+
         if hvac_mode == HVAC_MODE_OFF:
             await self.client.set_command(self.auth, 128, 0)
         else:
@@ -124,7 +125,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
             )[0]
             mode = mode_mapping["mappingCode"]
             await self.client.set_command(self.auth, 129, mode)
-            if not self._is_on:
+            if not _is_on:
                 await self.client.set_command(self.auth, 128, 1)
 
         await self.coordinator.async_request_refresh()
@@ -134,7 +135,9 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         status = self.coordinator.data[self.index]["status"]
         _is_on = bool(int(status.get("0x00") or 0))
         _hvac_mode = int(status.get("0x01"))
-        _preset_mode = HVAC_MODE_OFF if not _is_on else CLIMATE_AVAILABLE_PRESET[_hvac_mode]
+        _preset_mode = (
+            HVAC_MODE_OFF if not _is_on else CLIMATE_AVAILABLE_PRESET[_hvac_mode]
+        )
         _LOGGER.debug(f"[{self.label}] preset_mode: {_preset_mode}")
 
         return _preset_mode
@@ -146,10 +149,14 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         return _preset_modes
 
     async def set_preset_mode(self, preset_mode) -> None:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on = bool(int(status.get("0x00") or 0))
+
         _LOGGER.debug(f"[{self.label}] set_preset_mode: {preset_mode}")
+
         value = getKeyFromDict(CLIMATE_AVAILABLE_PRESET, preset_mode)
         self.client.set_command(self.auth, 1, value)
-        if not self._is_on:
+        if not _is_on:
             self.client.set_command(self.auth, 0, 1)
 
         await self.coordinator.async_request_refresh()
@@ -212,6 +219,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     def current_temperature(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _current_temperature = float(status.get("0x04") or 0)
+        _LOGGER.debug(f"[{self.label}] current_temperature: {_current_temperature}")
         return _current_temperature
 
     @property
@@ -223,6 +231,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         minimum_temperature = list(filter(lambda t: t[0] == "Min", temperature_range))[
             0
         ][1]
+        _LOGGER.debug(f"[{self.label}] min_temp: {minimum_temperature}")
 
         return minimum_temperature
 
@@ -235,6 +244,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         maximum_temperature = list(filter(lambda t: t[0] == "Max", temperature_range))[
             0
         ][1]
+        _LOGGER.debug(f"[{self.label}] max_temp: {maximum_temperature}")
 
         return maximum_temperature
 

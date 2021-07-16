@@ -43,12 +43,12 @@ def tryApiStatus(func):
 
     return wrapper_call
 
+
 def delay(func):
     async def wrapper_call(*args, **kwargs):
-        results = await asyncio.gather(*[
-          func(*args, **kwargs),
-          asyncio.sleep(SECONDS_BETWEEN_REQUEST)
-        ])
+        results = await asyncio.gather(
+            *[func(*args, **kwargs), asyncio.sleep(SECONDS_BETWEEN_REQUEST)]
+        )
         return results[0]
 
     return wrapper_call
@@ -66,10 +66,7 @@ class SmartApp(object):
         _LOGGER.info("Attemping to login...")
         data = {"MemId": self.account, "PW": self.password, "AppToken": APP_TOKEN}
         response = await self.request(
-            method="POST",
-            headers={},
-            endpoint=urls.login(),
-            data=data
+            method="POST", headers={}, endpoint=urls.login(), data=data
         )
 
         self._refresh_token = response["RefreshToken"]
@@ -147,20 +144,26 @@ class SmartApp(object):
     ):
         """Shared request method"""
 
-
         resp = None
         headers["user-agent"] = USER_AGENT
         _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
         try:
             response = await self._session.request(
-                method, url=endpoint, json=data, params=params, headers=headers, timeout=REQUEST_TIMEOUT
+                method,
+                url=endpoint,
+                json=data,
+                params=params,
+                headers=headers,
+                timeout=REQUEST_TIMEOUT,
             )
         except:
             auth = headers["auth"] or None
             if auth:
-                device = list(filter(lambda device: device["auth"] == auth, self._devices))
+                device = list(
+                    filter(lambda device: device["auth"] == auth, self._devices)
+                )
                 raise PanasonicDeviceOffline(
-                  f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                    f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
                 )
             else:
                 raise PanasonicDeviceOffline
@@ -176,9 +179,11 @@ class SmartApp(object):
             if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
                 auth = headers["auth"]
                 if auth:
-                    device = list(filter(lambda device: device["auth"] == auth, self._devices))
+                    device = list(
+                        filter(lambda device: device["auth"] == auth, self._devices)
+                    )
                     raise PanasonicDeviceOffline(
-                      f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                        f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
                     )
                 else:
                     raise PanasonicDeviceOffline
@@ -211,4 +216,3 @@ class SmartApp(object):
             )
 
         return resp
-

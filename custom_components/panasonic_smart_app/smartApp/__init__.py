@@ -156,7 +156,7 @@ class SmartApp(object):
                 method, url=endpoint, json=data, params=params, headers=headers, timeout=REQUEST_TIMEOUT
             )
         except:
-            auth = headers["auth"]
+            auth = headers["auth"] or None
             if auth:
                 device = list(filter(lambda device: device["auth"] == auth, self._devices))
                 raise PanasonicDeviceOffline(

@@ -50,7 +50,11 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 | F-Y28EX    | CZ-T006  |
 | F-Y24GX    | CZ-T006  |
 | F-Y26JH    | _(內建)_ |
-| CS-PX50BA2 | CZ-T007  |
+| CS-PX22FA2 | CZ-T007  |
+| CS-PX28FA2 | CZ-T007  |
+| CS-PX36FA2 | CZ-T007  |
+| CS-PX50FA2 | CZ-T007  |
+| CS-PX63FA2 | CZ-T007  |
 | CS-QX28FA2 | CZ-T007  |
 | CS-QX40FA2 | CZ-T007  |
 | CS-QX71FA2 | CZ-T007  |

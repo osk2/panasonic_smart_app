@@ -74,6 +74,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 | 除濕機   | humidifier    |                        |
 |          | number        | 定時開機（若裝置支援） |
 |          | number        | 定時關機               |
+|          | select        | 風量設定               |
 |          | sensor        | 環境溼度偵測器         |
 |          | sensor        | PM2.5 偵測器           |
 |          | binary_sensor | 水箱滿水偵測器         |

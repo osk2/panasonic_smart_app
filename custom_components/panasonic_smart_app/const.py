@@ -16,6 +16,7 @@ PLATFORMS = [
     "number",
     "binary_sensor",
     "climate",
+    "select",
 ]
 MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"

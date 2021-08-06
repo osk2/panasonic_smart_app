@@ -64,7 +64,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         update_interval=timedelta(seconds=UPDATE_INTERVAL),
     )
 
-    await coordinator.async_config_entry_first_refresh()
+    await coordinator.async_refresh()
+
+    if not coordinator.last_update_success:
+        raise ConfigEntryNotReady
 
     hass.data[DOMAIN][entry.entry_id] = {
         DATA_CLIENT: client,

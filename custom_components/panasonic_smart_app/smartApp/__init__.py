@@ -174,9 +174,9 @@ class SmartApp(object):
             except:
                 resp = {}
         elif response.status == HTTP_EXPECTATION_FAILED:
-            returned_raw_data = await response.text()
+            resp = await response.json()
 
-            if returned_raw_data == EXCEPTION_COMMAND_NOT_FOUND:
+            if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
                 auth = headers["auth"]
                 if auth:
                     device = list(
@@ -187,20 +187,15 @@ class SmartApp(object):
                     )
                 else:
                     raise PanasonicDeviceOffline
+            elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
+                    raise PanasonicTokenExpired
             else:
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",
                     response.status,
                     returned_raw_data,
                 )
-            try:
-                resp = await response.json()
-                if resp["StateMsg"] == EXCEPTION_INVALID_REFRESH_TOKEN:
-                    raise PanasonicTokenExpired
-                else:
-                    raise PanasonicLoginFailed
-            except:
-                raise PanasonicInvalidRefreshToken
+                raise PanasonicLoginFailed
         elif response.status == HTTP_TOO_MANY_REQUESTS:
             _LOGGER.error(
                 "Failed to access API. Returned" " %d: %s",

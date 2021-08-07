@@ -193,7 +193,7 @@ class SmartApp(object):
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",
                     response.status,
-                    returned_raw_data,
+                    await response.text(),
                 )
                 raise PanasonicLoginFailed
         elif response.status == HTTP_TOO_MANY_REQUESTS:

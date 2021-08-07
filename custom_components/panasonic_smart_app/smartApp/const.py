@@ -1,6 +1,6 @@
 BASE_URL = "https://ems2.panasonic.com.tw/api"
 APP_TOKEN = "D8CBFF4C-2824-4342-B22D-189166FEF503"
-USER_AGENT = "Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+USER_AGENT = "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G930K Build/N2G48H)"
 
 SECONDS_BETWEEN_REQUEST = 2
 REQUEST_TIMEOUT = 20

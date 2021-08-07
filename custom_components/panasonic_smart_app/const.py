@@ -16,11 +16,13 @@ PLATFORMS = [
     "number",
     "binary_sensor",
     "climate",
+    "switch"
 ]
 MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"
 
 DEVICE_TYPE_AC = 1
+DEVICE_TYPE_WASHING_MACHINE = 3
 DEVICE_TYPE_DEHUMIDIFIER = 4
 
 DATA_CLIENT = "client"
@@ -39,6 +41,10 @@ DEVICE_STATUS_CODES = {
         "0x21",
         "0x0b",
         "0x0c",
+        "0x08",
+        "0x1b",
+        "0x1e",
+        "0x1a"
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
         "0x00",
@@ -102,6 +108,10 @@ ICON_ON_TIMER = "mdi:alarm"
 ICON_OFF_TIMER = "mdi:alarm-snooze"
 ICON_THERMOMETER = "mdi:thermometer"
 ICON_PM25 = "mdi:dots-hexagon"
+ICON_NANOE = "mdi:atom"
+ICON_ECONAVI = "mdi:leaf"
+ICON_BUZZER = "mdi:volume-high"
+ICON_TURBO = "mdi:clock-fast"
 
 
 LABEL_DEHUMIDIFIER = ""
@@ -115,6 +125,10 @@ LABEL_CLIMATE_ON_TIMER = "定時開機"
 LABEL_CLIMATE_OFF_TIMER = "定時關機"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PM25 = "PM2.5"
+LABEL_NANOE = "nanoe"
+LABEL_ECONAVI = "ECONAVI"
+LABEL_BUZZER = "操作提示音"
+LABEL_TURBO = "急速"
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"

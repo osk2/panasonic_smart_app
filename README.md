@@ -75,6 +75,10 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 |              | number        | On timer (Only if supported) |
 |              | number        | Off timer                    |
 |              | sensor        | Outdoor temperature sensor   |
+|              | switch        | nanoe switch                 |
+|              | switch        | ECONAVI swtich               |
+|              | switch        | Buzzer switch                |
+|              | switch        | Turbo mode switch            |
 | Dehumidifier | humidifier    |                              |
 |              | number        | On timer (Only if supported) |
 |              | number        | Off timer                    |

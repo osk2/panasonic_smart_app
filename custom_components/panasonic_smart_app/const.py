@@ -16,7 +16,7 @@ PLATFORMS = [
     "number",
     "binary_sensor",
     "climate",
-    "switch"
+    "switch",
     "select",
 ]
 MANUFACTURER = "Panasonic"

@@ -37,7 +37,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     sensors = []
 
     for index, device in enumerate(devices):
-        device_type = int(device["Devices"][0]["DeviceType"])
+        device_type = int(device.get("DeviceType"))
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
@@ -113,7 +113,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _pm25 = int(status.get("0x53") or -1)
+        _pm25 = float(status.get("0x53") or -1)
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
         return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
 

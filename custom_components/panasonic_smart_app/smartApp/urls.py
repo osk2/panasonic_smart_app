@@ -4,12 +4,12 @@ from .const import BASE_URL
 
 
 def login():
-    url = f"{BASE_URL}/Userlogin1"
+    url = f"{BASE_URL}/userlogin1"
     return url
 
 
 def get_devices():
-    url = f"{BASE_URL}/UserGetRegisteredGWList1"
+    url = f"{BASE_URL}/UserGetRegisteredGwList2"
     return url
 
 

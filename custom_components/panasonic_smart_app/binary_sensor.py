@@ -24,7 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     sensors = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
                 PanasonoicTankSensor(
                     coordinator,

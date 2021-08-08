@@ -92,7 +92,7 @@ class SmartApp(object):
             method="GET", headers=headers, endpoint=urls.get_devices()
         )
 
-        self._devices = response["GWList"]
+        self._devices = response["GwList"]
         self._commands = response["CommandList"]
 
         return self._devices
@@ -116,11 +116,11 @@ class SmartApp(object):
             data=[commands],
         )
         result = {}
-        for device in response["devices"]:
-            for info in device.get("Info"):
-                command = info.get("CommandType")
-                status = info.get("status")
-                result[command] = status
+        device = response.get("devices")[0]
+        for info in device.get("Info"):
+            command = info.get("CommandType")
+            status = info.get("status")
+            result[command] = status
         return result
 
     @tryApiStatus
@@ -146,7 +146,7 @@ class SmartApp(object):
 
         resp = None
         headers["user-agent"] = USER_AGENT
-        _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
+        _LOGGER.debug(f"Making request to {endpoint} with headers {headers} and data {data}")
         try:
             response = await self._session.request(
                 method,
@@ -188,7 +188,7 @@ class SmartApp(object):
                 else:
                     raise PanasonicDeviceOffline
             elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
-                    raise PanasonicTokenExpired
+                raise PanasonicTokenExpired
             else:
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",

@@ -38,7 +38,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     humidifiers = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
             humidifiers.append(
                 PanasonicDehumidifier(
                     coordinator,
@@ -90,7 +90,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         )[0]["Parameters"]
         target_mode = list(
             filter(lambda m: m[1] == int(status.get("0x01") or 0), raw_mode_list)
-        )
+        )[0]
         _mode = target_mode[0] if len(target_mode) > 0 else ""
         _LOGGER.debug(f"[{self.label}] _mode: {_mode}")
         return _mode

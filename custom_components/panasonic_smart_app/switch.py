@@ -31,7 +31,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     switches = []
 
     for index, device in enumerate(devices):
-        device_type = int(device["Devices"][0]["DeviceType"])
+        device_type = int(device.get("DeviceType"))
 
         if device_type == DEVICE_TYPE_AC:
             switches.append(

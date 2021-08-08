@@ -46,7 +46,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     climate = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_AC:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_AC:
             climate.append(
                 PanasonicClimate(
                     coordinator,

@@ -16,6 +16,7 @@ PLATFORMS = [
     "number",
     "binary_sensor",
     "climate",
+    "select",
 ]
 MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"
@@ -102,6 +103,7 @@ ICON_ON_TIMER = "mdi:alarm"
 ICON_OFF_TIMER = "mdi:alarm-snooze"
 ICON_THERMOMETER = "mdi:thermometer"
 ICON_PM25 = "mdi:dots-hexagon"
+ICON_FAN = "mdi:fan"
 
 
 LABEL_DEHUMIDIFIER = ""
@@ -110,6 +112,7 @@ LABEL_TANK = "水箱滿水"
 LABEL_HUMIDITY = "環境溼度"
 LABEL_DEHUMIDIFIER_ON_TIMER = "定時開機"
 LABEL_DEHUMIDIFIER_OFF_TIMER = "定時關機"
+LABEL_DEHUMIDIFIER_FAN_MODE = "風量設定"
 LABEL_CLIMATE_ON_TIMER = "定時開機(分)"
 LABEL_CLIMATE_ON_TIMER = "定時開機"
 LABEL_CLIMATE_OFF_TIMER = "定時關機"

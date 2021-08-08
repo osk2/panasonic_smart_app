@@ -54,6 +54,7 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 | Dehumidifier | humidifier    |                              |
 |              | number        | On timer (Only if supported) |
 |              | number        | Off timer                    |
+|              | select        | Fan mode                     |
 |              | sensor        | Environment humidity sensor  |
 |              | sensor        | PM2.5 sensor                 |
 |              | binary_sensor | Water tank status sensor     |

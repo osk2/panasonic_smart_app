@@ -37,8 +37,12 @@ def tryApiStatus(func):
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
             await args[0].login()
             return await func(*args, **kwargs)
-        except (PanasonicDeviceOffline, Exception) as exception:
-            _LOGGER.info(exception.message)
+        except (
+            PanasonicDeviceOffline,
+            PanasonicExceedRateLimit,
+            Exception,
+        ) as exception:
+            _LOGGER.info(exception)
             return {}
 
     return wrapper_call
@@ -146,7 +150,9 @@ class SmartApp(object):
 
         resp = None
         headers["user-agent"] = USER_AGENT
-        _LOGGER.debug(f"Making request to {endpoint} with headers {headers} and data {data}")
+        _LOGGER.debug(
+            f"Making request to {endpoint} with headers {headers} and data {data}"
+        )
         try:
             response = await self._session.request(
                 method,

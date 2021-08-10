@@ -1,5 +1,4 @@
 import asyncio
-import async_timeout
 from datetime import timedelta
 import logging
 
@@ -41,7 +40,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     await client.login()
 
-    def chunks(L, n): return [L[x: x+n] for x in range(0, len(L), n)]
+    def chunks(L, n):
+        return [L[x : x + n] for x in range(0, len(L), n)]
 
     async def async_update_data():
         try:
@@ -54,10 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     device["status"] = {}
                     for codes in status_codes:
                         device["status"].update(
-                            await client.get_device_info(
-                                device.get("Auth"),
-                                codes
-                            )
+                            await client.get_device_info(device.get("Auth"), codes)
                         )
             return devices
         except BaseException as ex:

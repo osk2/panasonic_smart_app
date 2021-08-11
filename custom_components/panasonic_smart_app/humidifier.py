@@ -54,12 +54,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
-        return _is_on_status
+        return status.get("0x00") != None
 
     @property
     def label(self) -> str:
@@ -68,9 +66,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
     @property
     def target_humidity(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _target_humidity = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
-            int(status.get("0x04") or 0)
-        ]
+        _target_humidity = DEHUMIDIFIER_AVAILABLE_HUMIDITY[int(status.get("0x04", 0))]
         _LOGGER.debug(f"[{self.label}] target_humidity: {_target_humidity}")
         return _target_humidity
 

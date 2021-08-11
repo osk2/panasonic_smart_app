@@ -63,6 +63,11 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        return status.get("0x00") != None
+
+    @property
     def label(self) -> str:
         return f"{self.nickname} {LABEL_CLIMATE}"
 

@@ -17,7 +17,7 @@ from .const import (
     ICON_NANOE,
     ICON_ECONAVI,
     ICON_BUZZER,
-    ICON_TURBO
+    ICON_TURBO,
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -78,7 +78,7 @@ class PanasonicACNanoe(PanasonicBaseEntity, SwitchEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property
@@ -120,7 +120,7 @@ class PanasonicACEconavi(PanasonicBaseEntity, SwitchEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property
@@ -162,7 +162,7 @@ class PanasonicACBuzzer(PanasonicBaseEntity, SwitchEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property
@@ -204,7 +204,7 @@ class PanasonicACTurbo(PanasonicBaseEntity, SwitchEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property

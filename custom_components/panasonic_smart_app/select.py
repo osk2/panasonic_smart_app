@@ -43,7 +43,7 @@ class PanasonoicFanModeSensor(PanasonicBaseEntity, SelectEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property

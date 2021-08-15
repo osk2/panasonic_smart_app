@@ -130,6 +130,21 @@ class SmartApp(object):
             result[command] = status
         return result
 
+    async def get_device_overview(self):
+        headers = {"cptoken": self._cp_token}
+        response = await self.request(
+            method="GET",
+            headers=headers,
+            endpoint=urls.get_device_overview(),
+        )
+        result = {}
+        for device in response.get("GwList"):
+            for info in device.get("List"):
+                command = info.get("CommandType")
+                status = info.get("Status")
+                result[command] = status
+        return result
+
     async def get_device_with_info(self, status_code_mapping: dict):
 
         devices = await self.get_devices()
@@ -151,6 +166,7 @@ class SmartApp(object):
                         )
                     except PanasonicExceedRateLimit:
                         _LOGGER.info("超量使用 API，目前功能將受限制")
+                        device["status"].update(device_overview.get(device.get("GWID")))
                         break
 
         return devices

@@ -5,7 +5,6 @@ from homeassistant.components.number import NumberEntity
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_AC,
     DEVICE_TYPE_DEHUMIDIFIER,
     DATA_CLIENT,
@@ -29,7 +28,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 async def async_setup_entry(hass, entry, async_add_entities) -> bool:

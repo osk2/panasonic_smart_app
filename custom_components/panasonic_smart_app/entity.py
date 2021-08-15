@@ -5,10 +5,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import (
     DOMAIN,
     MANUFACTURER,
-    UPDATE_INTERVAL,
 )
-
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 class PanasonicBaseEntity(CoordinatorEntity, ABC):
     def __init__(

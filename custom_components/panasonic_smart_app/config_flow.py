@@ -11,7 +11,11 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 
 from .smartApp import SmartApp
 from .smartApp.exceptions import PanasonicExceedRateLimit
-from .const import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_UPDATE_INTERVAL,
+    DEFAULT_UPDATE_INTERVAL,
+)
 
 
 class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -59,6 +63,7 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_USERNAME): str,
                     vol.Required(CONF_PASSWORD): str,
+                    vol.Optional(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL): int,
                 }
             ),
             errors=self._errors,

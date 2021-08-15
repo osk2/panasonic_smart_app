@@ -6,7 +6,6 @@ from homeassistant.const import STATE_UNAVAILABLE
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_AC,
     DATA_CLIENT,
     DATA_COORDINATOR,
@@ -21,7 +20,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 async def async_setup_entry(hass, entry, async_add_entities) -> bool:

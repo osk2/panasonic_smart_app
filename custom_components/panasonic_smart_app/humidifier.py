@@ -9,7 +9,6 @@ from homeassistant.components.humidifier.const import (
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_DEHUMIDIFIER,
     DATA_CLIENT,
     DATA_COORDINATOR,
@@ -20,7 +19,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 def getKeyFromDict(targetDict, mode_name):

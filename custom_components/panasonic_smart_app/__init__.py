@@ -13,10 +13,11 @@ from .smartApp import SmartApp
 from .const import (
     DATA_CLIENT,
     DATA_COORDINATOR,
+    DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    CONF_UPDATE_INTERVAL,
     DEFAULT_NAME,
     PLATFORMS,
-    UPDATE_INTERVAL,
     DEVICE_STATUS_CODES,
 )
 
@@ -53,7 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER,
         name=DEFAULT_NAME,
         update_method=async_update_data,
-        update_interval=timedelta(seconds=UPDATE_INTERVAL),
+        update_interval=timedelta(seconds=entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)),
     )
 
     await coordinator.async_refresh()

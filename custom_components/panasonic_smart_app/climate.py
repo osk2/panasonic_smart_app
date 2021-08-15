@@ -16,7 +16,6 @@ from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
     DEVICE_TYPE_AC,
-    UPDATE_INTERVAL,
     DATA_CLIENT,
     DATA_COORDINATOR,
     CLIMATE_AVAILABLE_MODE,
@@ -28,7 +27,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 def getKeyFromDict(targetDict, mode_name):

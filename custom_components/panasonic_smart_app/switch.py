@@ -26,44 +26,56 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
+    commands = client.get_commands()
     switches = []
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
+        current_device_commands = [
+            command
+            for command in commands
+            if command["ModelType"] == device.get("ModelType")
+        ][0]["JSON"][0]["list"]
+        command_types = list(map(lambda c: c["CommandType"].lower(), current_device_commands))
 
         if device_type == DEVICE_TYPE_AC:
-            switches.append(
-                PanasonicACNanoe(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+
+            if "0x08" in command_types:
+                switches.append(
+                    PanasonicACNanoe(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            switches.append(
-                PanasonicACEconavi(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x1b" in command_types:
+                switches.append(
+                    PanasonicACEconavi(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            switches.append(
-                PanasonicACBuzzer(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x1f" in command_types:
+                switches.append(
+                    PanasonicACBuzzer(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            switches.append(
-                PanasonicACTurbo(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x1a" in command_types:
+                switches.append(
+                    PanasonicACTurbo(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
 
     async_add_entities(switches, True)
 

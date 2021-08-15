@@ -65,23 +65,25 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 ### 可用的實體
 
-| 裝置類型 | 實體類型      | 備註                   |
-| -------- | ------------- | ---------------------- |
-| 冷氣     | climate       |                        |
-|          | number        | 定時開機（若裝置支援） |
-|          | number        | 定時關機               |
-|          | sensor        | 室外溫度偵測器         |
-|          | switch        | nanoe 開關             |
-|          | switch        | ECONAVI 開關           |
-|          | switch        | 操控聲音開關           |
-|          | switch        | 急速模式開關           |
-| 除濕機   | humidifier    |                        |
-|          | number        | 定時開機（若裝置支援） |
-|          | number        | 定時關機               |
-|          | select        | 風量設定               |
-|          | sensor        | 環境溼度偵測器         |
-|          | sensor        | PM2.5 偵測器           |
-|          | binary_sensor | 水箱滿水偵測器         |
+| 裝置類型 | 實體類型      | 備註           |
+| -------- | ------------- | -------------- |
+| 冷氣     | climate       |                |
+|          | number        | 定時開機\*     |
+|          | number        | 定時關機       |
+|          | sensor        | 室外溫度偵測器 |
+|          | switch        | nanoe 開關\*   |
+|          | switch        | ECONAVI 開關\* |
+|          | switch        | 操控聲音開關\* |
+|          | switch        | 急速模式開關\* |
+| 除濕機   | humidifier    |                |
+|          | number        | 定時開機\*     |
+|          | number        | 定時關機       |
+|          | select        | 風量設定       |
+|          | sensor        | 環境溼度偵測器 |
+|          | sensor        | PM2.5 偵測器   |
+|          | binary_sensor | 水箱滿水偵測器 |
+
+\*僅在裝置支援的情況下可用
 
 更多實體支援請至 [Issue](https://github.com/osk2/panasonic_smart_app/issues) 頁面許願，也歡迎發送 PR 💪
 

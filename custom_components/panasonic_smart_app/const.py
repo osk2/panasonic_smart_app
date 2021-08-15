@@ -47,20 +47,22 @@ DEVICE_STATUS_CODES = {
         "0x08",
         "0x1b",
         "0x1e",
-        "0x1a"
+        "0x1a",
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
-        "0x00",
-        "0x01",
+        "0x00",  # Dehumidifier online status
+        "0x01",  # Dehumidifier operation mode
+        "0x02",  # Dehumidifier off timer
+        "0x07",  # Dehumidifier humidity sensor
+        "0x09",  # Dehumidifier fan direction
+        "0x0D",  # Dehumidifier nanoe
         "0x50",
-        "0x0a",
-        "0x04",
-        "0x0e",
-        "0x09",
-        "0x55",
-        "0x02",
-        "0x53",
-        "0x07",
+        "0x18",  # Dehumidifier buzzer
+        "0x53",  # Dehumidifier PM2.5
+        "0x55",  # Dehumidifier on timer
+        "0x0A",  # Dehumidifier tank status
+        "0x04",  # Dehumidifier target humidity
+        "0x0E",  # Dehumidifier fan mode
     ],
 }
 

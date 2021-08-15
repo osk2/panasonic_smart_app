@@ -114,6 +114,7 @@ ICON_ECONAVI = "mdi:leaf"
 ICON_BUZZER = "mdi:volume-high"
 ICON_TURBO = "mdi:clock-fast"
 ICON_FAN = "mdi:fan"
+ICON_ENERGY = "mdi:flash"
 
 
 LABEL_DEHUMIDIFIER = ""
@@ -132,6 +133,7 @@ LABEL_NANOE = "nanoe"
 LABEL_ECONAVI = "ECONAVI"
 LABEL_BUZZER = "操作提示音"
 LABEL_TURBO = "急速"
+LABEL_ENERGY = "本月耗電量"
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"

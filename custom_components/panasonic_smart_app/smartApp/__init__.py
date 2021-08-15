@@ -1,5 +1,6 @@
 """ Panasonic Smart App API """
 from typing import Literal
+from datetime import datetime
 import asyncio
 import logging
 
@@ -17,11 +18,13 @@ from .const import (
     USER_AGENT,
     SECONDS_BETWEEN_REQUEST,
     REQUEST_TIMEOUT,
+    COMMANDS_PER_REQUEST,
     HTTP_EXPECTATION_FAILED,
     HTTP_TOO_MANY_REQUESTS,
     EXCEPTION_COMMAND_NOT_FOUND,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
+from .utils import chunks
 from . import urls
 
 _LOGGER = logging.getLogger(__name__)
@@ -125,6 +128,50 @@ class SmartApp(object):
             command = info.get("CommandType")
             status = info.get("status")
             result[command] = status
+        return result
+
+    async def get_device_with_info(self, status_code_mapping: dict):
+
+        devices = await self.get_devices()
+        energy_report = await self.get_energy_report()
+        device_overview = await self.get_device_overview()
+
+        for device in devices:
+            device_type = int(device.get("DeviceType"))
+            device["energy"] = energy_report.get(device.get("GWID"))
+            if device_type in status_code_mapping.keys():
+                status_codes = chunks(
+                    status_code_mapping[device_type], COMMANDS_PER_REQUEST
+                )
+                device["status"] = {}
+                for codes in status_codes:
+                    try:
+                        device["status"].update(
+                            await self.get_device_info(device.get("Auth"), codes)
+                        )
+                    except PanasonicExceedRateLimit:
+                        _LOGGER.info("超量使用 API，目前功能將受限制")
+                        break
+
+        return devices
+
+    async def get_energy_report(self):
+        headers = {"cptoken": self._cp_token}
+        payload = {
+            "name": "Power",
+            "from": datetime.today().replace(day=1).strftime("%Y/%m/%d"),
+            "unit": "day",
+            "max_num": 31,
+        }
+        response = await self.request(
+            method="POST",
+            headers=headers,
+            endpoint=urls.get_energy_report(),
+            data=payload,
+        )
+        result = {}
+        for device in response.get("GwList"):
+            result[device.get("GwID")] = float(device.get("Total_kwh"))
         return result
 
     @tryApiStatus

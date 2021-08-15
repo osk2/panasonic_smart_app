@@ -18,6 +18,11 @@ def get_device_info():
     return url
 
 
+def get_energy_report():
+    url = f"{BASE_URL}/UserGetInfo"
+    return url
+
+
 def set_command():
     url = f"{BASE_URL}/DeviceSetCommand"
     return url

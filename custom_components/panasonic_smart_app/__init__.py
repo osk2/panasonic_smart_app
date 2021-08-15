@@ -40,26 +40,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     await client.login()
 
-    def chunks(L, n):
-        return [L[x : x + n] for x in range(0, len(L), n)]
-
     async def async_update_data():
         try:
             _LOGGER.info("Updating device info...")
-            devices = await client.get_devices()
-            for device in devices:
-                device_type = int(device.get("DeviceType"))
-                if device_type in DEVICE_STATUS_CODES.keys():
-                    status_codes = chunks(DEVICE_STATUS_CODES[device_type], 6)
-                    device["status"] = {}
-                    for codes in status_codes:
-                        device["status"].update(
-                            await client.get_device_info(device.get("Auth"), codes)
-                        )
-            return devices
+            return await client.get_device_with_info(DEVICE_STATUS_CODES)
         except BaseException as ex:
             _LOGGER.error(ex)
-            raise UpdateFailed("Failed on initialize")
+            raise UpdateFailed("Failed while updating device status")
 
     coordinator = DataUpdateCoordinator(
         hass,

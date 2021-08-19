@@ -226,7 +226,7 @@ class SmartApp(object):
                 timeout=REQUEST_TIMEOUT,
             )
         except:
-            auth = headers["auth"] or None
+            auth = headers.get("auth")
             if auth:
                 device = list(
                     filter(lambda device: device["auth"] == auth, self._devices)
@@ -246,7 +246,7 @@ class SmartApp(object):
             resp = await response.json()
 
             if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
-                auth = headers["auth"]
+                auth = headers.get("auth")
                 if auth:
                     device = list(
                         filter(lambda device: device["auth"] == auth, self._devices)

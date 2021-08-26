@@ -5,7 +5,6 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_DEHUMIDIFIER,
     DATA_CLIENT,
     DATA_COORDINATOR,
@@ -14,7 +13,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 async def async_setup_entry(hass, entry, async_add_entities) -> bool:
@@ -24,7 +22,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     sensors = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
                 PanasonoicTankSensor(
                     coordinator,

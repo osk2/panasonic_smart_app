@@ -5,10 +5,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import (
     DOMAIN,
     MANUFACTURER,
-    UPDATE_INTERVAL,
 )
-
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 class PanasonicBaseEntity(CoordinatorEntity, ABC):
     def __init__(
@@ -31,7 +28,7 @@ class PanasonicBaseEntity(CoordinatorEntity, ABC):
 
     @property
     def current_device_info(self) -> dict:
-        return self.device["Devices"][0]
+        return self.device
 
     @property
     def nickname(self) -> str:
@@ -57,7 +54,7 @@ class PanasonicBaseEntity(CoordinatorEntity, ABC):
 
     @property
     def auth(self) -> str:
-        return self.device["auth"]
+        return self.device["Auth"]
 
     @property
     def unique_id(self) -> str:

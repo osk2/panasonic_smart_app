@@ -1,5 +1,6 @@
 """ Panasonic Smart App API """
 from typing import Literal
+from datetime import datetime
 import asyncio
 import logging
 
@@ -17,11 +18,13 @@ from .const import (
     USER_AGENT,
     SECONDS_BETWEEN_REQUEST,
     REQUEST_TIMEOUT,
+    COMMANDS_PER_REQUEST,
     HTTP_EXPECTATION_FAILED,
     HTTP_TOO_MANY_REQUESTS,
     EXCEPTION_COMMAND_NOT_FOUND,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
+from .utils import chunks
 from . import urls
 
 _LOGGER = logging.getLogger(__name__)
@@ -37,8 +40,12 @@ def tryApiStatus(func):
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
             await args[0].login()
             return await func(*args, **kwargs)
-        except (PanasonicDeviceOffline, Exception) as exception:
-            _LOGGER.info(exception.message)
+        except (
+            PanasonicDeviceOffline,
+            PanasonicExceedRateLimit,
+            Exception,
+        ) as exception:
+            _LOGGER.info(exception)
             return {}
 
     return wrapper_call
@@ -92,7 +99,7 @@ class SmartApp(object):
             method="GET", headers=headers, endpoint=urls.get_devices()
         )
 
-        self._devices = response["GWList"]
+        self._devices = response["GwList"]
         self._commands = response["CommandList"]
 
         return self._devices
@@ -116,11 +123,71 @@ class SmartApp(object):
             data=[commands],
         )
         result = {}
-        for device in response["devices"]:
-            for info in device.get("Info"):
+        device = response.get("devices")[0]
+        for info in device.get("Info"):
+            command = info.get("CommandType")
+            status = info.get("status")
+            result[command] = status
+        return result
+
+    async def get_device_overview(self):
+        headers = {"cptoken": self._cp_token}
+        response = await self.request(
+            method="GET",
+            headers=headers,
+            endpoint=urls.get_device_overview(),
+        )
+        result = {}
+        for device in response.get("GwList"):
+            for info in device.get("List"):
                 command = info.get("CommandType")
-                status = info.get("status")
+                status = info.get("Status")
                 result[command] = status
+        return result
+
+    async def get_device_with_info(self, status_code_mapping: dict):
+
+        devices = await self.get_devices()
+        energy_report = await self.get_energy_report()
+        device_overview = await self.get_device_overview()
+
+        for device in devices:
+            device_type = int(device.get("DeviceType"))
+            device["energy"] = energy_report.get(device.get("GWID"))
+            if device_type in status_code_mapping.keys():
+                status_codes = chunks(
+                    status_code_mapping[device_type], COMMANDS_PER_REQUEST
+                )
+                device["status"] = {}
+                for codes in status_codes:
+                    try:
+                        device["status"].update(
+                            await self.get_device_info(device.get("Auth"), codes)
+                        )
+                    except PanasonicExceedRateLimit:
+                        _LOGGER.info("超量使用 API，目前功能將受限制")
+                        device["status"].update(device_overview.get(device.get("GWID")))
+                        break
+
+        return devices
+
+    async def get_energy_report(self):
+        headers = {"cptoken": self._cp_token}
+        payload = {
+            "name": "Power",
+            "from": datetime.today().replace(day=1).strftime("%Y/%m/%d"),
+            "unit": "day",
+            "max_num": 31,
+        }
+        response = await self.request(
+            method="POST",
+            headers=headers,
+            endpoint=urls.get_energy_report(),
+            data=payload,
+        )
+        result = {}
+        for device in response.get("GwList"):
+            result[device.get("GwID")] = float(device.get("Total_kwh"))
         return result
 
     @tryApiStatus
@@ -146,7 +213,9 @@ class SmartApp(object):
 
         resp = None
         headers["user-agent"] = USER_AGENT
-        _LOGGER.debug(f"Making request to {endpoint} with headers {headers}")
+        _LOGGER.debug(
+            f"Making request to {endpoint} with headers {headers} and data {data}"
+        )
         try:
             response = await self._session.request(
                 method,
@@ -157,7 +226,7 @@ class SmartApp(object):
                 timeout=REQUEST_TIMEOUT,
             )
         except:
-            auth = headers["auth"] or None
+            auth = headers.get("auth")
             if auth:
                 device = list(
                     filter(lambda device: device["auth"] == auth, self._devices)
@@ -177,7 +246,7 @@ class SmartApp(object):
             resp = await response.json()
 
             if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
-                auth = headers["auth"]
+                auth = headers.get("auth")
                 if auth:
                     device = list(
                         filter(lambda device: device["auth"] == auth, self._devices)
@@ -188,7 +257,7 @@ class SmartApp(object):
                 else:
                     raise PanasonicDeviceOffline
             elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
-                    raise PanasonicTokenExpired
+                raise PanasonicTokenExpired
             else:
                 _LOGGER.error(
                     "Failed to access API. Returned" " %d: %s",

@@ -5,7 +5,6 @@ from homeassistant.components.number import NumberEntity
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_AC,
     DEVICE_TYPE_DEHUMIDIFIER,
     DATA_CLIENT,
@@ -29,7 +28,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 async def async_setup_entry(hass, entry, async_add_entities) -> bool:
@@ -44,10 +42,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         current_device_commands = [
             command
             for command in commands
-            if command["ModelType"] == device["Devices"][0]["ModelType"]
+            if command["ModelType"] == device.get("ModelType")
         ]
 
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
             numbers.append(
                 PanasonicDehumidifierOffTimer(
                     coordinator,
@@ -79,7 +77,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         )
                     )
 
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_AC:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_AC:
 
             numbers.append(
                 PanasonicACOffTimer(
@@ -118,11 +116,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = int(status.get("0x00") or -1) == 0
+        _is_on_status = int(status.get("0x00", -1)) == 0
         return _is_on_status
 
     @property
@@ -159,11 +156,10 @@ class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
 
 
 class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property
@@ -200,11 +196,13 @@ class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
 
 
 class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = int(status.get("0x00") or -1) == 0
+        if status.get("0x00") == None:
+            return False
+
+        _is_on_status = int(status.get("0x00")) == 0
         return _is_on_status
 
     @property
@@ -241,11 +239,10 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
 
 
 class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property

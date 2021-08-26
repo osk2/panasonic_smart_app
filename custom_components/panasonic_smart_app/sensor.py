@@ -5,7 +5,9 @@ from homeassistant.const import (
     STATE_UNAVAILABLE,
     DEVICE_CLASS_HUMIDITY,
     DEVICE_CLASS_TEMPERATURE,
+    DEVICE_CLASS_ENERGY,
     TEMP_CELSIUS,
+    ENERGY_KILO_WATT_HOUR,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
 )
@@ -13,7 +15,6 @@ from homeassistant.const import (
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_DEHUMIDIFIER,
     DEVICE_TYPE_AC,
     DATA_CLIENT,
@@ -21,13 +22,14 @@ from .const import (
     LABEL_PM25,
     LABEL_HUMIDITY,
     LABEL_OUTDOOR_TEMPERATURE,
+    LABEL_ENERGY,
     ICON_PM25,
     ICON_THERMOMETER,
     ICON_HUMIDITY,
+    ICON_ENERGY,
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 async def async_setup_entry(hass, entry, async_add_entities) -> bool:
@@ -37,7 +39,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     sensors = []
 
     for index, device in enumerate(devices):
-        device_type = int(device["Devices"][0]["DeviceType"])
+        device_type = int(device.get("DeviceType"))
+
+        sensors.append(
+          PanasonicEnergySensor(
+              coordinator,
+              index,
+              client,
+              device,
+          )
+        )
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             sensors.append(
@@ -113,7 +124,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _pm25 = int(status.get("0x53") or -1)
+        _pm25 = float(status.get("0x53") or -1)
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
         return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
 
@@ -142,12 +153,34 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
         status = self.coordinator.data[self.index]["status"]
         _outside_temperature = float(status.get("0x21") or -1)
         _LOGGER.debug(f"[{self.label}] state: {_outside_temperature}")
-        return (
-            _outside_temperature
-            if _outside_temperature >= 0
-            else STATE_UNAVAILABLE
-        )
+        return _outside_temperature if _outside_temperature >= 0 else STATE_UNAVAILABLE
 
     @property
     def unit_of_measurement(self) -> str:
         return TEMP_CELSIUS
+
+
+class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic energy sensor """
+
+    @property
+    def label(self) -> str:
+        return f"{self.nickname} {LABEL_ENERGY}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_ENERGY
+
+    @property
+    def device_class(self) -> str:
+        return DEVICE_CLASS_ENERGY
+
+    @property
+    def state(self) -> int:
+        energy = self.coordinator.data[self.index]["energy"]
+        _LOGGER.debug(f"[{self.label}] state: {energy}")
+        return energy if energy >= 0 else STATE_UNAVAILABLE
+
+    @property
+    def unit_of_measurement(self) -> str:
+        return ENERGY_KILO_WATT_HOUR

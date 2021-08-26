@@ -1,5 +1,4 @@
 import asyncio
-import async_timeout
 from datetime import timedelta
 import logging
 
@@ -14,10 +13,11 @@ from .smartApp import SmartApp
 from .const import (
     DATA_CLIENT,
     DATA_COORDINATOR,
+    DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    CONF_UPDATE_INTERVAL,
     DEFAULT_NAME,
     PLATFORMS,
-    UPDATE_INTERVAL,
     DEVICE_STATUS_CODES,
 )
 
@@ -44,24 +44,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def async_update_data():
         try:
             _LOGGER.info("Updating device info...")
-            devices = await client.get_devices()
-            for device in devices:
-                device_type = int(device["Devices"][0]["DeviceType"])
-                if device_type in DEVICE_STATUS_CODES.keys():
-                    status_codes = DEVICE_STATUS_CODES[device_type]
-                    device["status"] = await client.get_device_info(
-                        device["auth"], status_codes
-                    )
-            return devices
-        except:
-            raise UpdateFailed("Failed on initialize")
+            return await client.get_device_with_info(DEVICE_STATUS_CODES)
+        except BaseException as ex:
+            _LOGGER.error(ex)
+            raise UpdateFailed("Failed while updating device status")
 
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
         name=DEFAULT_NAME,
         update_method=async_update_data,
-        update_interval=timedelta(seconds=UPDATE_INTERVAL),
+        update_interval=timedelta(seconds=entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)),
     )
 
     await coordinator.async_refresh()

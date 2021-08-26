@@ -16,17 +16,22 @@ PLATFORMS = [
     "number",
     "binary_sensor",
     "climate",
+    "switch",
+    "select",
 ]
 MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"
 
 DEVICE_TYPE_AC = 1
+DEVICE_TYPE_WASHING_MACHINE = 3
 DEVICE_TYPE_DEHUMIDIFIER = 4
 
 DATA_CLIENT = "client"
 DATA_COORDINATOR = "coordinator"
 
-UPDATE_INTERVAL = 90
+CONF_UPDATE_INTERVAL = "update_interval"
+
+DEFAULT_UPDATE_INTERVAL = 180
 
 DEVICE_STATUS_CODES = {
     DEVICE_TYPE_AC: [
@@ -39,19 +44,25 @@ DEVICE_STATUS_CODES = {
         "0x21",
         "0x0b",
         "0x0c",
+        "0x08",
+        "0x1b",
+        "0x1e",
+        "0x1a",
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
-        "0x00",
-        "0x01",
+        "0x00",  # Dehumidifier online status
+        "0x01",  # Dehumidifier operation mode
+        "0x02",  # Dehumidifier off timer
+        "0x07",  # Dehumidifier humidity sensor
+        "0x09",  # Dehumidifier fan direction
+        "0x0D",  # Dehumidifier nanoe
         "0x50",
-        "0x0a",
-        "0x04",
-        "0x0e",
-        "0x09",
-        "0x55",
-        "0x02",
-        "0x53",
-        "0x07",
+        "0x18",  # Dehumidifier buzzer
+        "0x53",  # Dehumidifier PM2.5
+        "0x55",  # Dehumidifier on timer
+        "0x0A",  # Dehumidifier tank status
+        "0x04",  # Dehumidifier target humidity
+        "0x0E",  # Dehumidifier fan mode
     ],
 }
 
@@ -102,6 +113,12 @@ ICON_ON_TIMER = "mdi:alarm"
 ICON_OFF_TIMER = "mdi:alarm-snooze"
 ICON_THERMOMETER = "mdi:thermometer"
 ICON_PM25 = "mdi:dots-hexagon"
+ICON_NANOE = "mdi:atom"
+ICON_ECONAVI = "mdi:leaf"
+ICON_BUZZER = "mdi:volume-high"
+ICON_TURBO = "mdi:clock-fast"
+ICON_FAN = "mdi:fan"
+ICON_ENERGY = "mdi:flash"
 
 
 LABEL_DEHUMIDIFIER = ""
@@ -110,11 +127,17 @@ LABEL_TANK = "水箱滿水"
 LABEL_HUMIDITY = "環境溼度"
 LABEL_DEHUMIDIFIER_ON_TIMER = "定時開機"
 LABEL_DEHUMIDIFIER_OFF_TIMER = "定時關機"
+LABEL_DEHUMIDIFIER_FAN_MODE = "風量設定"
 LABEL_CLIMATE_ON_TIMER = "定時開機(分)"
 LABEL_CLIMATE_ON_TIMER = "定時開機"
 LABEL_CLIMATE_OFF_TIMER = "定時關機"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PM25 = "PM2.5"
+LABEL_NANOE = "nanoe"
+LABEL_ECONAVI = "ECONAVI"
+LABEL_BUZZER = "操作提示音"
+LABEL_TURBO = "急速"
+LABEL_ENERGY = "本月耗電量"
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"

@@ -6,7 +6,8 @@
         "description": "Login with your Panasonic Smart App credentials.",
         "data": {
           "username": "Panasonic Smart App username",
-          "password": "Panasonic Smart App password"
+          "password": "Panasonic Smart App password",
+          "update_interval": "Update interval (second)"
         }
       }
     },

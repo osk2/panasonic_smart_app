@@ -16,7 +16,6 @@ from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
     DEVICE_TYPE_AC,
-    UPDATE_INTERVAL,
     DATA_CLIENT,
     DATA_COORDINATOR,
     CLIMATE_AVAILABLE_MODE,
@@ -28,7 +27,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 def getKeyFromDict(targetDict, mode_name):
@@ -46,7 +44,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     climate = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_AC:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_AC:
             climate.append(
                 PanasonicClimate(
                     coordinator,
@@ -62,6 +60,11 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
+    @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        return status.get("0x00") != None
+
     @property
     def label(self) -> str:
         return f"{self.nickname} {LABEL_CLIMATE}"

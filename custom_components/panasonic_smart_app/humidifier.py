@@ -9,7 +9,6 @@ from homeassistant.components.humidifier.const import (
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
-    UPDATE_INTERVAL,
     DEVICE_TYPE_DEHUMIDIFIER,
     DATA_CLIENT,
     DATA_COORDINATOR,
@@ -20,7 +19,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
-SCAN_INTERVAL = timedelta(seconds=UPDATE_INTERVAL)
 
 
 def getKeyFromDict(targetDict, mode_name):
@@ -38,7 +36,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     humidifiers = []
 
     for index, device in enumerate(devices):
-        if int(device["Devices"][0]["DeviceType"]) == DEVICE_TYPE_DEHUMIDIFIER:
+        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
             humidifiers.append(
                 PanasonicDehumidifier(
                     coordinator,
@@ -54,12 +52,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
-        return _is_on_status
+        return status.get("0x00") != None
 
     @property
     def label(self) -> str:
@@ -68,9 +64,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
     @property
     def target_humidity(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _target_humidity = DEHUMIDIFIER_AVAILABLE_HUMIDITY[
-            int(status.get("0x04") or 0)
-        ]
+        _target_humidity = DEHUMIDIFIER_AVAILABLE_HUMIDITY[int(status.get("0x04", 0))]
         _LOGGER.debug(f"[{self.label}] target_humidity: {_target_humidity}")
         return _target_humidity
 
@@ -90,7 +84,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         )[0]["Parameters"]
         target_mode = list(
             filter(lambda m: m[1] == int(status.get("0x01") or 0), raw_mode_list)
-        )
+        )[0]
         _mode = target_mode[0] if len(target_mode) > 0 else ""
         _LOGGER.debug(f"[{self.label}] _mode: {_mode}")
         return _mode

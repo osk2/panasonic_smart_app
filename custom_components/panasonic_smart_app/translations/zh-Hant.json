@@ -6,7 +6,8 @@
         "description": "登入您的 Panasonic Smart App 帳戶",
         "data": {
           "username": "Panasonic Smart App 帳號",
-          "password": "Panasonic Smart App 密碼"
+          "password": "Panasonic Smart App 密碼",
+          "update_interval": "更新時間間隔（秒）"
         }
       }
     },

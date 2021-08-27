@@ -132,11 +132,23 @@ class SmartApp(object):
 
     async def get_device_overview(self):
         headers = {"cptoken": self._cp_token}
-        response = await self.request(
-            method="GET",
-            headers=headers,
-            endpoint=urls.get_device_overview(),
-        )
+
+        """ First request always return empty state, so we request twice """
+        response = (
+            await asyncio.gather(
+                self.request(
+                    method="GET",
+                    headers=headers,
+                    endpoint=urls.get_device_overview(),
+                ),
+                self.request(
+                    method="GET",
+                    headers=headers,
+                    endpoint=urls.get_device_overview(),
+                ),
+            )
+        )[1]
+
         result = {}
         for device in response.get("GwList"):
             for info in device.get("List"):

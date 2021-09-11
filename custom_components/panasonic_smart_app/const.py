@@ -120,7 +120,6 @@ ICON_TURBO = "mdi:clock-fast"
 ICON_FAN = "mdi:fan"
 ICON_ENERGY = "mdi:flash"
 
-
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
 LABEL_TANK = "水箱滿水"
@@ -141,3 +140,6 @@ LABEL_ENERGY = "本月耗電量"
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"
+
+STATE_MEASUREMENT = "measurement"
+STATE_TOTAL_INCREASING = "total_increasing"

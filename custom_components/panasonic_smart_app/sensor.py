@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 import logging
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import (
@@ -6,6 +6,7 @@ from homeassistant.const import (
     DEVICE_CLASS_HUMIDITY,
     DEVICE_CLASS_TEMPERATURE,
     DEVICE_CLASS_ENERGY,
+    DEVICE_CLASS_PM25,
     TEMP_CELSIUS,
     ENERGY_KILO_WATT_HOUR,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -27,6 +28,8 @@ from .const import (
     ICON_THERMOMETER,
     ICON_HUMIDITY,
     ICON_ENERGY,
+    STATE_MEASUREMENT,
+    STATE_TOTAL_INCREASING,
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -42,12 +45,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         device_type = int(device.get("DeviceType"))
 
         sensors.append(
-          PanasonicEnergySensor(
-              coordinator,
-              index,
-              client,
-              device,
-          )
+            PanasonicEnergySensor(
+                coordinator,
+                index,
+                client,
+                device,
+            )
         )
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
@@ -106,6 +109,10 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
         return _current_humd if _current_humd else STATE_UNAVAILABLE
 
     @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
+
+    @property
     def unit_of_measurement(self) -> str:
         return PERCENTAGE
 
@@ -122,11 +129,19 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
         return ICON_PM25
 
     @property
+    def device_class(self) -> str:
+        return DEVICE_CLASS_PM25
+
+    @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _pm25 = float(status.get("0x53") or -1)
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
         return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
+
+    @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
 
     @property
     def unit_of_measurement(self) -> str:
@@ -156,6 +171,10 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
         return _outside_temperature if _outside_temperature >= 0 else STATE_UNAVAILABLE
 
     @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
+
+    @property
     def unit_of_measurement(self) -> str:
         return TEMP_CELSIUS
 
@@ -176,10 +195,18 @@ class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
         return DEVICE_CLASS_ENERGY
 
     @property
+    def last_reset(self):
+        return datetime.today().replace(day=1)
+
+    @property
     def state(self) -> int:
         energy = self.coordinator.data[self.index]["energy"]
         _LOGGER.debug(f"[{self.label}] state: {energy}")
         return energy if energy >= 0 else STATE_UNAVAILABLE
+
+    @property
+    def state_class(self) -> str:
+        return STATE_TOTAL_INCREASING
 
     @property
     def unit_of_measurement(self) -> str:

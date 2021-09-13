@@ -58,7 +58,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         device,
                     )
                 )
-            if "0x1f" in command_types:
+            if "0x1e" in command_types:
                 switches.append(
                     PanasonicACBuzzer(
                         coordinator,
@@ -190,21 +190,21 @@ class PanasonicACBuzzer(PanasonicBaseEntity, SwitchEntity):
     @property
     def is_on(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _nanoe_status = status.get("0x1e")
-        if _nanoe_status == None:
+        _buzzer_status = status.get("0x1E")
+        if _buzzer_status == None:
             return STATE_UNAVAILABLE
-        _is_on = bool(int(_nanoe_status))
+        _is_on = not bool(int(_buzzer_status))
         _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
         return _is_on
 
     async def async_turn_on(self) -> None:
         _LOGGER.debug(f"[{self.label}] Turning on buzzer")
-        await self.client.set_command(self.auth, 158, 0)
+        await self.client.set_command(self.auth, 30, 0)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
         _LOGGER.debug(f"[{self.label}] Turning off buzzer")
-        await self.client.set_command(self.auth, 158, 1)
+        await self.client.set_command(self.auth, 30, 1)
         await self.coordinator.async_request_refresh()
 
 

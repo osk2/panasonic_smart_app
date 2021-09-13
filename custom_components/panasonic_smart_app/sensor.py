@@ -166,9 +166,9 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _outside_temperature = float(status.get("0x21") or -1)
-        _LOGGER.debug(f"[{self.label}] state: {_outside_temperature}")
-        return _outside_temperature if _outside_temperature >= 0 else STATE_UNAVAILABLE
+        _outdoor_temperature = float(status.get("0x21", -1))
+        _LOGGER.debug(f"[{self.label}] state: {_outdoor_temperature}")
+        return _outdoor_temperature if _outdoor_temperature >= 0 else STATE_UNAVAILABLE
 
     @property
     def state_class(self) -> str:

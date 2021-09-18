@@ -45,8 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         try:
             _LOGGER.info("Updating device info...")
             return await client.get_device_with_info(DEVICE_STATUS_CODES)
-        except BaseException as ex:
-            _LOGGER.error(ex)
+        except:
             raise UpdateFailed("Failed while updating device status")
 
     coordinator = DataUpdateCoordinator(

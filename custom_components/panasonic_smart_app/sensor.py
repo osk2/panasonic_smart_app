@@ -104,7 +104,7 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _current_humd = status.get("0x07") or None
+        _current_humd = status.get("0x07", None)
         _LOGGER.debug(f"[{self.label}] state: {_current_humd}")
         return _current_humd if _current_humd else STATE_UNAVAILABLE
 
@@ -135,7 +135,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _pm25 = float(status.get("0x53") or -1)
+        _pm25 = float(status.get("0x53", -1))
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
         return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
 

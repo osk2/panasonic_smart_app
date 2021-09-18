@@ -1,6 +1,7 @@
 """ Panasonic Smart App API """
 from typing import Literal
 from datetime import datetime
+from collections import defaultdict
 import asyncio
 import logging
 
@@ -40,9 +41,11 @@ def tryApiStatus(func):
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
             await args[0].login()
             return await func(*args, **kwargs)
+        except PanasonicExceedRateLimit:
+            """ Fallback to use overview API """
+            raise PanasonicExceedRateLimit
         except (
             PanasonicDeviceOffline,
-            PanasonicExceedRateLimit,
             Exception,
         ) as exception:
             _LOGGER.info(exception)
@@ -130,42 +133,40 @@ class SmartApp(object):
             result[command] = status
         return result
 
-    async def get_device_overview(self):
+    async def get_overview(self):
         headers = {"cptoken": self._cp_token}
+        response = await self.request(
+            method="GET",
+            headers=headers,
+            endpoint=urls.get_device_overview(),
+        )
 
-        """ First request always return empty state, so we request twice """
-        response = (
-            await asyncio.gather(
-                self.request(
-                    method="GET",
-                    headers=headers,
-                    endpoint=urls.get_device_overview(),
-                ),
-                self.request(
-                    method="GET",
-                    headers=headers,
-                    endpoint=urls.get_device_overview(),
-                ),
-            )
-        )[1]
-
-        result = {}
+        result = defaultdict(dict)
         for device in response.get("GwList"):
             for info in device.get("List"):
                 command = info.get("CommandType")
                 status = info.get("Status")
-                result[command] = status
+                result[device.get("GWID")][command] = status
         return result
 
     async def get_device_with_info(self, status_code_mapping: dict):
 
-        devices = await self.get_devices()
+        devices = await self.get_devices() or []
         energy_report = await self.get_energy_report()
-        device_overview = await self.get_device_overview()
+
+        async def get_device_overview(gwid: str):
+            all_device_overview = await self.get_overview() or {}
+            device_overview = all_device_overview.get(gwid, {})
+            if device_overview and "" in list(dict(device_overview).values()):
+                """ Retry if API return empty status for current device """
+                return await get_device_overview(gwid)
+            else:
+                return device_overview
 
         for device in devices:
             device_type = int(device.get("DeviceType"))
-            device["energy"] = energy_report.get(device.get("GWID"))
+            gwid = device.get("GWID")
+            device["energy"] = energy_report.get(gwid)
             if device_type in status_code_mapping.keys():
                 status_codes = chunks(
                     status_code_mapping[device_type], COMMANDS_PER_REQUEST
@@ -173,12 +174,16 @@ class SmartApp(object):
                 device["status"] = {}
                 for codes in status_codes:
                     try:
-                        device["status"].update(
-                            await self.get_device_info(device.get("Auth"), codes)
-                        )
+                        info = await self.get_device_info(device.get("Auth"), codes)
+                        device["status"].update(info)
                     except PanasonicExceedRateLimit:
-                        _LOGGER.info("超量使用 API，目前功能將受限制")
-                        device["status"].update(device_overview.get(device.get("GWID")))
+                        _LOGGER.warning("超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31")
+                        overview = await get_device_overview(gwid)
+                        target_device = list(
+                            filter(lambda d: d["GWID"] == gwid, self._devices)
+                        )
+                        _LOGGER.debug(f"[{target_device[0]['NickName']}] overview: {overview}")
+                        device["status"].update(overview)
                         break
 
         return devices
@@ -238,13 +243,13 @@ class SmartApp(object):
                 timeout=REQUEST_TIMEOUT,
             )
         except:
-            auth = headers.get("auth")
+            auth = headers.get("auth", None)
             if auth:
                 device = list(
-                    filter(lambda device: device["auth"] == auth, self._devices)
+                    filter(lambda device: device["Auth"] == auth, self._devices)
                 )
                 raise PanasonicDeviceOffline(
-                    f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
+                    f"{device[0]['NickName']} is offline. Retry later..."
                 )
             else:
                 raise PanasonicDeviceOffline
@@ -255,34 +260,34 @@ class SmartApp(object):
             except:
                 resp = {}
         elif response.status == HTTP_EXPECTATION_FAILED:
-            resp = await response.json()
+            try:
+                resp = await response.json()
+                if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
+                    auth = headers.get("auth", None)
+                    if auth:
+                        device = list(
+                            filter(lambda device: device["Auth"] == auth, self._devices)
+                        )
+                        raise PanasonicDeviceOffline(
+                            f"{device[0]['NickName']} is offline. Retry later..."
+                        )
+                    else:
+                        raise PanasonicDeviceOffline
 
-            if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
-                auth = headers.get("auth")
-                if auth:
-                    device = list(
-                        filter(lambda device: device["auth"] == auth, self._devices)
-                    )
-                    raise PanasonicDeviceOffline(
-                        f"{device[0]['Devices'][0]['NickName']} is offline. Retry later..."
-                    )
+                elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
+                    raise PanasonicTokenExpired
                 else:
-                    raise PanasonicDeviceOffline
-            elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
-                raise PanasonicTokenExpired
-            else:
-                _LOGGER.error(
-                    "Failed to access API. Returned" " %d: %s",
-                    response.status,
-                    await response.text(),
-                )
+                    _LOGGER.error(
+                        "Failed to access API. Returned" " %d: %s",
+                        response.status,
+                        await response.text(),
+                    )
+                    raise PanasonicLoginFailed
+            except:
+                """ Invalid CPToken or something else """
                 raise PanasonicLoginFailed
+
         elif response.status == HTTP_TOO_MANY_REQUESTS:
-            _LOGGER.error(
-                "Failed to access API. Returned" " %d: %s",
-                response.status,
-                await response.text(),
-            )
             raise PanasonicExceedRateLimit
         else:
             _LOGGER.error(

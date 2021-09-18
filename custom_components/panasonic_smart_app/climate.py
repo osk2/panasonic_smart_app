@@ -63,7 +63,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        return status.get("0x00") != None
+        return status.get("0x00", None) != None
 
     @property
     def label(self) -> str:
@@ -81,11 +81,14 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> str:
         status = self.coordinator.data[self.index]["status"]
-        _is_on = bool(int(status.get("0x00") or 0))
+        _is_on = bool(int(status.get("0x00", 0)))
 
         if not _is_on:
             return HVAC_MODE_OFF
         else:
+            if not status.get("0x01", None):
+                return ""
+
             value = int(status.get("0x01"))
             mode_mapping = list(
                 filter(lambda m: m["mappingCode"] == value, CLIMATE_AVAILABLE_MODE)
@@ -116,7 +119,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     async def async_set_hvac_mode(self, hvac_mode) -> None:
         status = self.coordinator.data[self.index]["status"]
-        _is_on = bool(int(status.get("0x00") or 0))
+        _is_on = bool(int(status.get("0x00", 0)))
 
         _LOGGER.debug(f"[{self.label}] set_hvac_mode: {hvac_mode}")
 
@@ -136,7 +139,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str:
         status = self.coordinator.data[self.index]["status"]
-        _is_on = bool(int(status.get("0x00") or 0))
+        _is_on = bool(int(status.get("0x00", 0)))
         _hvac_mode = int(status.get("0x01"))
         _preset_mode = (
             HVAC_MODE_OFF if not _is_on else CLIMATE_AVAILABLE_PRESET[_hvac_mode]
@@ -153,7 +156,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     async def set_preset_mode(self, preset_mode) -> None:
         status = self.coordinator.data[self.index]["status"]
-        _is_on = bool(int(status.get("0x00") or 0))
+        _is_on = bool(int(status.get("0x00", 0)))
 
         _LOGGER.debug(f"[{self.label}] set_preset_mode: {preset_mode}")
 
@@ -167,7 +170,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def fan_mode(self) -> str:
         status = self.coordinator.data[self.index]["status"]
-        _fan_mode = int(status.get("0x02") or 0)
+        _fan_mode = int(status.get("0x02", 0))
         _LOGGER.debug(f"[{self.label}] fan_mode: {_fan_mode}")
         return CLIMATE_AVAILABLE_FAN_MODE[_fan_mode]
 
@@ -187,7 +190,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def swing_mode(self) -> str:
         status = self.coordinator.data[self.index]["status"]
-        _raw_swing_mode = int(status.get("0x0f") or 0)
+        _raw_swing_mode = int(status.get("0x0F", 0))
         _swing_mode = CLIMATE_AVAILABLE_SWING_MODE[_raw_swing_mode]
         _LOGGER.debug(f"[{self.label}] swing_mode: {_swing_mode}")
         return _swing_mode
@@ -207,7 +210,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def target_temperature(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _target_temperature = float(status.get("0x03") or 0)
+        _target_temperature = float(status.get("0x03", 0))
         _LOGGER.debug(f"[{self.label}] target_temperature: {_target_temperature}")
         return _target_temperature
 
@@ -221,7 +224,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def current_temperature(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _current_temperature = float(status.get("0x04") or 0)
+        _current_temperature = float(status.get("0x04", 0))
         _LOGGER.debug(f"[{self.label}] current_temperature: {_current_temperature}")
         return _current_temperature
 

@@ -42,7 +42,7 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_on_status = bool(int(status.get("0x00") or 0))
+        _is_on_status = bool(int(status.get("0x00", 0)))
         return _is_on_status
 
     @property
@@ -56,6 +56,6 @@ class PanasonoicTankSensor(PanasonicBaseEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
-        _is_tank_full = bool(int(status.get("0x0a") or 0))
+        _is_tank_full = bool(int(status.get("0x0A", 0)))
         _LOGGER.debug(f"[{self.label}] is_on: {_is_tank_full}")
         return _is_tank_full

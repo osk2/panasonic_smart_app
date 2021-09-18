@@ -31,26 +31,34 @@ DATA_COORDINATOR = "coordinator"
 
 CONF_UPDATE_INTERVAL = "update_interval"
 
+DEVICE_CLASS_SWITCH = "switch"
+
 DEFAULT_UPDATE_INTERVAL = 180
 
 DEVICE_STATUS_CODES = {
     DEVICE_TYPE_AC: [
-        "0x00",
-        "0x01",
-        "0x04",
-        "0x03",
-        "0x02",
-        "0x0f",
-        "0x21",
-        "0x0b",
-        "0x0c",
-        "0x08",
-        "0x1b",
-        "0x1e",
-        "0x1a",
+        "0x00", # AC power status
+        "0x01", # AC operation mode
+        "0x04", # AC current termperature
+        "0x03", # AC target temperature
+        "0x02", # AC fan level
+        "0x0F", # AC fan position (horizontal)
+        "0x21", # AC outdoor temperature
+        "0x0B", # AC on timer
+        "0x0C", # AC off timer
+        "0x08", # AC nanoeX
+        "0x1B", # AC ECONAVI
+        "0x1E", # AC buzzer
+        "0x1A", # AC turbo mode
+        "0x18", # AC self clean
+        "0x05", # AC sleep mode
+        "0x17", # AC dryer
+        # "0x11", # AC fan position (vertical)
+        # "0x19", # AC motion detection
+        # "0x1F", # AC indicator light
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
-        "0x00",  # Dehumidifier online status
+        "0x00",  # Dehumidifier power status
         "0x01",  # Dehumidifier operation mode
         "0x02",  # Dehumidifier off timer
         "0x07",  # Dehumidifier humidity sensor
@@ -119,6 +127,10 @@ ICON_BUZZER = "mdi:volume-high"
 ICON_TURBO = "mdi:clock-fast"
 ICON_FAN = "mdi:fan"
 ICON_ENERGY = "mdi:flash"
+ICON_DRYER = "mdi:weather-windy"
+ICON_SLEEP = "mdi:sleep"
+ICON_CLEAN = "mdi:broom"
+
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -130,6 +142,9 @@ LABEL_DEHUMIDIFIER_FAN_MODE = "風量設定"
 LABEL_CLIMATE_ON_TIMER = "定時開機(分)"
 LABEL_CLIMATE_ON_TIMER = "定時開機"
 LABEL_CLIMATE_OFF_TIMER = "定時關機"
+LABEL_CLIMATE_DRYER = "乾燥防霉"
+LABEL_CLIMATE_SLEEP = "舒眠"
+LABEL_CLIMATE_CLEAN = "自體淨"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PM25 = "PM2.5"
 LABEL_NANOE = "nanoe"

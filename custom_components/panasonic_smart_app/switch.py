@@ -266,7 +266,7 @@ class PanasonicACTurbo(PanasonicBaseEntity, SwitchEntity):
     @property
     def is_on(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _turbo_status = status.get("0x1a", None)
+        _turbo_status = status.get("0x1A", None)
         if _turbo_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_turbo_status))

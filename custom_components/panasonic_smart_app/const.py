@@ -37,25 +37,25 @@ DEFAULT_UPDATE_INTERVAL = 180
 
 DEVICE_STATUS_CODES = {
     DEVICE_TYPE_AC: [
-        "0x00", # AC power status
-        "0x01", # AC operation mode
-        "0x04", # AC current termperature
-        "0x03", # AC target temperature
-        "0x02", # AC fan level
-        "0x0F", # AC fan position (horizontal)
-        "0x21", # AC outdoor temperature
-        "0x0B", # AC on timer
-        "0x0C", # AC off timer
-        "0x08", # AC nanoeX
-        "0x1B", # AC ECONAVI
-        "0x1E", # AC buzzer
-        "0x1A", # AC turbo mode
-        "0x18", # AC self clean
-        "0x05", # AC sleep mode
-        "0x17", # AC dryer
-        # "0x11", # AC fan position (vertical)
-        # "0x19", # AC motion detection
-        # "0x1F", # AC indicator light
+        "0x00",  # AC power status
+        "0x01",  # AC operation mode
+        "0x04",  # AC current termperature
+        "0x03",  # AC target temperature
+        "0x02",  # AC fan level
+        "0x0F",  # AC fan position (horizontal)
+        "0x21",  # AC outdoor temperature
+        "0x0B",  # AC on timer
+        "0x0C",  # AC off timer
+        "0x08",  # AC nanoeX
+        "0x1B",  # AC ECONAVI
+        "0x1E",  # AC buzzer
+        "0x1A",  # AC turbo mode
+        "0x18",  # AC self clean
+        "0x05",  # AC sleep mode
+        "0x17",  # AC dryer
+        "0x11",  # AC fan position (vertical)
+        "0x19",  # AC motion detection
+        "0x1F",  # AC indicator light
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
         "0x00",  # Dehumidifier power status
@@ -130,7 +130,9 @@ ICON_ENERGY = "mdi:flash"
 ICON_DRYER = "mdi:weather-windy"
 ICON_SLEEP = "mdi:sleep"
 ICON_CLEAN = "mdi:broom"
-
+ICON_LIGHT = "mdi:lightbulb-on-outline"
+ICON_MOTION_SENSOR = "mdi:motion-sensor"
+ICON_ARROW_LEFT_RIGHT = "mdi:arrow-left-right-bold"
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -145,6 +147,9 @@ LABEL_CLIMATE_OFF_TIMER = "定時關機"
 LABEL_CLIMATE_DRYER = "乾燥防霉"
 LABEL_CLIMATE_SLEEP = "舒眠"
 LABEL_CLIMATE_CLEAN = "自體淨"
+LABEL_CLIMATE_FAN_POSITION = "左右風向設定"
+LABEL_CLIMATE_MOTION_DETECTION = "動向感應"
+LABEL_CLIMATE_INDICATOR = "機體燈光"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PM25 = "PM2.5"
 LABEL_NANOE = "nanoe"

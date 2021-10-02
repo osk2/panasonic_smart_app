@@ -69,23 +69,28 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 
 ### Available Entities
 
-| Device Type  | Entity Type   | Note                        |
-| ------------ | ------------- | --------------------------- |
-| AC           | climate       |                             |
-|              | number        | On timer\*                  |
-|              | number        | Off timer                   |
-|              | sensor        | Outdoor temperature sensor  |
-|              | switch        | nanoe switch\*              |
-|              | switch        | ECONAVI swtich\*            |
-|              | switch        | Buzzer switch\*             |
-|              | switch        | Turbo mode switch\*         |
-| Dehumidifier | humidifier    |                             |
-|              | number        | On timer\*                  |
-|              | number        | Off timer                   |
-|              | select        | Fan mode                    |
-|              | sensor        | Environment humidity sensor |
-|              | sensor        | PM2.5 sensor                |
-|              | binary_sensor | Water tank status sensor    |
+| Device Type  | Entity Type   | Note                           |
+| ------------ | ------------- | ------------------------------ |
+| AC           | climate       |                                |
+|              | number        | On timer\*                     |
+|              | number        | Off timer                      |
+|              | sensor        | Outdoor temperature sensor     |
+|              | switch        | nanoe switch\*                 |
+|              | switch        | ECONAVI swtich\*               |
+|              | switch        | Buzzer switch\*                |
+|              | switch        | Turbo mode switch\*            |
+|              | switch        | Self-clean mode switch\*       |
+|              | switch        | Anti-mold mode switch\*        |
+|              | switch        | Sleep mode switch\*            |
+|              | select        | Motion detection mode select\* |
+|              | select        | Indicator light select\*       |
+| Dehumidifier | humidifier    |                                |
+|              | number        | On timer\*                     |
+|              | number        | Off timer                      |
+|              | select        | Fan mode\*                     |
+|              | sensor        | Environment humidity sensor    |
+|              | sensor        | PM2.5 sensor                   |
+|              | binary_sensor | Water tank status sensor       |
 
 \*Only available if feature is supported.
 

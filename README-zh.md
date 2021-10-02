@@ -75,6 +75,11 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |          | switch        | ECONAVI 開關\* |
 |          | switch        | 操控聲音開關\* |
 |          | switch        | 急速模式開關\* |
+|          | switch        | 自體淨開關\*   |
+|          | switch        | 乾燥防霉開關\* |
+|          | switch        | 舒眠模式開關\* |
+|          | select        | 動向感應模式\* |
+|          | select        | 機體燈光模式\* |
 | 除濕機   | humidifier    |                |
 |          | number        | 定時開機\*     |
 |          | number        | 定時關機       |

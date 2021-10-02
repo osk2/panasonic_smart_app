@@ -48,7 +48,7 @@ def tryApiStatus(func):
             PanasonicDeviceOffline,
             Exception,
         ) as exception:
-            _LOGGER.info(exception)
+            _LOGGER.warning(exception)
             return {}
 
     return wrapper_call
@@ -177,12 +177,16 @@ class SmartApp(object):
                         info = await self.get_device_info(device.get("Auth"), codes)
                         device["status"].update(info)
                     except PanasonicExceedRateLimit:
-                        _LOGGER.warning("超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31")
+                        _LOGGER.warning(
+                            "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
+                        )
                         overview = await get_device_overview(gwid)
                         target_device = list(
                             filter(lambda d: d["GWID"] == gwid, self._devices)
                         )
-                        _LOGGER.debug(f"[{target_device[0]['NickName']}] overview: {overview}")
+                        _LOGGER.debug(
+                            f"[{target_device[0]['NickName']}] overview: {overview}"
+                        )
                         device["status"].update(overview)
                         break
 
@@ -249,10 +253,10 @@ class SmartApp(object):
                     filter(lambda device: device["Auth"] == auth, self._devices)
                 )
                 raise PanasonicDeviceOffline(
-                    f"{device[0]['NickName']} is offline. Retry later..."
+                    f"無法連線至\"{device[0]['NickName']}\"，本次更新已略過，將於下輪更新時重試"
                 )
             else:
-                raise PanasonicDeviceOffline
+                raise PanasonicDeviceOffline(f"無法連線至裝置，本次更新已略過，將於下輪更新時重試")
 
         if response.status == HTTP_OK:
             try:
@@ -274,10 +278,10 @@ class SmartApp(object):
                         filter(lambda device: device["Auth"] == auth, self._devices)
                     )
                     raise PanasonicDeviceOffline(
-                        f"{device[0]['NickName']} is offline. Retry later..."
+                        f"無法連線至\"{device[0]['NickName']}\"，本次更新已略過，將於下輪更新時重試"
                     )
                 else:
-                    raise PanasonicDeviceOffline
+                    raise PanasonicDeviceOffline(f"無法連線至裝置，本次更新已略過，將於下輪更新時重試")
 
             elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
                 raise PanasonicTokenExpired
@@ -288,7 +292,6 @@ class SmartApp(object):
                     await response.text(),
                 )
                 raise PanasonicLoginFailed
-
 
         elif response.status == HTTP_TOO_MANY_REQUESTS:
             raise PanasonicExceedRateLimit

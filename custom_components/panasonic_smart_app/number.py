@@ -216,7 +216,7 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
     @property
     def value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _on_timer = float(status.get("0x0b") or 0)
+        _on_timer = float(status.get("0x0B") or 0)
         _timer_value = 0 if _on_timer <= 0 else _on_timer
         _LOGGER.debug(f"[{self.label}] value: {_timer_value}")
         return int(_timer_value)
@@ -256,7 +256,7 @@ class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
     @property
     def value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _off_timer = float(status.get("0x0c") or 0)
+        _off_timer = float(status.get("0x0C") or 0)
         _timer_value = 0 if _off_timer <= 0 else _off_timer
         _LOGGER.debug(f"[{self.label}] value: {_timer_value}")
         return int(_timer_value)

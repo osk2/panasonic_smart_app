@@ -43,7 +43,9 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             for command in commands
             if command["ModelType"] == device.get("ModelType")
         ][0]["JSON"][0]["list"]
-        command_types = list(map(lambda c: c["CommandType"].lower(), current_device_commands))
+        command_types = list(
+            map(lambda c: c["CommandType"].lower(), current_device_commands)
+        )
 
         if device_type == DEVICE_TYPE_AC:
 
@@ -182,7 +184,7 @@ class PanasonicACEconavi(PanasonicBaseEntity, SwitchEntity):
     @property
     def is_on(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _nanoe_status = status.get("0x1b")
+        _nanoe_status = status.get("0x1B")
         if _nanoe_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_nanoe_status))

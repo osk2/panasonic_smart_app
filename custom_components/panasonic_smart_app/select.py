@@ -71,7 +71,7 @@ class PanasonoicFanModeSensor(PanasonicBaseEntity, SelectEntity):
             filter(lambda c: c["CommandType"] == "0x0E", self.commands)
         )[0]["Parameters"]
         target_option = list(
-            filter(lambda m: m[1] == int(status.get("0x0e") or 0), raw_mode_list)
+            filter(lambda m: m[1] == int(status.get("0x0E") or 0), raw_mode_list)
         )[0]
         _current_option = target_option[0] if len(target_option) > 0 else ""
         _LOGGER.debug(f"[{self.label}] current_option: {_current_option}")

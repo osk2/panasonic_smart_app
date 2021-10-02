@@ -260,32 +260,35 @@ class SmartApp(object):
             except:
                 resp = {}
         elif response.status == HTTP_EXPECTATION_FAILED:
+            resp = {}
             try:
                 resp = await response.json()
-                if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
-                    auth = headers.get("auth", None)
-                    if auth:
-                        device = list(
-                            filter(lambda device: device["Auth"] == auth, self._devices)
-                        )
-                        raise PanasonicDeviceOffline(
-                            f"{device[0]['NickName']} is offline. Retry later..."
-                        )
-                    else:
-                        raise PanasonicDeviceOffline
-
-                elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
-                    raise PanasonicTokenExpired
-                else:
-                    _LOGGER.error(
-                        "Failed to access API. Returned" " %d: %s",
-                        response.status,
-                        await response.text(),
-                    )
-                    raise PanasonicLoginFailed
             except:
                 """ Invalid CPToken or something else """
                 raise PanasonicLoginFailed
+
+            if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
+                auth = headers.get("auth", None)
+                if auth:
+                    device = list(
+                        filter(lambda device: device["Auth"] == auth, self._devices)
+                    )
+                    raise PanasonicDeviceOffline(
+                        f"{device[0]['NickName']} is offline. Retry later..."
+                    )
+                else:
+                    raise PanasonicDeviceOffline
+
+            elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
+                raise PanasonicTokenExpired
+            else:
+                _LOGGER.error(
+                    "Failed to access API. Returned" " %d: %s",
+                    response.status,
+                    await response.text(),
+                )
+                raise PanasonicLoginFailed
+
 
         elif response.status == HTTP_TOO_MANY_REQUESTS:
             raise PanasonicExceedRateLimit

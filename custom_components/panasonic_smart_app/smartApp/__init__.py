@@ -253,10 +253,10 @@ class SmartApp(object):
                     filter(lambda device: device["Auth"] == auth, self._devices)
                 )
                 raise PanasonicDeviceOffline(
-                    f"無法連線至\"{device[0]['NickName']}\"，本次更新已略過，將於下輪更新時重試"
+                    f"無法連線至\"{device[0]['NickName']}\"，將於下輪更新時重試"
                 )
             else:
-                raise PanasonicDeviceOffline(f"無法連線至裝置，本次更新已略過，將於下輪更新時重試")
+                raise PanasonicDeviceOffline(f"無法連線至裝置，將於下輪更新時重試")
 
         if response.status == HTTP_OK:
             try:
@@ -278,10 +278,10 @@ class SmartApp(object):
                         filter(lambda device: device["Auth"] == auth, self._devices)
                     )
                     raise PanasonicDeviceOffline(
-                        f"無法連線至\"{device[0]['NickName']}\"，本次更新已略過，將於下輪更新時重試"
+                        f"無法連線至\"{device[0]['NickName']}\"，將於下輪更新時重試"
                     )
                 else:
-                    raise PanasonicDeviceOffline(f"無法連線至裝置，本次更新已略過，將於下輪更新時重試")
+                    raise PanasonicDeviceOffline(f"無法連線至裝置，將於下輪更新時重試")
 
             elif resp.get("StateMsg") == EXCEPTION_INVALID_REFRESH_TOKEN:
                 raise PanasonicTokenExpired

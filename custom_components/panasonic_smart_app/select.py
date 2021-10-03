@@ -125,7 +125,7 @@ class PanasonoicDehumidifierFanModeSelect(PanasonicBaseEntity, SelectEntity):
         target_option = list(filter(lambda m: m[0] == option, raw_mode_list))
         if len(target_option) > 0:
             _LOGGER.debug(f"[{self.label}] Set fan mode to {option}")
-            await self.client.set_command(self.auth, 142, target_option[0])
+            await self.client.set_command(self.auth, 142, target_option[0][1])
             await self.coordinator.async_request_refresh()
         else:
             return
@@ -178,7 +178,7 @@ class PanasonoicACMotionDetection(PanasonicBaseEntity, SelectEntity):
         target_option = list(filter(lambda m: m[0] == option, raw_mode_list))
         if len(target_option) > 0:
             _LOGGER.debug(f"[{self.label}] Set motion detection to {option}")
-            await self.client.set_command(self.auth, 153, target_option[0])
+            await self.client.set_command(self.auth, 153, target_option[0][1])
             await self.coordinator.async_request_refresh()
         else:
             return
@@ -228,10 +228,11 @@ class PanasonoicACIndicatorLightSelect(PanasonicBaseEntity, SelectEntity):
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x1f", self.commands)
         )[0]["Parameters"]
+        _LOGGER.debug(raw_mode_list)
         target_option = list(filter(lambda m: m[0] == option, raw_mode_list))
         if len(target_option) > 0:
-            _LOGGER.debug(f"[{self.label}] Set indicator light to {option}")
-            await self.client.set_command(self.auth, 159, target_option[0])
+            _LOGGER.debug(f"[{self.label}] Set motion detection to {option}")
+            await self.client.set_command(self.auth, 159, target_option[0][1])
             await self.coordinator.async_request_refresh()
         else:
             return

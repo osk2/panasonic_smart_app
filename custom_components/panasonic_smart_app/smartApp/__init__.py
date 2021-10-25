@@ -2,10 +2,10 @@
 from typing import Literal
 from datetime import datetime
 from collections import defaultdict
+from http import HTTPStatus
 import asyncio
 import logging
 
-from homeassistant.const import HTTP_OK
 from .exceptions import (
     PanasonicRefreshTokenNotFound,
     PanasonicTokenExpired,
@@ -20,8 +20,6 @@ from .const import (
     SECONDS_BETWEEN_REQUEST,
     REQUEST_TIMEOUT,
     COMMANDS_PER_REQUEST,
-    HTTP_EXPECTATION_FAILED,
-    HTTP_TOO_MANY_REQUESTS,
     EXCEPTION_COMMAND_NOT_FOUND,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
@@ -258,12 +256,12 @@ class SmartApp(object):
             else:
                 raise PanasonicDeviceOffline(f"無法連線至裝置，將於下輪更新時重試")
 
-        if response.status == HTTP_OK:
+        if response.status == HTTPStatus.OK:
             try:
                 resp = await response.json()
             except:
                 resp = {}
-        elif response.status == HTTP_EXPECTATION_FAILED:
+        elif response.status == HTTPStatus.EXPECTATION_FAILED:
             resp = {}
             try:
                 resp = await response.json()
@@ -293,7 +291,7 @@ class SmartApp(object):
                 )
                 raise PanasonicLoginFailed
 
-        elif response.status == HTTP_TOO_MANY_REQUESTS:
+        elif response.status == HTTPStatus.TOO_MANY_REQUESTS:
             raise PanasonicExceedRateLimit
         else:
             _LOGGER.error(

@@ -94,6 +94,8 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 
 \*Only available if feature is supported.
 
+Note: Make sure latest Home Assistant is installed or some entities might not available.
+
 For missing entities, open an issue or submit a PR 💪
 
 ### Enable Logs

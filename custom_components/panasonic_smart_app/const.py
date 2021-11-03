@@ -56,6 +56,7 @@ DEVICE_STATUS_CODES = {
         "0x11",  # AC fan position (vertical)
         "0x19",  # AC motion detection
         "0x1F",  # AC indicator light
+        "0x37",  # AC PM2.5
     ],
     DEVICE_TYPE_DEHUMIDIFIER: [
         "0x00",  # Dehumidifier power status

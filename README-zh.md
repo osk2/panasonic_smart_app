@@ -71,6 +71,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |          | number        | 定時開機\*     |
 |          | number        | 定時關機       |
 |          | sensor        | 室外溫度偵測器 |
+|          | sensor        | PM2.5 偵測器   |
 |          | switch        | nanoe 開關\*   |
 |          | switch        | ECONAVI 開關\* |
 |          | switch        | 操控聲音開關\* |

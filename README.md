@@ -75,6 +75,7 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 |              | number        | On timer\*                     |
 |              | number        | Off timer                      |
 |              | sensor        | Outdoor temperature sensor     |
+|              | sensor        | PM2.5 sensor                   |
 |              | switch        | nanoe switch\*                 |
 |              | switch        | ECONAVI swtich\*               |
 |              | switch        | Buzzer switch\*                |

@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 import logging
 from homeassistant.components.sensor import SensorEntity
@@ -63,7 +64,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
             )
             sensors.append(
-                PanasonicPM25Sensor(
+                PanasonicDehumidifierPM25Sensor(
                     coordinator,
                     index,
                     client,
@@ -74,6 +75,14 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         if device_type == DEVICE_TYPE_AC:
             sensors.append(
                 PanasonicOutdoorTemperatureSensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+            sensors.append(
+                PanasonicACPM25Sensor(
                     coordinator,
                     index,
                     client,
@@ -117,8 +126,13 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
         return PERCENTAGE
 
 
-class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
-    """ Panasonic dehumidifer PM2.5 sensor """
+class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
+
+    @property
+    @abstractmethod
+    def command_type(self) -> str:
+        """Command type for PM2.5 sensor."""
+        ...
 
     @property
     def label(self) -> str:
@@ -135,7 +149,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _pm25 = float(status.get("0x53", -1))
+        _pm25 = float(status.get(self.command_type, -1))
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
         return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
 
@@ -147,6 +161,19 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity):
     def unit_of_measurement(self) -> str:
         return CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 
+class PanasonicDehumidifierPM25Sensor(PanasonicPM25Sensor):
+    """ Panasonic Dehumidifier PM2.5 sensor """
+
+    @property
+    def command_type(self) -> str:
+        return "0x53"
+
+class PanasonicACPM25Sensor(PanasonicPM25Sensor):
+    """ Panasonic AC PM2.5 sensor """
+
+    @property
+    def command_type(self) -> str:
+        return "0x37"
 
 class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic AC outdoor temperature sensor """

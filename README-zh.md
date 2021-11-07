@@ -41,27 +41,9 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 # 附錄
 
-### 經測試的裝置
+### 支援的裝置型號
 
-下列裝置經過測試可正常操作，你也可以在 [issue](https://github.com/osk2/panasonic_smart_app/issues) 中回報你的裝置型號
-
-| 裝置型號   | 模組型號 |
-| ---------- | -------- |
-| F-Y28EX    | CZ-T006  |
-| F-Y24GX    | CZ-T006  |
-| F-Y26JH    | _(內建)_ |
-| CS-PX22FA2 | CZ-T007  |
-| CS-PX28FA2 | CZ-T007  |
-| CS-PX36FA2 | CZ-T007  |
-| CS-PX50FA2 | CZ-T007  |
-| CS-PX63FA2 | CZ-T007  |
-| CS-QX28FA2 | CZ-T007  |
-| CS-QX40FA2 | CZ-T007  |
-| CS-QX71FA2 | CZ-T007  |
-| CS-RX28GA2 | _(內建)_ |
-| CS-RX36GA2 | _(內建)_ |
-| CS-RX50GA2 | _(內建)_ |
-| CS-RX71GA2 | _(內建)_ |
+經測試確認可支援的裝置清單請見[支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smart_app/discussions/42)
 
 ### 可用的實體
 

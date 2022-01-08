@@ -52,7 +52,7 @@ DEVICE_STATUS_CODES = {
         "0x1A",  # AC turbo mode
         "0x18",  # AC self clean
         "0x05",  # AC sleep mode
-        "0x17",  # AC dryer
+        "0x17",  # AC mold prevention
         "0x11",  # AC fan position (vertical)
         "0x19",  # AC motion detection
         "0x1F",  # AC indicator light
@@ -128,7 +128,7 @@ ICON_BUZZER = "mdi:volume-high"
 ICON_TURBO = "mdi:clock-fast"
 ICON_FAN = "mdi:fan"
 ICON_ENERGY = "mdi:flash"
-ICON_DRYER = "mdi:weather-windy"
+ICON_MOLD_PREVENTION = "mdi:weather-windy"
 ICON_SLEEP = "mdi:sleep"
 ICON_CLEAN = "mdi:broom"
 ICON_LIGHT = "mdi:lightbulb-on-outline"
@@ -145,7 +145,7 @@ LABEL_DEHUMIDIFIER_FAN_MODE = "風量設定"
 LABEL_CLIMATE_ON_TIMER = "定時開機(分)"
 LABEL_CLIMATE_ON_TIMER = "定時開機"
 LABEL_CLIMATE_OFF_TIMER = "定時關機"
-LABEL_CLIMATE_DRYER = "乾燥防霉"
+LABEL_CLIMATE_MOLD_PREVENTION = "乾燥防霉"
 LABEL_CLIMATE_SLEEP = "舒眠"
 LABEL_CLIMATE_CLEAN = "自體淨"
 LABEL_CLIMATE_FAN_POSITION = "左右風向設定"

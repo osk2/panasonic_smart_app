@@ -57,7 +57,7 @@ Feel free to report working device by opening an [issue](https://github.com/osk2
 |              | switch        | Buzzer switch\*                |
 |              | switch        | Turbo mode switch\*            |
 |              | switch        | Self-clean mode switch\*       |
-|              | switch        | Anti-mold mode switch\*        |
+|              | switch        | Mold prevention mode switch\*  |
 |              | switch        | Sleep mode switch\*            |
 |              | select        | Motion detection mode select\* |
 |              | select        | Indicator light select\*       |

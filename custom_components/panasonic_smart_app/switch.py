@@ -14,7 +14,7 @@ from .const import (
     LABEL_ECONAVI,
     LABEL_BUZZER,
     LABEL_TURBO,
-    LABEL_CLIMATE_DRYER,
+    LABEL_CLIMATE_MOLD_PREVENTION,
     LABEL_CLIMATE_SLEEP,
     LABEL_CLIMATE_CLEAN,
     ICON_NANOE,
@@ -22,7 +22,7 @@ from .const import (
     ICON_BUZZER,
     ICON_TURBO,
     ICON_SLEEP,
-    ICON_DRYER,
+    ICON_MOLD_PREVENTION,
     ICON_CLEAN,
 )
 
@@ -96,7 +96,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
             if "0x17" in command_types:
                 switches.append(
-                    PanasonicACDryer(
+                    PanasonicACMoldPrevention(
                         coordinator,
                         index,
                         client,
@@ -328,8 +328,8 @@ class PanasonicACSleepMode(PanasonicBaseEntity, SwitchEntity):
         await self.coordinator.async_request_refresh()
 
 
-class PanasonicACDryer(PanasonicBaseEntity, SwitchEntity):
-    """ Panasonic AC dryer switch """
+class PanasonicACMoldPrevention(PanasonicBaseEntity, SwitchEntity):
+    """ Panasonic AC mold prevention switch """
 
     @property
     def available(self) -> bool:
@@ -339,11 +339,11 @@ class PanasonicACDryer(PanasonicBaseEntity, SwitchEntity):
 
     @property
     def label(self):
-        return f"{self.nickname} {LABEL_CLIMATE_DRYER}"
+        return f"{self.nickname} {LABEL_CLIMATE_MOLD_PREVENTION}"
 
     @property
     def icon(self) -> str:
-        return ICON_DRYER
+        return ICON_MOLD_PREVENTION
 
     @property
     def device_class(self) -> str:
@@ -352,20 +352,20 @@ class PanasonicACDryer(PanasonicBaseEntity, SwitchEntity):
     @property
     def is_on(self) -> int:
         status = self.coordinator.data[self.index]["status"]
-        _dryer_status = status.get("0x17")
-        if _dryer_status == None:
+        _mold_prevention_status = status.get("0x17")
+        if _mold_prevention_status == None:
             return STATE_UNAVAILABLE
-        _is_on = bool(int(_dryer_status))
+        _is_on = bool(int(_mold_prevention_status))
         _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on dryer")
+        _LOGGER.debug(f"[{self.label}] Turning on mold prevention")
         await self.client.set_command(self.auth, 23, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off dryer")
+        _LOGGER.debug(f"[{self.label}] Turning off mold prevention")
         await self.client.set_command(self.auth, 23, 0)
         await self.coordinator.async_request_refresh()
 

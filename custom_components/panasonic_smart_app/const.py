@@ -73,6 +73,16 @@ DEVICE_STATUS_CODES = {
         "0x04",  # Dehumidifier target humidity
         "0x0E",  # Dehumidifier fan mode
     ],
+    DEVICE_TYPE_WASHING_MACHINE: [
+        "0x13", # Washing machine remaining washing time
+        "0x14", # Washing machine timer
+        "0x15", # Washing machine remaining time to trigger timer
+        "0x50", # Washing machine status
+        "0x54", # Washing machine current mode
+        "0x55", # Washing machine current cycle
+        "0x61", # Washing machine dryer delay
+        "0x64", # Washing machine cycle
+    ],
 }
 
 DEHUMIDIFIER_MAX_HUMD = 70
@@ -134,6 +144,10 @@ ICON_CLEAN = "mdi:broom"
 ICON_LIGHT = "mdi:lightbulb-on-outline"
 ICON_MOTION_SENSOR = "mdi:motion-sensor"
 ICON_ARROW_LEFT_RIGHT = "mdi:arrow-left-right-bold"
+ICON_CLOCK = "mdi:clock"
+ICON_INFO = "mdi:information"
+ICON_WASHING_MACHINE = "mdi:washing-machine"
+ICON_LIST = "mdi:order-bool-descending-variant"
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -151,6 +165,10 @@ LABEL_CLIMATE_CLEAN = "自體淨"
 LABEL_CLIMATE_FAN_POSITION = "左右風向設定"
 LABEL_CLIMATE_MOTION_DETECTION = "動向感應"
 LABEL_CLIMATE_INDICATOR = "機體燈光"
+LABEL_WASHING_MACHINE_COUNTDOWN = "剩餘洗衣時間"
+LABEL_WASHING_MACHINE_STATUS = "運轉狀態"
+LABEL_WASHING_MACHINE_CYCLE = "目前行程"
+LABEL_WASHING_MACHINE_MODE = "目前模式"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PM25 = "PM2.5"
 LABEL_NANOE = "nanoe"

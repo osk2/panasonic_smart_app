@@ -12,6 +12,7 @@ from homeassistant.const import (
     ENERGY_KILO_WATT_HOUR,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
+    TIME_MINUTES,
 )
 
 from .entity import PanasonicBaseEntity
@@ -19,16 +20,25 @@ from .const import (
     DOMAIN,
     DEVICE_TYPE_DEHUMIDIFIER,
     DEVICE_TYPE_AC,
+    DEVICE_TYPE_WASHING_MACHINE,
     DATA_CLIENT,
     DATA_COORDINATOR,
     LABEL_PM25,
     LABEL_HUMIDITY,
     LABEL_OUTDOOR_TEMPERATURE,
     LABEL_ENERGY,
+    LABEL_WASHING_MACHINE_COUNTDOWN,
+    LABEL_WASHING_MACHINE_STATUS,
+    LABEL_WASHING_MACHINE_CYCLE,
+    LABEL_WASHING_MACHINE_MODE,
     ICON_PM25,
     ICON_THERMOMETER,
     ICON_HUMIDITY,
     ICON_ENERGY,
+    ICON_CLOCK,
+    ICON_INFO,
+    ICON_WASHING_MACHINE,
+    ICON_LIST,
     STATE_MEASUREMENT,
     STATE_TOTAL_INCREASING,
 )
@@ -83,6 +93,40 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             )
             sensors.append(
                 PanasonicACPM25Sensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+
+        if device_type == DEVICE_TYPE_WASHING_MACHINE:
+            sensors.append(
+                PanasonicWashingCountdownSensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+            sensors.append(
+              PanasonicWashingStatusSensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+            sensors.append(
+                PanasonicWashingModeSensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+            sensors.append(
+                PanasonicWashingCycleSensor(
                     coordinator,
                     index,
                     client,
@@ -238,3 +282,129 @@ class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
     @property
     def unit_of_measurement(self) -> str:
         return ENERGY_KILO_WATT_HOUR
+
+
+class PanasonicWashingCountdownSensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic washing machine washing cycle countdown sensor """
+
+    @property
+    def label(self):
+        return f"{self.nickname} {LABEL_WASHING_MACHINE_COUNTDOWN}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_CLOCK
+
+    @property
+    def state(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        _current_countdown = status.get("0x13", None)
+        _LOGGER.debug(f"[{self.label}] state: {_current_countdown}")
+        return _current_countdown if _current_countdown else STATE_UNAVAILABLE
+
+    @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
+
+    @property
+    def unit_of_measurement(self) -> str:
+        return TIME_MINUTES
+
+
+class PanasonicWashingStatusSensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic washing machine status sensor """
+
+    @property
+    def label(self):
+        return f"{self.nickname} {LABEL_WASHING_MACHINE_STATUS}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_INFO
+
+    @property
+    def state(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        washing_status = status.get("0x50")
+
+        if not washing_status:
+            return STATE_UNAVAILABLE
+
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x50", self.commands)
+        )[0]["Parameters"]
+        _current_status = list(
+            filter(lambda m: m[1] == int(washing_status), raw_mode_list)
+        )[0][0]
+        _LOGGER.debug(f"[{self.label}] state: {_current_status}")
+        return _current_status
+
+    @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
+
+
+class PanasonicWashingModeSensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic washing machine mode sensor """
+
+    @property
+    def label(self):
+        return f"{self.nickname} {LABEL_WASHING_MACHINE_MODE}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_WASHING_MACHINE
+
+    @property
+    def state(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        mode = status.get("0x54")
+
+        if not mode:
+            return STATE_UNAVAILABLE
+
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x54", self.commands)
+        )[0]["Parameters"]
+        _current_mode = list(
+            filter(lambda m: m[1] == int(mode), raw_mode_list)
+        )[0][0]
+        _LOGGER.debug(f"[{self.label}] state: {_current_mode}")
+        return _current_mode
+
+    @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT
+
+
+class PanasonicWashingCycleSensor(PanasonicBaseEntity, SensorEntity):
+    """ Panasonic washing machine washing cycle sensor """
+
+    @property
+    def label(self):
+        return f"{self.nickname} {LABEL_WASHING_MACHINE_CYCLE}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_LIST
+
+    @property
+    def state(self) -> int:
+        status = self.coordinator.data[self.index]["status"]
+        cycle = status.get("0x55")
+
+        if not cycle:
+            return STATE_UNAVAILABLE
+
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x55", self.commands)
+        )[0]["Parameters"]
+        _current_cycle = list(
+            filter(lambda m: m[1] == int(cycle), raw_mode_list)
+        )[0][0]
+        _LOGGER.debug(f"[{self.label}] state: {_current_cycle}")
+        return _current_cycle
+
+    @property
+    def state_class(self) -> str:
+        return STATE_MEASUREMENT

@@ -49,29 +49,33 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 
 ### Available Entities
 
-| Device Type  | Entity Type   | Note                           |
-| ------------ | ------------- | ------------------------------ |
-| AC           | climate       |                                |
-|              | number        | On timer\*                     |
-|              | number        | Off timer                      |
-|              | sensor        | Outdoor temperature sensor     |
-|              | sensor        | PM2.5 sensor                   |
-|              | switch        | nanoe switch\*                 |
-|              | switch        | ECONAVI swtich\*               |
-|              | switch        | Buzzer switch\*                |
-|              | switch        | Turbo mode switch\*            |
-|              | switch        | Self-clean mode switch\*       |
-|              | switch        | Mold prevention switch\*       |
-|              | switch        | Sleep mode switch\*            |
-|              | select        | Motion detection mode select\* |
-|              | select        | Indicator light select\*       |
-| Dehumidifier | humidifier    |                                |
-|              | number        | On timer\*                     |
-|              | number        | Off timer                      |
-|              | select        | Fan mode\*                     |
-|              | sensor        | Environment humidity sensor    |
-|              | sensor        | PM2.5 sensor                   |
-|              | binary_sensor | Water tank status sensor       |
+| Device Type     | Entity Type   | Note                           |
+| --------------- | ------------- | ------------------------------ |
+| AC              | climate       |                                |
+|                 | number        | On timer\*                     |
+|                 | number        | Off timer                      |
+|                 | sensor        | Outdoor temperature sensor     |
+|                 | sensor        | PM2.5 sensor                   |
+|                 | switch        | nanoe switch\*                 |
+|                 | switch        | ECONAVI swtich\*               |
+|                 | switch        | Buzzer switch\*                |
+|                 | switch        | Turbo mode switch\*            |
+|                 | switch        | Self-clean mode switch\*       |
+|                 | switch        | Mold prevention switch\*       |
+|                 | switch        | Sleep mode switch\*            |
+|                 | select        | Motion detection mode select\* |
+|                 | select        | Indicator light select\*       |
+| Dehumidifier    | humidifier    |                                |
+|                 | number        | On timer\*                     |
+|                 | number        | Off timer                      |
+|                 | select        | Fan mode\*                     |
+|                 | sensor        | Environment humidity sensor    |
+|                 | sensor        | PM2.5 sensor                   |
+|                 | binary_sensor | Water tank status sensor       |
+| Washing Machine | sensor        | Countdown sensor               |
+|                 | sensor        | Device status sensor           |
+|                 | sensor        | Washing mode sensor            |
+|                 | sensor        | Washing cycle sensor           |
 
 \*Only available if feature is supported.
 

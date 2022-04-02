@@ -84,6 +84,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         _is_on = bool(int(status.get("0x00", 0)))
 
         if not _is_on:
+            _LOGGER.debug(f"[{self.label}] hvac_mode: off")
             return HVAC_MODE_OFF
         else:
             if not status.get("0x01", None):

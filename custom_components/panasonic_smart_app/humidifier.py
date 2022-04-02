@@ -109,6 +109,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
     def is_on(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
         _is_on_status = bool(int(status.get("0x00") or 0))
+        _LOGGER.debug(f"[{self.label}] is_on: {_is_on_status}")
         return _is_on_status
 
     @property

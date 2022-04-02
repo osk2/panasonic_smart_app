@@ -193,9 +193,12 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
     @property
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
+        _is_on = bool(int(status.get("0x00", 0)))
+        if not _is_on:
+            return STATE_UNAVAILABLE
         _pm25 = float(status.get(self.command_type, -1))
         _LOGGER.debug(f"[{self.label}] state: {_pm25}")
-        return _pm25 if _pm25 >= 0 else STATE_UNAVAILABLE
+        return _pm25
 
     @property
     def state_class(self) -> str:

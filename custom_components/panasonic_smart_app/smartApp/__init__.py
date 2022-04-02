@@ -20,7 +20,8 @@ from .const import (
     SECONDS_BETWEEN_REQUEST,
     REQUEST_TIMEOUT,
     COMMANDS_PER_REQUEST,
-    EXCEPTION_COMMAND_NOT_FOUND,
+    EXCEPTION_DEVICE_OFFLINE,
+    EXCEPTION_DEVICE_NOT_RESPONDING,
     EXCEPTION_INVALID_REFRESH_TOKEN,
 )
 from .utils import chunks
@@ -112,7 +113,11 @@ class SmartApp(object):
     async def get_device_info(
         self, deviceId=None, options=["0x00", "0x01", "0x03", "0x04"]
     ):
-        headers = {"cptoken": self._cp_token, "auth": deviceId}
+        headers = {
+          "cptoken": self._cp_token,
+          "auth": deviceId,
+          "gwid": deviceId[0:12]
+        }
         commands = {"CommandTypes": [], "DeviceID": 1}
         for option in options:
             commands["CommandTypes"].append({"CommandType": option})
@@ -269,7 +274,11 @@ class SmartApp(object):
                 """ Invalid CPToken or something else """
                 raise PanasonicLoginFailed
 
-            if resp.get("StateMsg") == EXCEPTION_COMMAND_NOT_FOUND:
+            offline_exceptions = [
+              EXCEPTION_DEVICE_OFFLINE,
+              EXCEPTION_DEVICE_NOT_RESPONDING
+            ]
+            if resp.get("StateMsg") in offline_exceptions:
                 auth = headers.get("auth", None)
                 if auth:
                     device = list(

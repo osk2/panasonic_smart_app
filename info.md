@@ -21,53 +21,37 @@ Home Assistant integration for [Panasonic Smart App](https://play.google.com/sto
 
 ### Tested Devices
 
-Following devices were tested.
-
-Feel free to report working device by opening an [issue](https://github.com/osk2/panasonic_smart_app/issues)
-
-| Device Model | Module Type  |
-| ------------ | ------------ |
-| F-Y28EX      | CZ-T006      |
-| F-Y24GX      | CZ-T006      |
-| F-Y26JH      | _(Built-in)_ |
-| CS-PX22FA2   | CZ-T007      |
-| CS-PX28FA2   | CZ-T007      |
-| CS-PX36FA2   | CZ-T007      |
-| CS-PX50FA2   | CZ-T007      |
-| CS-PX63FA2   | CZ-T007      |
-| CS-QX28FA2   | CZ-T007      |
-| CS-QX40FA2   | CZ-T007      |
-| CS-QX71FA2   | CZ-T007      |
-| CS-RX28GA2   | _(Built-in)_ |
-| CS-RX36GA2   | _(Built-in)_ |
-| CS-RX50GA2   | _(Built-in)_ |
-| CS-RX71GA2   | _(Built-in)_ |
+See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smart_app/discussions/42) for detail of supported devices.
 
 ### Available Entities
 
-| Device Type  | Entity Type   | Note                           |
-| ------------ | ------------- | ------------------------------ |
-| AC           | climate       |                                |
-|              | number        | On timer\*                     |
-|              | number        | Off timer                      |
-|              | sensor        | Outdoor temperature sensor     |
-|              | sensor        | PM2.5 sensor                   |
-|              | switch        | nanoe switch\*                 |
-|              | switch        | ECONAVI swtich\*               |
-|              | switch        | Buzzer switch\*                |
-|              | switch        | Turbo mode switch\*            |
-|              | switch        | Self-clean mode switch\*       |
-|              | switch        | Mold prevention mode switch\*  |
-|              | switch        | Sleep mode switch\*            |
-|              | select        | Motion detection mode select\* |
-|              | select        | Indicator light select\*       |
-| Dehumidifier | humidifier    |                                |
-|              | number        | On timer\*                     |
-|              | number        | Off timer                      |
-|              | select        | Fan mode\*                     |
-|              | sensor        | Environment humidity sensor    |
-|              | sensor        | PM2.5 sensor                   |
-|              | binary_sensor | Water tank status sensor       |
+| Device Type     | Entity Type   | Note                           |
+| --------------- | ------------- | ------------------------------ |
+| AC              | climate       |                                |
+|                 | number        | On timer\*                     |
+|                 | number        | Off timer                      |
+|                 | sensor        | Outdoor temperature sensor     |
+|                 | sensor        | PM2.5 sensor                   |
+|                 | switch        | nanoe switch\*                 |
+|                 | switch        | ECONAVI swtich\*               |
+|                 | switch        | Buzzer switch\*                |
+|                 | switch        | Turbo mode switch\*            |
+|                 | switch        | Self-clean mode switch\*       |
+|                 | switch        | Mold prevention switch\*       |
+|                 | switch        | Sleep mode switch\*            |
+|                 | select        | Motion detection mode select\* |
+|                 | select        | Indicator light select\*       |
+| Dehumidifier    | humidifier    |                                |
+|                 | number        | On timer\*                     |
+|                 | number        | Off timer                      |
+|                 | select        | Fan mode\*                     |
+|                 | sensor        | Environment humidity sensor    |
+|                 | sensor        | PM2.5 sensor                   |
+|                 | binary_sensor | Water tank status sensor       |
+| Washing Machine | sensor        | Countdown sensor               |
+|                 | sensor        | Device status sensor           |
+|                 | sensor        | Washing mode sensor            |
+|                 | sensor        | Washing cycle sensor           |
 
 \*Only available if feature is supported.
 

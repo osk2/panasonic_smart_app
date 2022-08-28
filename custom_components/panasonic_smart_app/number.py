@@ -131,7 +131,7 @@ class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
         return ICON_ON_TIMER
 
     @property
-    def value(self) -> int:
+    def native_value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _on_timer = float(status.get("0x55") or 0)
         _timer_value = 0 if _on_timer <= 0 else _on_timer
@@ -139,18 +139,18 @@ class PanasonicDehumidifierOnTimer(PanasonicBaseEntity, NumberEntity):
         return int(_timer_value)
 
     @property
-    def min_value(self) -> int:
+    def native_min_value(self) -> int:
         return DEHUMIDIFIER_ON_TIMER_MIN
 
     @property
-    def max_value(self) -> int:
+    def native_max_value(self) -> int:
         return DEHUMIDIFIER_ON_TIMER_MAX
 
     @property
-    def unit_of_measurement(self) -> str:
+    def native_unit_of_measurement(self) -> str:
         return UNIT_HOUR
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 213, int(value))
         await self.coordinator.async_request_refresh()
 
@@ -171,7 +171,7 @@ class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
         return ICON_OFF_TIMER
 
     @property
-    def value(self) -> int:
+    def native_value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _off_timer = float(status.get("0x02") or 0)
         _timer_value = 0 if _off_timer <= 0 else _off_timer
@@ -179,18 +179,18 @@ class PanasonicDehumidifierOffTimer(PanasonicBaseEntity, NumberEntity):
         return int(_timer_value)
 
     @property
-    def min_value(self) -> int:
+    def native_min_value(self) -> int:
         return DEHUMIDIFIER_OFF_TIMER_MIN
 
     @property
-    def max_value(self) -> int:
+    def native_max_value(self) -> int:
         return DEHUMIDIFIER_OFF_TIMER_MAX
 
     @property
-    def unit_of_measurement(self) -> str:
+    def native_unit_of_measurement(self) -> str:
         return UNIT_HOUR
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 130, int(value))
         await self.coordinator.async_request_refresh()
 
@@ -214,7 +214,7 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
         return ICON_ON_TIMER
 
     @property
-    def value(self) -> int:
+    def native_value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _on_timer = float(status.get("0x0B") or 0)
         _timer_value = 0 if _on_timer <= 0 else _on_timer
@@ -222,18 +222,18 @@ class PanasonicACOnTimer(PanasonicBaseEntity, NumberEntity):
         return int(_timer_value)
 
     @property
-    def min_value(self) -> int:
+    def native_min_value(self) -> int:
         return CLIMATE_ON_TIMER_MIN
 
     @property
-    def max_value(self) -> int:
+    def native_max_value(self) -> int:
         return CLIMATE_ON_TIMER_MAX
 
     @property
-    def unit_of_measurement(self) -> str:
+    def native_unit_of_measurement(self) -> str:
         return UNIT_MINUTE
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 139, int(value))
         await self.coordinator.async_request_refresh()
 
@@ -254,7 +254,7 @@ class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
         return ICON_OFF_TIMER
 
     @property
-    def value(self) -> int:
+    def native_value(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _off_timer = float(status.get("0x0C") or 0)
         _timer_value = 0 if _off_timer <= 0 else _off_timer
@@ -262,17 +262,17 @@ class PanasonicACOffTimer(PanasonicBaseEntity, NumberEntity):
         return int(_timer_value)
 
     @property
-    def min_value(self) -> int:
+    def native_min_value(self) -> int:
         return CLIMATE_OFF_TIMER_MIN
 
     @property
-    def max_value(self) -> int:
+    def native_max_value(self) -> int:
         return CLIMATE_OFF_TIMER_MAX
 
     @property
-    def unit_of_measurement(self) -> str:
+    def native_unit_of_measurement(self) -> str:
         return UNIT_MINUTE
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         await self.client.set_command(self.auth, 140, int(value))
         await self.coordinator.async_request_refresh()

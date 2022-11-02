@@ -72,7 +72,27 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     @property
     def supported_features(self) -> int:
         """Return the list of supported features."""
-        return SUPPORT_TARGET_TEMPERATURE | SUPPORT_FAN_MODE | SUPPORT_SWING_MODE
+        status = self.coordinator.data[self.index]["status"]
+        support_feature = SUPPORT_TARGET_TEMPERATURE
+
+        try:
+          _raw_swing_mode = int(status.get("0x0F", 0))
+          _swing_mode = CLIMATE_AVAILABLE_SWING_MODE[_raw_swing_mode]
+        except IndexError:
+          _swing_mode = False
+
+        try:
+          _raw_fan_mode = int(status.get("0x02", 0))
+          _fan_mode = CLIMATE_AVAILABLE_FAN_MODE[_raw_fan_mode]
+        except IndexError:
+          _fan_mode = False
+
+        if _swing_mode:
+            support_feature |= SUPPORT_SWING_MODE
+        if _fan_mode:
+            support_feature |= SUPPORT_FAN_MODE
+
+        return support_feature
 
     @property
     def temperature_unit(self) -> str:

@@ -1,14 +1,14 @@
 {
   "domain": "panasonic_smart_app",
   "name": "Panasonic Smart App",
-  "version": "1.0.0",
-  "config_flow": true,
-  "documentation": "https://github.com/osk2/panasonic_smart_app",
-  "issue_tracker": "https://github.com/osk2/panasonic_smart_app/issues",
-  "dependencies": [],
-  "codeowners": [
-    "@osk2"
-  ],
-  "iot_class": "cloud_polling",
-  "requirements": []
+	"codeowners": [
+		"@osk2"
+	],
+	"config_flow": true,
+	"dependencies": [],
+	"documentation": "https://github.com/osk2/panasonic_smart_app",
+	"iot_class": "cloud_polling",
+	"issue_tracker": "https://github.com/osk2/panasonic_smart_app/issues",
+	"requirements": [],
+	"version": "1.0.0"
 }

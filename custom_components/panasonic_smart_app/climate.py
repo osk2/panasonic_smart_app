@@ -78,13 +78,13 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         try:
           _raw_swing_mode = int(status.get("0x0F", 0))
           _swing_mode = CLIMATE_AVAILABLE_SWING_MODE[_raw_swing_mode]
-        except IndexError:
+        except KeyError:
           _swing_mode = False
 
         try:
           _raw_fan_mode = int(status.get("0x02", 0))
           _fan_mode = CLIMATE_AVAILABLE_FAN_MODE[_raw_fan_mode]
-        except IndexError:
+        except KeyError:
           _fan_mode = False
 
         if _swing_mode:

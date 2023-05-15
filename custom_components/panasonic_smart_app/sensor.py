@@ -276,7 +276,7 @@ class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
     def state(self) -> int:
         energy = self.coordinator.data[self.index]["energy"]
         _LOGGER.debug(f"[{self.label}] state: {energy}")
-        return energy if energy >= 0 else STATE_UNAVAILABLE
+        return energy if energy is not None and energy >= 0 else STATE_UNAVAILABLE
 
     @property
     def state_class(self) -> str:

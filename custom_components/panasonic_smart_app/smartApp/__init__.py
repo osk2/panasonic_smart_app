@@ -111,12 +111,12 @@ class SmartApp(object):
 
     @tryApiStatus
     async def get_device_info(
-        self, deviceId=None, options=["0x00", "0x01", "0x03", "0x04"]
+        self, deviceId=None, gwid=None, options=["0x00", "0x01", "0x03", "0x04"]
     ):
         headers = {
           "cptoken": self._cp_token,
           "auth": deviceId,
-          "gwid": deviceId[0:12]
+          "gwid": gwid
         }
         commands = {"CommandTypes": [], "DeviceID": 1}
         for option in options:
@@ -177,7 +177,7 @@ class SmartApp(object):
                 device["status"] = {}
                 for codes in status_codes:
                     try:
-                        info = await self.get_device_info(device.get("Auth"), codes)
+                        info = await self.get_device_info(device.get("Auth"), gwid, codes)
                         device["status"].update(info)
                     except PanasonicExceedRateLimit:
                         _LOGGER.warning(

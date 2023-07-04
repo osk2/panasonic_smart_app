@@ -7,6 +7,7 @@
         "data": {
           "username": "Panasonic Smart App username",
           "password": "Panasonic Smart App password",
+          "proxy": "Proxy URL (optional)",
           "update_interval": "Update interval (second)"
         }
       }

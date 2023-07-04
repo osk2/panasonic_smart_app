@@ -15,6 +15,7 @@ from .const import (
     DATA_COORDINATOR,
     DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    CONF_PROXY,
     CONF_UPDATE_INTERVAL,
     DEFAULT_NAME,
     PLATFORMS,
@@ -31,8 +32,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     username = entry.data.get(CONF_USERNAME)
     password = entry.data.get(CONF_PASSWORD)
+    proxy = entry.data.get(CONF_PROXY, '')
     session = async_get_clientsession(hass)
-    client = SmartApp(session, username, password)
+    client = SmartApp(session, username, password, proxy)
 
     _LOGGER.info(
         "\n\

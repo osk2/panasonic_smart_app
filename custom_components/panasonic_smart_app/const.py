@@ -29,6 +29,7 @@ DEVICE_TYPE_DEHUMIDIFIER = 4
 DATA_CLIENT = "client"
 DATA_COORDINATOR = "coordinator"
 
+CONF_PROXY = "proxy"
 CONF_UPDATE_INTERVAL = "update_interval"
 
 DEVICE_CLASS_SWITCH = "switch"

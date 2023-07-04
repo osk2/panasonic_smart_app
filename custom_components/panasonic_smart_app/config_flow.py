@@ -13,6 +13,7 @@ from .smartApp import SmartApp
 from .smartApp.exceptions import PanasonicExceedRateLimit
 from .const import (
     DOMAIN,
+    CONF_PROXY,
     CONF_UPDATE_INTERVAL,
     DEFAULT_UPDATE_INTERVAL,
 )
@@ -36,11 +37,13 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             username = user_input[CONF_USERNAME]
             password = user_input[CONF_PASSWORD]
+            proxy = user_input.get(CONF_PROXY, '')
             session = async_get_clientsession(self.hass)
             client = SmartApp(
                 session=session,
                 account=username,
                 password=password,
+                proxy=proxy,
             )
 
             try:
@@ -63,6 +66,7 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_USERNAME): str,
                     vol.Required(CONF_PASSWORD): str,
+                    vol.Optional(CONF_PROXY, default=None): str,
                     vol.Optional(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL): int,
                 }
             ),

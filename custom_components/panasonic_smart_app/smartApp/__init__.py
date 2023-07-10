@@ -239,7 +239,7 @@ class SmartApp(object):
         resp = None
         headers["user-agent"] = USER_AGENT
         _LOGGER.debug(
-            f"Making request to {endpoint} with headers {headers} and data {data}"
+            f"Making request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
         )
         try:
             response = await self._session.request(

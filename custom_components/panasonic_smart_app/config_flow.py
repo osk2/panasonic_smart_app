@@ -4,19 +4,21 @@ from __future__ import annotations
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant import config_entries
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from homeassistant.core import callback
+from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .smartApp import SmartApp
-from .smartApp.exceptions import PanasonicExceedRateLimit
 from .const import (
     DOMAIN,
     CONF_PROXY,
     CONF_UPDATE_INTERVAL,
     DEFAULT_UPDATE_INTERVAL,
 )
+from .smartApp import SmartApp
+from .smartApp.exceptions import PanasonicExceedRateLimit
 
 
 class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -25,6 +27,12 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         self._errors: dict[str, str] = {}
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowHandler:
+        """Return the options flow."""
+        return OptionsFlowHandler(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -76,3 +84,30 @@ class SmartAppFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _test_credentials(self, client) -> True:
         await client.login()
         return True
+
+class OptionsFlowHandler(config_entries.OptionsFlow):
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        """Initialize options flow."""
+        self.config_entry = config_entry
+
+    async def async_step_init(
+            self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Manage the options."""
+        if user_input is not None:
+            username = self.config_entry.data.get(CONF_USERNAME)
+            return self.async_create_entry(title=username, data=user_input)
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Optional(CONF_PROXY, default=self.config_entry.options.get(
+                        CONF_PROXY, ''
+                    )): str,
+                    vol.Optional(CONF_UPDATE_INTERVAL, default=self.config_entry.options.get(
+                        CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL
+                    )): int,
+                }
+            ),
+        )

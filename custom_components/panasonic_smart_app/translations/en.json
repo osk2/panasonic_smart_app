@@ -19,5 +19,15 @@
     "abort": {
       "single_instance_allowed": "Only a single instance is allowed."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "proxy": "Proxy URL (optional)",
+          "update_interval": "Update interval (second)"
+        }
+      }
+    }
   }
 }

@@ -23,6 +23,7 @@ from .const import (
     EXCEPTION_DEVICE_OFFLINE,
     EXCEPTION_DEVICE_NOT_RESPONDING,
     EXCEPTION_INVALID_REFRESH_TOKEN,
+    EXCEPTION_DEVICE_JP_INFO,
 )
 from .utils import chunks
 from . import urls
@@ -278,7 +279,8 @@ class SmartApp(object):
 
             offline_exceptions = [
               EXCEPTION_DEVICE_OFFLINE,
-              EXCEPTION_DEVICE_NOT_RESPONDING
+              EXCEPTION_DEVICE_NOT_RESPONDING,
+              EXCEPTION_DEVICE_JP_INFO,
             ]
             if resp.get("StateMsg") in offline_exceptions:
                 auth = headers.get("auth", None)

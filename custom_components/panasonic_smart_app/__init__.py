@@ -15,6 +15,7 @@ from .const import (
     DATA_COORDINATOR,
     DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    CONF_PROXY,
     CONF_UPDATE_INTERVAL,
     DEFAULT_NAME,
     PLATFORMS,
@@ -31,8 +32,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     username = entry.data.get(CONF_USERNAME)
     password = entry.data.get(CONF_PASSWORD)
+    proxy = entry.options.get(CONF_PROXY, '')
     session = async_get_clientsession(hass)
-    client = SmartApp(session, username, password)
+    client = SmartApp(session, username, password, proxy)
 
     _LOGGER.info(
         "\n\
@@ -53,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER,
         name=DEFAULT_NAME,
         update_method=async_update_data,
-        update_interval=timedelta(seconds=entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)),
+        update_interval=timedelta(seconds=entry.options.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)),
     )
 
     await coordinator.async_refresh()

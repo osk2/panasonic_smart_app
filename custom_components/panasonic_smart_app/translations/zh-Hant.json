@@ -7,6 +7,7 @@
         "data": {
           "username": "Panasonic Smart App 帳號",
           "password": "Panasonic Smart App 密碼",
+          "proxy": "代理伺服器（選填）",
           "update_interval": "更新時間間隔（秒）"
         }
       }
@@ -17,6 +18,16 @@
     },
     "abort": {
       "single_instance_allowed": "重複設定。僅能建立一個實例"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "proxy": "代理伺服器（選填）",
+          "update_interval": "更新時間間隔（秒）"
+        }
+      }
     }
   }
 }

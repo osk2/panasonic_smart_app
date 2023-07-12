@@ -23,6 +23,7 @@ from .const import (
     EXCEPTION_DEVICE_OFFLINE,
     EXCEPTION_DEVICE_NOT_RESPONDING,
     EXCEPTION_INVALID_REFRESH_TOKEN,
+    EXCEPTION_DEVICE_JP_INFO,
 )
 from .utils import chunks
 from . import urls
@@ -64,9 +65,10 @@ def delay(func):
 
 
 class SmartApp(object):
-    def __init__(self, session, account, password):
+    def __init__(self, session, account, password, proxy=None):
         self.account = account
         self.password = password
+        self._proxy = proxy
         self._session = session
         self._devices = []
         self._commands = []
@@ -238,7 +240,7 @@ class SmartApp(object):
         resp = None
         headers["user-agent"] = USER_AGENT
         _LOGGER.debug(
-            f"Making request to {endpoint} with headers {headers} and data {data}"
+            f"Making request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
         )
         try:
             response = await self._session.request(
@@ -248,6 +250,7 @@ class SmartApp(object):
                 params=params,
                 headers=headers,
                 timeout=REQUEST_TIMEOUT,
+                proxy=self._proxy,
             )
         except:
             auth = headers.get("auth", None)
@@ -276,7 +279,8 @@ class SmartApp(object):
 
             offline_exceptions = [
               EXCEPTION_DEVICE_OFFLINE,
-              EXCEPTION_DEVICE_NOT_RESPONDING
+              EXCEPTION_DEVICE_NOT_RESPONDING,
+              EXCEPTION_DEVICE_JP_INFO,
             ]
             if resp.get("StateMsg") in offline_exceptions:
                 auth = headers.get("auth", None)

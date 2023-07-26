@@ -40,8 +40,8 @@ Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 
 # Configuration
 
-1. Search `Panasonic Smart App` in integration list
-2. Follow steps on UI to finish configuration
+1. Search `Panasonic Smart App` in the integration list
+2. Follow the steps on UI to finish the configuration
 
 # Note
 
@@ -79,15 +79,17 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | sensor        | Washing mode sensor            |
 |                 | sensor        | Washing cycle sensor           |
 
-\*Only available if feature is supported.
+\*Only available if the feature is supported.
 
-Note: Make sure latest Home Assistant is installed or some entities might not available.
+Note: Ensure the latest Home Assistant is installed or some entities might not be available.
 
 For missing entities, open an issue or submit a PR 💪
 
 ### Enable Logs
 
-Add following configs to `configuration.yaml`:
+⚠️ Logs may contain some sensitive information. Be very careful before you post logs.
+
+Add the following configs to `configuration.yaml`:
 
 ```yaml
 logger:

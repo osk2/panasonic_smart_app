@@ -173,27 +173,24 @@ class SmartApp(object):
             gwid = device.get("GWID")
             device["energy"] = energy_report.get(gwid)
             if device_type in status_code_mapping.keys():
-                status_codes = chunks(
-                    status_code_mapping[device_type], COMMANDS_PER_REQUEST
-                )
+                status_codes = status_code_mapping[device_type]
                 device["status"] = {}
-                for codes in status_codes:
-                    try:
-                        info = await self.get_device_info(device.get("Auth"), gwid, codes)
-                        device["status"].update(info)
-                    except PanasonicExceedRateLimit:
-                        _LOGGER.warning(
-                            "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
-                        )
-                        overview = await get_device_overview(gwid)
-                        target_device = list(
-                            filter(lambda d: d["GWID"] == gwid, self._devices)
-                        )
-                        _LOGGER.debug(
-                            f"[{target_device[0]['NickName']}] overview: {overview}"
-                        )
-                        device["status"].update(overview)
-                        break
+                try:
+                    info = await self.get_device_info(device.get("Auth"), gwid, status_codes)
+                    device["status"].update(info)
+                except PanasonicExceedRateLimit:
+                    _LOGGER.warning(
+                        "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
+                    )
+                    overview = await get_device_overview(gwid)
+                    target_device = list(
+                        filter(lambda d: d["GWID"] == gwid, self._devices)
+                    )
+                    _LOGGER.debug(
+                        f"[{target_device[0]['NickName']}] overview: {overview}"
+                    )
+                    device["status"].update(overview)
+                    break
 
         return devices
 

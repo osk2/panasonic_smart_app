@@ -78,6 +78,7 @@ DEVICE_STATUS_CODES = {
         "0x13", # Washing machine remaining washing time
         "0x14", # Washing machine timer
         "0x15", # Washing machine remaining time to trigger timer
+        "0x41", # Washing machine timer for japan model
         "0x50", # Washing machine status
         "0x54", # Washing machine current mode
         "0x55", # Washing machine current cycle

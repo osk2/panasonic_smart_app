@@ -270,6 +270,12 @@ class SmartApp(object):
         if response.status == HTTPStatus.OK:
             try:
                 resp = await response.json()
+                _LOGGER.debug(
+                    "Succeed to access #%d API. Returned" " %d: %s",
+                    request_id,
+                    response.status,
+                    await response.text(),
+                )
             except:
                 resp = {}
         elif response.status == HTTPStatus.EXPECTATION_FAILED:

@@ -72,6 +72,7 @@ class SmartApp(object):
         self._session = session
         self._devices = []
         self._commands = []
+        self.last_request_id = 0
 
     async def login(self):
         _LOGGER.info("Attemping to login...")
@@ -238,9 +239,11 @@ class SmartApp(object):
         """Shared request method"""
 
         resp = None
+        request_id = self.last_request_id + 1
+        self.last_request_id = request_id
         headers["user-agent"] = USER_AGENT
         _LOGGER.debug(
-            f"Making request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
+            f"Making #{request_id} request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
         )
         try:
             response = await self._session.request(
@@ -298,7 +301,8 @@ class SmartApp(object):
                 raise PanasonicTokenExpired
             else:
                 _LOGGER.error(
-                    "Failed to access API. Returned" " %d: %s",
+                    "Failed to access #%d API. Returned" " %d: %s",
+                    request_id,
                     response.status,
                     await response.text(),
                 )
@@ -308,7 +312,8 @@ class SmartApp(object):
             raise PanasonicExceedRateLimit
         else:
             _LOGGER.error(
-                "Failed to access API. Returned" " %d: %s",
+                "Failed to access #%d API. Returned" " %d: %s",
+                request_id,
                 response.status,
                 await response.text(),
             )

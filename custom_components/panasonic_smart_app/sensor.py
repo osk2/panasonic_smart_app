@@ -302,6 +302,8 @@ class PanasonicWashingCountdownSensor(PanasonicBaseEntity, SensorEntity):
     def state(self) -> int:
         status = self.coordinator.data[self.index]["status"]
         _current_countdown = status.get("0x13", None)
+        if _current_countdown is None or float(_current_countdown) < 0:
+            _current_countdown = status.get("0x41", None)
         _LOGGER.debug(f"[{self.label}] state: {_current_countdown}")
         return _current_countdown if _current_countdown else STATE_UNAVAILABLE
 

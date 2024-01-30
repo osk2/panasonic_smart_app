@@ -25,6 +25,7 @@ DEFAULT_NAME = "Panasonic Smart Application"
 DEVICE_TYPE_AC = 1
 DEVICE_TYPE_WASHING_MACHINE = 3
 DEVICE_TYPE_DEHUMIDIFIER = 4
+DEVICE_TYPE_PURIFIER = 8
 
 DATA_CLIENT = "client"
 DATA_COORDINATOR = "coordinator"
@@ -85,6 +86,12 @@ DEVICE_STATUS_CODES = {
         "0x61", # Washing machine dryer delay
         "0x64", # Washing machine cycle
     ],
+    DEVICE_TYPE_PURIFIER: [
+        "0x00",  # Purifier power status
+        "0x01",  # Purifier fan level
+        "0x07",  # Purifier nanoeX
+        "0x50",  # Purifier PM 2.5
+    ],
 }
 
 DEHUMIDIFIER_MAX_HUMD = 70
@@ -135,6 +142,7 @@ ICON_OFF_TIMER = "mdi:alarm-snooze"
 ICON_THERMOMETER = "mdi:thermometer"
 ICON_PM25 = "mdi:dots-hexagon"
 ICON_NANOE = "mdi:atom"
+ICON_NANOEX = "mdi:atom"
 ICON_ECONAVI = "mdi:leaf"
 ICON_BUZZER = "mdi:volume-high"
 ICON_TURBO = "mdi:clock-fast"
@@ -150,6 +158,7 @@ ICON_CLOCK = "mdi:clock"
 ICON_INFO = "mdi:information"
 ICON_WASHING_MACHINE = "mdi:washing-machine"
 ICON_LIST = "mdi:order-bool-descending-variant"
+ICON_PURIFIER = "mdi:air-purifier"
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -172,12 +181,15 @@ LABEL_WASHING_MACHINE_STATUS = "運轉狀態"
 LABEL_WASHING_MACHINE_CYCLE = "目前行程"
 LABEL_WASHING_MACHINE_MODE = "目前模式"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
+LABEL_PURIFIER_FAN_LEVEL = "風量設定"
 LABEL_PM25 = "PM2.5"
 LABEL_NANOE = "nanoe"
+LABEL_NANOEX = "nanoeX"
 LABEL_ECONAVI = "ECONAVI"
 LABEL_BUZZER = "操作提示音"
 LABEL_TURBO = "急速"
 LABEL_ENERGY = "本月耗電量"
+LABEL_POWER = "電源"
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"

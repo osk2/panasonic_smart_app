@@ -78,6 +78,10 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | sensor        | Device status sensor           |
 |                 | sensor        | Washing mode sensor            |
 |                 | sensor        | Washing cycle sensor           |
+| Purifier        | switch        | Power switch                   |
+|                 | select        | Fan level\*                    |
+|                 | switch        | nanoeX switch\*                |
+|                 | sensor        | PM2.5 sensor                   |
 
 \*Only available if the feature is supported.
 

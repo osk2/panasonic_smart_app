@@ -21,6 +21,7 @@ from .const import (
     DEVICE_TYPE_DEHUMIDIFIER,
     DEVICE_TYPE_AC,
     DEVICE_TYPE_WASHING_MACHINE,
+    DEVICE_TYPE_PURIFIER,
     DATA_CLIENT,
     DATA_COORDINATOR,
     LABEL_PM25,
@@ -134,6 +135,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
             )
 
+        if device_type == DEVICE_TYPE_PURIFIER:
+            sensors.append(
+                PanasonicPurifierPM25Sensor(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+
     async_add_entities(sensors, True)
 
     return True
@@ -221,6 +232,15 @@ class PanasonicACPM25Sensor(PanasonicPM25Sensor):
     @property
     def command_type(self) -> str:
         return "0x37"
+
+
+class PanasonicPurifierPM25Sensor(PanasonicPM25Sensor):
+    """ Panasonic Purifier PM2.5 sensor """
+
+    @property
+    def command_type(self) -> str:
+        return "0x50"
+
 
 class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
     """ Panasonic AC outdoor temperature sensor """

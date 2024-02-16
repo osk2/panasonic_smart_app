@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
-from datetime import datetime, timedelta
 import logging
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (
+    SensorEntity,
+    SensorDeviceClass,
+)
 from homeassistant.const import (
+    UnitOfEnergy,
+    UnitOfTemperature,
     STATE_UNAVAILABLE,
-    DEVICE_CLASS_HUMIDITY,
-    DEVICE_CLASS_TEMPERATURE,
-    DEVICE_CLASS_ENERGY,
-    DEVICE_CLASS_PM25,
     TEMP_CELSIUS,
     ENERGY_KILO_WATT_HOUR,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -163,7 +163,7 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def device_class(self) -> str:
-        return DEVICE_CLASS_HUMIDITY
+        return SensorDeviceClass.HUMIDITY
 
     @property
     def state(self) -> int:
@@ -199,7 +199,7 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
 
     @property
     def device_class(self) -> str:
-        return DEVICE_CLASS_PM25
+        return SensorDeviceClass.PM25
 
     @property
     def state(self) -> int:
@@ -255,7 +255,7 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def device_class(self) -> str:
-        return DEVICE_CLASS_TEMPERATURE
+        return SensorDeviceClass.TEMPERATURE
 
     @property
     def state(self) -> int:
@@ -270,7 +270,7 @@ class PanasonicOutdoorTemperatureSensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def unit_of_measurement(self) -> str:
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
 
 class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
@@ -286,11 +286,7 @@ class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def device_class(self) -> str:
-        return DEVICE_CLASS_ENERGY
-
-    @property
-    def last_reset(self):
-        return datetime.today().replace(day=1)
+        return SensorDeviceClass.ENERGY
 
     @property
     def state(self) -> int:
@@ -304,7 +300,7 @@ class PanasonicEnergySensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def unit_of_measurement(self) -> str:
-        return ENERGY_KILO_WATT_HOUR
+        return UnitOfEnergy.KILO_WATT_HOUR
 
 
 class PanasonicWashingCountdownSensor(PanasonicBaseEntity, SensorEntity):

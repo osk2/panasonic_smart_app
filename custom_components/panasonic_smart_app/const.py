@@ -1,13 +1,6 @@
 """Contants for Panasonic Smart App integration"""
 
-from homeassistant.components.climate.const import (
-    HVAC_MODE_OFF,
-    HVAC_MODE_COOL,
-    HVAC_MODE_DRY,
-    HVAC_MODE_HEAT,
-    HVAC_MODE_AUTO,
-    HVAC_MODE_FAN_ONLY,
-)
+from homeassistant.components.climate import HVACMode
 
 DOMAIN = "panasonic_smart_app"
 PLATFORMS = [
@@ -103,12 +96,12 @@ DEHUMIDIFIER_OFF_TIMER_MIN = 0
 DEHUMIDIFIER_OFF_TIMER_MAX = 12
 
 CLIMATE_AVAILABLE_MODE = [
-    {"key": HVAC_MODE_OFF, "mappingCode": -1},
-    {"key": HVAC_MODE_COOL, "mappingCode": 0},
-    {"key": HVAC_MODE_DRY, "mappingCode": 1},
-    {"key": HVAC_MODE_FAN_ONLY, "mappingCode": 2},
-    {"key": HVAC_MODE_AUTO, "mappingCode": 3},
-    {"key": HVAC_MODE_HEAT, "mappingCode": 4},
+    {"key": HVACMode.OFF, "mappingCode": -1},
+    {"key": HVACMode.COOL, "mappingCode": 0},
+    {"key": HVACMode.DRY, "mappingCode": 1},
+    {"key": HVACMode.FAN_ONLY, "mappingCode": 2},
+    {"key": HVACMode.AUTO, "mappingCode": 3},
+    {"key": HVACMode.HEAT, "mappingCode": 4},
 ]
 CLIMATE_AVAILABLE_PRESET = {0: "冷氣", 1: "除濕", 2: "清淨", 3: "自動", 4: "暖氣"}
 CLIMATE_AVAILABLE_SWING_MODE = {

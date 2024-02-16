@@ -1,15 +1,13 @@
 import logging
 from datetime import timedelta
-from homeassistant.components.climate import ClimateEntity
+from homeassistant.components.climate import (
+    ClimateEntity,
+    ClimateEntityFeature,
+    HVACMode,
+)
 from homeassistant.const import (
     TEMP_CELSIUS,
     ATTR_TEMPERATURE,
-)
-from homeassistant.components.climate.const import (
-    HVAC_MODE_OFF,
-    SUPPORT_TARGET_TEMPERATURE,
-    SUPPORT_FAN_MODE,
-    SUPPORT_SWING_MODE,
 )
 
 from .entity import PanasonicBaseEntity
@@ -73,7 +71,9 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     def supported_features(self) -> int:
         """Return the list of supported features."""
         status = self.coordinator.data[self.index]["status"]
-        support_feature = SUPPORT_TARGET_TEMPERATURE
+        supported_feature = ClimateEntityFeature.TURN_ON
+        supported_feature |= ClimateEntityFeature.TURN_OFF
+        supported_feature |= ClimateEntityFeature.TARGET_TEMPERATURE
 
         try:
           _raw_swing_mode = int(status.get("0x0F", 0))
@@ -88,11 +88,11 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
           _fan_mode = False
 
         if _swing_mode:
-            support_feature |= SUPPORT_SWING_MODE
+            supported_feature |= ClimateEntityFeature.SWING_MODE
         if _fan_mode:
-            support_feature |= SUPPORT_FAN_MODE
+            supported_feature |= ClimateEntityFeature.FAN_MODE
 
-        return support_feature
+        return supported_feature
 
     @property
     def temperature_unit(self) -> str:
@@ -105,7 +105,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
         if not _is_on:
             _LOGGER.debug(f"[{self.label}] hvac_mode: off")
-            return HVAC_MODE_OFF
+            return HVACMode.OFF
         else:
             if not status.get("0x01", None):
                 return ""
@@ -132,7 +132,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         _hvac_modes = list(map(mode_extractor, raw_modes))
 
         """ Force adding off mode into list """
-        _hvac_modes.append(HVAC_MODE_OFF)
+        _hvac_modes.append(HVACMode.OFF)
 
         _LOGGER.debug(f"[{self.label}] hvac_modes: {_hvac_modes}")
 
@@ -144,7 +144,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
         _LOGGER.debug(f"[{self.label}] set_hvac_mode: {hvac_mode}")
 
-        if hvac_mode == HVAC_MODE_OFF:
+        if hvac_mode == HVACMode.OFF:
             await self.client.set_command(self.auth, 128, 0)
         else:
             mode_mapping = list(
@@ -163,7 +163,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         _is_on = bool(int(status.get("0x00", 0)))
         _hvac_mode = int(status.get("0x01"))
         _preset_mode = (
-            HVAC_MODE_OFF if not _is_on else CLIMATE_AVAILABLE_PRESET[_hvac_mode]
+            HVACMode.OFF if not _is_on else CLIMATE_AVAILABLE_PRESET[_hvac_mode]
         )
         _LOGGER.debug(f"[{self.label}] preset_mode: {_preset_mode}")
 

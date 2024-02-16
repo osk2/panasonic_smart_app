@@ -1,9 +1,9 @@
 import logging
 from datetime import timedelta
-from homeassistant.components.humidifier import HumidifierEntity
-from homeassistant.components.humidifier.const import (
-    DEVICE_CLASS_DEHUMIDIFIER,
-    SUPPORT_MODES,
+from homeassistant.components.humidifier import (
+    HumidifierEntity,
+    HumidiferDeviceClass,
+    HumidifierEntityFeature,
 )
 
 from .entity import PanasonicBaseEntity
@@ -103,7 +103,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
     @property
     def supported_features(self) -> int:
-        return SUPPORT_MODES
+        return HumidifierEntityFeature
 
     @property
     def is_on(self) -> bool:
@@ -114,7 +114,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
     @property
     def device_class(self) -> str:
-        return DEVICE_CLASS_DEHUMIDIFIER
+        return HumidiferDeviceClass.DEHUMIDIFIER
 
     async def async_set_mode(self, mode) -> None:
         """ Set operation mode """

@@ -101,7 +101,7 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
     @property
     def supported_features(self) -> int:
-        return HumidifierEntityFeature
+        return HumidifierEntityFeature.MODES
 
     @property
     def is_on(self) -> bool:

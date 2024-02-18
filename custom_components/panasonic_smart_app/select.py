@@ -42,7 +42,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
 
-            if "0x0E" in command_types:
+            if "0x0e" in command_types:
                 select.append(
                     PanasonoicDehumidifierFanModeSelect(
                         coordinator,

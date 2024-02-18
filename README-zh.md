@@ -55,7 +55,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |          | number        | 定時開機\*     |
 |          | number        | 定時關機       |
 |          | sensor        | 室外溫度偵測器 |
-|          | sensor        | PM2.5 偵測器   |
+|          | sensor        | PM2.5 偵測器\* |
 |          | switch        | nanoe 開關\*   |
 |          | switch        | ECONAVI 開關\* |
 |          | switch        | 操控聲音開關\* |
@@ -70,15 +70,15 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |          | number        | 定時關機       |
 |          | select        | 風量設定       |
 |          | sensor        | 環境溼度偵測器 |
-|          | sensor        | PM2.5 偵測器   |
+|          | sensor        | PM2.5 偵測器\* |
 |          | binary_sensor | 水箱滿水偵測器 |
 | 洗衣機   | sensor        | 洗衣時間偵測器 |
 |          | sensor        | 運轉狀態偵測器 |
 |          | sensor        | 洗衣模式偵測器 |
 |          | sensor        | 洗衣行程偵測器 |
-| 空氣清淨機 | switch        | 電源開關      |
-|          | select        | 風量設定\*    |
-|          | switch        | nanoeX 開關\* |
+| 空氣清淨機 | switch        | 電源開關     |
+|          | select        | 風量設定\*     |
+|          | switch        | nanoeX 開關\*  |
 |          | sensor        | PM2.5 偵測器   |
 
 \*僅在裝置支援的情況下可用

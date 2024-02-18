@@ -57,7 +57,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | number        | On timer\*                     |
 |                 | number        | Off timer                      |
 |                 | sensor        | Outdoor temperature sensor     |
-|                 | sensor        | PM2.5 sensor                   |
+|                 | sensor        | PM2.5 sensor\*                 |
 |                 | switch        | nanoe switch\*                 |
 |                 | switch        | ECONAVI swtich\*               |
 |                 | switch        | Buzzer switch\*                |
@@ -72,7 +72,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | number        | Off timer                      |
 |                 | select        | Fan mode\*                     |
 |                 | sensor        | Environment humidity sensor    |
-|                 | sensor        | PM2.5 sensor                   |
+|                 | sensor        | PM2.5 sensor\*                 |
 |                 | binary_sensor | Water tank status sensor       |
 | Washing Machine | sensor        | Countdown sensor               |
 |                 | sensor        | Device status sensor           |

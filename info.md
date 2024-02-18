@@ -12,14 +12,16 @@ Following documentation may be out-dated or not for beta release
 
 Home Assistant integration for [Panasonic Smart App](https://play.google.com/store/apps/details?id=com.panasonic.smart&hl=zh_TW&gl=US).
 
+This integration allows you to control your Panasonic appliances.
+
 # Configuration
 
-1. Search `Panasonic Smart App` in integration list
-2. Follow steps on UI to finish configuration
+1. Search `Panasonic Smart App` in the integration list
+2. Follow the steps on UI to finish the configuration
 
 # Note
 
-### Tested Devices
+### Supported Devices
 
 See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smart_app/discussions/42) for detail of supported devices.
 
@@ -52,16 +54,22 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | sensor        | Device status sensor           |
 |                 | sensor        | Washing mode sensor            |
 |                 | sensor        | Washing cycle sensor           |
+| Purifier        | switch        | Power switch                   |
+|                 | select        | Fan level\*                    |
+|                 | switch        | nanoeX switch\*                |
+|                 | sensor        | PM2.5 sensor                   |
 
-\*Only available if feature is supported.
+\*Only available if the feature is supported.
 
-Note: Make sure latest Home Assistant is installed or some entities might not available.
+Note: Ensure the latest Home Assistant is installed or some entities might not be available.
 
-For missing entities, open an [issue](https://github.com/osk2/panasonic_smart_app/issues) or submit a PR 💪
+For missing entities, open an issue or submit a PR 💪
 
 ### Enable Logs
 
-Add following configs to `configuration.yaml`:
+⚠️ Logs may contain some sensitive information. Be very careful before you post logs.
+
+Add the following configs to `configuration.yaml`:
 
 ```yaml
 logger:

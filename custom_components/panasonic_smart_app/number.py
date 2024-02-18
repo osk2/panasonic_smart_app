@@ -44,8 +44,9 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             for command in commands
             if command["ModelType"] == device.get("ModelType")
         ]
+        device_type = int(device.get("DeviceType"))
 
-        if int(device.get("DeviceType")) == DEVICE_TYPE_DEHUMIDIFIER:
+        if device_type == DEVICE_TYPE_DEHUMIDIFIER:
             numbers.append(
                 PanasonicDehumidifierOffTimer(
                     coordinator,
@@ -77,7 +78,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         )
                     )
 
-        if int(device.get("DeviceType")) == DEVICE_TYPE_AC:
+        if device_type == DEVICE_TYPE_AC:
 
             numbers.append(
                 PanasonicACOffTimer(

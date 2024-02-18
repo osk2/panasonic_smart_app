@@ -7,10 +7,10 @@ from homeassistant.components.sensor import (
 from homeassistant.const import (
     UnitOfEnergy,
     UnitOfTemperature,
+    UnitOfTime,
     STATE_UNAVAILABLE,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
-    TIME_MINUTES,
 )
 
 from .entity import PanasonicBaseEntity
@@ -327,7 +327,7 @@ class PanasonicWashingCountdownSensor(PanasonicBaseEntity, SensorEntity):
 
     @property
     def unit_of_measurement(self) -> str:
-        return TIME_MINUTES
+        return UnitOfTime.MINUTES
 
 
 class PanasonicWashingStatusSensor(PanasonicBaseEntity, SensorEntity):

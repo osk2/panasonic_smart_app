@@ -6,7 +6,7 @@ from homeassistant.components.climate import (
     HVACMode,
 )
 from homeassistant.const import (
-    TEMP_CELSIUS,
+    UnitOfTemperature,
     ATTR_TEMPERATURE,
 )
 
@@ -96,7 +96,7 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
 
     @property
     def temperature_unit(self) -> str:
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
     @property
     def hvac_mode(self) -> str:

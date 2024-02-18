@@ -1,4 +1,3 @@
-from datetime import timedelta
 import logging
 from homeassistant.components.select import SelectEntity
 
@@ -18,7 +17,6 @@ from .const import (
     ICON_FAN,
     ICON_LIGHT,
     ICON_MOTION_SENSOR,
-    ICON_ARROW_LEFT_RIGHT,
 )
 
 _LOGGER = logging.getLogger(__package__)

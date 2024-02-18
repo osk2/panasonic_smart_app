@@ -8,8 +8,6 @@ from homeassistant.const import (
     UnitOfEnergy,
     UnitOfTemperature,
     STATE_UNAVAILABLE,
-    TEMP_CELSIUS,
-    ENERGY_KILO_WATT_HOUR,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     PERCENTAGE,
     TIME_MINUTES,

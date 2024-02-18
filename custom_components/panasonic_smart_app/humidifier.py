@@ -1,11 +1,9 @@
 import logging
-from datetime import timedelta
 from homeassistant.components.humidifier import (
     HumidifierEntity,
     HumidiferDeviceClass,
     HumidifierEntityFeature,
 )
-
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,

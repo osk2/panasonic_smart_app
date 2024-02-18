@@ -49,10 +49,19 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
+    commands = client.get_commands()
     sensors = []
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
+        current_device_commands = [
+            command
+            for command in commands
+            if command["ModelType"] == device.get("ModelType")
+        ][0]["JSON"][0]["list"]
+        command_types = list(
+            map(lambda c: c["CommandType"].lower(), current_device_commands)
+        )
 
         sensors.append(
             PanasonicEnergySensor(
@@ -72,14 +81,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     device,
                 )
             )
-            sensors.append(
-                PanasonicDehumidifierPM25Sensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+
+            if "0x53" in command_types:
+                sensors.append(
+                    PanasonicDehumidifierPM25Sensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
 
         if device_type == DEVICE_TYPE_AC:
             sensors.append(
@@ -90,14 +101,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     device,
                 )
             )
-            sensors.append(
-                PanasonicACPM25Sensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+
+            if "0x37" in command_types:
+                sensors.append(
+                    PanasonicACPM25Sensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
 
         if device_type == DEVICE_TYPE_WASHING_MACHINE:
             sensors.append(

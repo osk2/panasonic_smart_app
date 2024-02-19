@@ -1,5 +1,4 @@
 import logging
-from datetime import timedelta
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
@@ -71,28 +70,24 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     def supported_features(self) -> int:
         """Return the list of supported features."""
         status = self.coordinator.data[self.index]["status"]
-        supported_feature = ClimateEntityFeature.TURN_ON
-        supported_feature |= ClimateEntityFeature.TURN_OFF
-        supported_feature |= ClimateEntityFeature.TARGET_TEMPERATURE
+        features = (
+            ClimateEntityFeature.TURN_ON
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TARGET_TEMPERATURE
+        )
 
-        try:
-          _raw_swing_mode = int(status.get("0x0F", 0))
-          _swing_mode = CLIMATE_AVAILABLE_SWING_MODE[_raw_swing_mode]
-        except KeyError:
-          _swing_mode = False
-
-        try:
-          _raw_fan_mode = int(status.get("0x02", 0))
-          _fan_mode = CLIMATE_AVAILABLE_FAN_MODE[_raw_fan_mode]
-        except KeyError:
-          _fan_mode = False
+        _raw_swing_mode = int(status.get("0x0F", 0))
+        _swing_mode = _raw_swing_mode in CLIMATE_AVAILABLE_SWING_MODE
+        
+        _raw_fan_mode = int(status.get("0x02", 0))
+        _fan_mode = _raw_fan_mode in CLIMATE_AVAILABLE_FAN_MODE
 
         if _swing_mode:
-            supported_feature |= ClimateEntityFeature.SWING_MODE
+            features |= ClimateEntityFeature.SWING_MODE
         if _fan_mode:
-            supported_feature |= ClimateEntityFeature.FAN_MODE
+            features |= ClimateEntityFeature.FAN_MODE
 
-        return supported_feature
+        return features
 
     @property
     def temperature_unit(self) -> str:

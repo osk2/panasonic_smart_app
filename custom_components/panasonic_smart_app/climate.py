@@ -57,6 +57,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
+
+    """ Can be removed after 2025.1 is released"""
+    _enable_turn_on_off_backwards_compatibility = False
+
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]

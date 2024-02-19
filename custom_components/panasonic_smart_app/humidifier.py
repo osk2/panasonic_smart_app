@@ -8,6 +8,7 @@ from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
     DEVICE_TYPE_DEHUMIDIFIER,
+    DEVICE_CLASS_DEHUMIDIFIER,
     DATA_CLIENT,
     DATA_COORDINATOR,
     LABEL_DEHUMIDIFIER,
@@ -112,7 +113,8 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
     @property
     def device_class(self) -> str:
-        return HumidiferDeviceClass.DEHUMIDIFIER
+        #return HumidiferDeviceClass.DEHUMIDIFIER
+        return DEVICE_CLASS_DEHUMIDIFIER
 
     async def async_set_mode(self, mode) -> None:
         """ Set operation mode """

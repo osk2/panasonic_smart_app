@@ -27,6 +27,7 @@ CONF_PROXY = "proxy"
 CONF_UPDATE_INTERVAL = "update_interval"
 
 DEVICE_CLASS_SWITCH = "switch"
+DEVICE_CLASS_DEHUMIDIFIER = "dehumidifier"
 
 DEFAULT_UPDATE_INTERVAL = 180
 

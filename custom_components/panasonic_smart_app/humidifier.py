@@ -1,7 +1,7 @@
 import logging
 from homeassistant.components.humidifier import (
     HumidifierEntity,
-    HumidiferDeviceClass,
+    HumidifierDeviceClass,
     HumidifierEntityFeature,
 )
 from .entity import PanasonicBaseEntity
@@ -113,8 +113,8 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
 
     @property
     def device_class(self) -> str:
-        #return HumidiferDeviceClass.DEHUMIDIFIER
-        return DEVICE_CLASS_DEHUMIDIFIER
+        # return DEVICE_CLASS_DEHUMIDIFIER
+        return HumidifierDeviceClass.DEHUMIDIFIER
 
     async def async_set_mode(self, mode) -> None:
         """ Set operation mode """

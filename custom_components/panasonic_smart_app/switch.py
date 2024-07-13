@@ -22,7 +22,6 @@ from .const import (
     LABEL_CLIMATE_CLEAN,
     LABEL_POWER,
     LABEL_DEHUMIDIFIER_BUZZER,
-    ICON_TANK,
     ICON_NANOE,
     ICON_NANOEX,
     ICON_ECONAVI,
@@ -146,16 +145,6 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             if "0x0d" in command_types:
                 switches.append(
                     PanasonicDehumidifierNanoeX(
-                        coordinator,
-                        index,
-                        client,
-                        device,
-                    )
-                )
-
-            if "0x00" in command_types:
-                switches.append(
-                    PanasonicDehumidifierPower(
                         coordinator,
                         index,
                         client,
@@ -594,46 +583,6 @@ class PanasonicDehumidifierNanoeX(PanasonicBaseEntity, SwitchEntity):
     async def async_turn_off(self) -> None:
         _LOGGER.debug(f"[{self.label}] Turning off nanoeX")
         await self.client.set_command(self.auth, 0x80 + 0x0D, 0)
-        await self.coordinator.async_request_refresh()
-
-class PanasonicDehumidifierPower(PanasonicBaseEntity, SwitchEntity):
-    """ Panasonic Dehumidifier power """
-
-    @property
-    def available(self) -> bool:
-        status = self.coordinator.data[self.index]["status"]
-        return status.get("0x00", None) != None
-
-    @property
-    def label(self):
-        return f"{self.nickname} {LABEL_POWER}"
-
-    @property
-    def icon(self) -> str:
-        return ICON_TANK
-
-    @property
-    def device_class(self) -> str:
-        return DEVICE_CLASS_SWITCH
-
-    @property
-    def is_on(self) -> int:
-        status = self.coordinator.data[self.index]["status"]
-        _power_status = status.get("0x00")
-        if _power_status == None:
-            return STATE_UNAVAILABLE
-        _is_on = bool(int(_power_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
-        return _is_on
-
-    async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on Dehumidifier")
-        await self.client.set_command(self.auth, 0x80 + 0x00, 1)
-        await self.coordinator.async_request_refresh()
-
-    async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off Dehumidifier")
-        await self.client.set_command(self.auth, 0x80 + 0x00, 0)
         await self.coordinator.async_request_refresh()
 
 class PanasonicDehumidifierBuzzer(PanasonicBaseEntity, SwitchEntity):

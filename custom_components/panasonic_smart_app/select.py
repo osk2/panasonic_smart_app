@@ -10,6 +10,7 @@ from .const import (
     DATA_CLIENT,
     DATA_COORDINATOR,
     LABEL_DEHUMIDIFIER_FAN_MODE,
+    LABEL_DEHUMIDIFIER_FAN_POSITION,
     LABEL_PURIFIER_FAN_LEVEL,
     LABEL_CLIMATE_FAN_POSITION,
     LABEL_CLIMATE_MOTION_DETECTION,
@@ -17,6 +18,7 @@ from .const import (
     ICON_FAN,
     ICON_LIGHT,
     ICON_MOTION_SENSOR,
+    ICON_HUMIDITY,
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -51,6 +53,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         device,
                     )
                 )
+
+            if "0x09" in command_types:
+                select.append(
+                    PanasonoicDehumidifierFanPositionSelect(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
+                )       
 
         if device_type == DEVICE_TYPE_AC:
 
@@ -141,6 +153,57 @@ class PanasonoicDehumidifierFanModeSelect(PanasonicBaseEntity, SelectEntity):
         else:
             return
 
+class PanasonoicDehumidifierFanPositionSelect(PanasonicBaseEntity, SelectEntity):
+    @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on_status = bool(int(status.get("0x00", 0)))
+        return _is_on_status
+
+    @property
+    def label(self) -> str:
+        return f"{self.nickname} {LABEL_DEHUMIDIFIER_FAN_POSITION}"
+
+    @property
+    def icon(self) -> str:
+        return ICON_FAN
+
+    @property
+    def options(self) -> list:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x09", self.commands)
+        )[0]["Parameters"]
+
+        def mode_extractor(mode):
+            return mode[0]
+
+        mode_list = list(map(mode_extractor, raw_mode_list))
+        return mode_list
+
+    @property
+    def current_option(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x09", self.commands)
+        )[0]["Parameters"]
+        target_option = list(
+            filter(lambda m: m[1] == int(status.get("0x09") or 0), raw_mode_list)
+        )[0]
+        _current_option = target_option[0] if len(target_option) > 0 else ""
+        _LOGGER.debug(f"[{self.label}] current_option: {_current_option}")
+        return _current_option
+
+    async def async_select_option(self, option: str) -> None:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x09", self.commands)
+        )[0]["Parameters"]
+        target_option = list(filter(lambda m: m[0] == option, raw_mode_list))
+        if len(target_option) > 0:
+            _LOGGER.debug(f"[{self.label}] Set fan position to {option}")
+            await self.client.set_command(self.auth, 0x80 + 0x09, target_option[0][1])
+            await self.coordinator.async_request_refresh()
+        else:
+            return
 
 class PanasonoicACMotionDetection(PanasonicBaseEntity, SelectEntity):
     @property

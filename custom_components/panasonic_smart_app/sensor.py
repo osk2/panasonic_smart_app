@@ -49,19 +49,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
-    commands = client.get_commands()
     sensors = []
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
-        current_device_commands = [
-            command
-            for command in commands
-            if command["ModelType"] == device.get("ModelType")
-        ][0]["JSON"][0]["list"]
-        command_types = list(
-            map(lambda c: c["CommandType"].lower(), current_device_commands)
-        )
+        device_status = coordinator.data[index]["status"].keys()
+        _LOGGER.debug(f"Device index #{index} status: {device_status}")
 
         sensors.append(
             PanasonicEnergySensor(
@@ -73,16 +66,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         )
 
         if device_type == DEVICE_TYPE_DEHUMIDIFIER:
-            sensors.append(
-                PanasonicHumiditySensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x07" in device_status:
+                sensors.append(
+                    PanasonicHumiditySensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-
-            if "0x53" in command_types:
+            if "0x53" in device_status:
                 sensors.append(
                     PanasonicDehumidifierPM25Sensor(
                         coordinator,
@@ -93,16 +86,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
 
         if device_type == DEVICE_TYPE_AC:
-            sensors.append(
-                PanasonicOutdoorTemperatureSensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x21" in device_status:
+                sensors.append(
+                    PanasonicOutdoorTemperatureSensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-
-            if "0x37" in command_types:
+            if "0x37" in device_status:
                 sensors.append(
                     PanasonicACPM25Sensor(
                         coordinator,
@@ -113,48 +106,53 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
 
         if device_type == DEVICE_TYPE_WASHING_MACHINE:
-            sensors.append(
-                PanasonicWashingCountdownSensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x13" in device_status:
+                sensors.append(
+                    PanasonicWashingCountdownSensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            sensors.append(
-              PanasonicWashingStatusSensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x50" in device_status:
+                sensors.append(
+                PanasonicWashingStatusSensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            sensors.append(
-                PanasonicWashingModeSensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x54" in device_status:
+                sensors.append(
+                    PanasonicWashingModeSensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
-            sensors.append(
-                PanasonicWashingCycleSensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x55" in device_status:
+                sensors.append(
+                    PanasonicWashingCycleSensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
 
         if device_type == DEVICE_TYPE_PURIFIER:
-            sensors.append(
-                PanasonicPurifierPM25Sensor(
-                    coordinator,
-                    index,
-                    client,
-                    device,
+            if "0x50" in device_status:
+                sensors.append(
+                    PanasonicPurifierPM25Sensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
                 )
-            )
 
     async_add_entities(sensors, True)
 
@@ -230,12 +228,14 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
     def unit_of_measurement(self) -> str:
         return CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 
+
 class PanasonicDehumidifierPM25Sensor(PanasonicPM25Sensor):
     """ Panasonic Dehumidifier PM2.5 sensor """
 
     @property
     def command_type(self) -> str:
         return "0x53"
+
 
 class PanasonicACPM25Sensor(PanasonicPM25Sensor):
     """ Panasonic AC PM2.5 sensor """

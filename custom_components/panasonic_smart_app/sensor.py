@@ -49,20 +49,10 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
     client = hass.data[DOMAIN][entry.entry_id][DATA_CLIENT]
     coordinator = hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR]
     devices = coordinator.data
-    # commands = client.get_commands()
     sensors = []
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
-        # current_device_commands = [
-        #     command
-        #     for command in commands
-        #     if command["ModelType"] == device.get("ModelType")
-        # ][0]["JSON"][0]["list"]
-        # command_types = list(
-        #     map(lambda c: c["CommandType"].lower(), current_device_commands)
-        # )
-
         device_status = coordinator.data[index]["status"].keys()
         _LOGGER.debug(f"Device index #{index} status: {device_status}")
 
@@ -238,12 +228,14 @@ class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
     def unit_of_measurement(self) -> str:
         return CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 
+
 class PanasonicDehumidifierPM25Sensor(PanasonicPM25Sensor):
     """ Panasonic Dehumidifier PM2.5 sensor """
 
     @property
     def command_type(self) -> str:
         return "0x53"
+
 
 class PanasonicACPM25Sensor(PanasonicPM25Sensor):
     """ Panasonic AC PM2.5 sensor """

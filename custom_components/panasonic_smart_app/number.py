@@ -57,15 +57,9 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             )
 
             if len(current_device_commands) > 0:
-                is_on_timer_supported = (
-                    len(
-                        [
-                            command
-                            for command in current_device_commands[0]["JSON"][0]["list"]
-                            if command["CommandType"] == "0x55"
-                        ]
-                    )
-                    > 0
+                is_on_timer_supported = any(
+                    command["CommandType"] == "0x55"
+                    for command in current_device_commands[0]["JSON"][0]["list"]
                 )
 
                 if is_on_timer_supported:
@@ -79,7 +73,6 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     )
 
         if device_type == DEVICE_TYPE_AC:
-
             numbers.append(
                 PanasonicACOffTimer(
                     coordinator,
@@ -90,15 +83,9 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
             )
 
             if len(current_device_commands) > 0:
-                is_on_timer_supported = (
-                    len(
-                        [
-                            command
-                            for command in current_device_commands[0]["JSON"][0]["list"]
-                            if command["CommandType"] == "0x0b"
-                        ]
-                    )
-                    > 0
+                is_on_timer_supported = any(
+                    command["CommandType"] == "0x0b"
+                    for command in current_device_commands[0]["JSON"][0]["list"]
                 )
 
                 if is_on_timer_supported:

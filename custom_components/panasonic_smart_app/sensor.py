@@ -365,9 +365,14 @@ class PanasonicWashingStatusSensor(PanasonicBaseEntity, SensorEntity):
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x50", self.commands)
         )[0]["Parameters"]
+        
+        if not raw_mode_list:
+            return STATE_UNAVAILABLE
+        
         _current_status = list(
             filter(lambda m: m[1] == int(washing_status), raw_mode_list)
         )[0][0]
+        
         _LOGGER.debug(f"[{self.label}] state: {_current_status}")
         return _current_status
 

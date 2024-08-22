@@ -53,7 +53,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
-        device_status = coordinator.data[index]["status"].keys()
+        device_status = coordinator.data[index].get("status", {}).keys()
         _LOGGER.debug(f"Device index #{index} status: {device_status}")
 
         sensors.append(

@@ -51,39 +51,62 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 
 ### Available Entities
 
-| Device Type     | Entity Type   | Note                           |
-| --------------- | ------------- | ------------------------------ |
-| AC              | climate       |                                |
-|                 | number        | On timer\*                     |
-|                 | number        | Off timer                      |
-|                 | sensor        | Outdoor temperature sensor     |
-|                 | sensor        | PM2.5 sensor\*                 |
-|                 | switch        | nanoe switch\*                 |
-|                 | switch        | ECONAVI swtich\*               |
-|                 | switch        | Buzzer switch\*                |
-|                 | switch        | Turbo mode switch\*            |
-|                 | switch        | Self-clean mode switch\*       |
-|                 | switch        | Mold prevention switch\*       |
-|                 | switch        | Sleep mode switch\*            |
-|                 | select        | Motion detection mode select\* |
-|                 | select        | Indicator light select\*       |
-| Dehumidifier    | humidifier    |                                |
-|                 | number        | On timer\*                     |
-|                 | number        | Off timer                      |
-|                 | select        | Fan mode\*                     |
-|                 | sensor        | Environment humidity sensor    |
-|                 | sensor        | PM2.5 sensor\*                 |
-|                 | binary_sensor | Water tank status sensor       |
-| Washing Machine | sensor        | Countdown sensor               |
-|                 | sensor        | Device status sensor           |
-|                 | sensor        | Washing mode sensor            |
-|                 | sensor        | Washing cycle sensor           |
-| Purifier        | switch        | Power switch                   |
-|                 | select        | Fan level\*                    |
-|                 | switch        | nanoeX switch\*                |
-|                 | sensor        | PM2.5 sensor                   |
+| Device Type      | Entity Type   | Note                                     |
+| ---------------- | ------------- | ---------------------------------------- |
+| General          | sensor        | Energy consumption sensor\*              |
+|                  | sensor        | CO2 footprint sensor\*                   |
+| AC               | climate       |                                          |
+|                  | number        | On timer\*                               |
+|                  | number        | Off timer                                |
+|                  | sensor        | Outdoor temperature sensor               |
+|                  | sensor        | PM2.5 sensor\*                           |
+|                  | switch        | nanoe switch\*                           |
+|                  | switch        | ECONAVI swtich\*                         |
+|                  | switch        | Buzzer switch\*                          |
+|                  | switch        | Turbo mode switch\*                      |
+|                  | switch        | Self-clean mode switch\*                 |
+|                  | switch        | Mold prevention switch\*                 |
+|                  | switch        | Sleep mode switch\*                      |
+|                  | select        | Motion detection mode select\*           |
+|                  | select        | Indicator light select\*                 |
+| Dehumidifier     | humidifier    |                                          |
+|                  | number        | On timer\*                               |
+|                  | number        | Off timer                                |
+|                  | select        | Fan mode\*                               |
+|                  | sensor        | Environment humidity sensor              |
+|                  | sensor        | PM2.5 sensor\*                           |
+|                  | binary_sensor | Water tank status sensor                 |
+| Washing Machine  | sensor        | Countdown sensor                         |
+|                  | sensor        | Device status sensor                     |
+|                  | sensor        | Washing mode sensor                      |
+|                  | sensor        | Washing cycle sensor                     |
+| Purifier         | switch        | Power switch                             |
+|                  | select        | Fan level\*                              |
+|                  | switch        | nanoeX switch\*                          |
+|                  | sensor        | PM2.5 sensor                             |
+| Refrigerator\*\* | sensor        | Freezer temperature sensor               |
+|                  | sensor        | Refrigerator temperature sensor          |
+|                  | sensor        | Partial freezer temperature sensor       |
+|                  | sensor        | Rapid freezing level sensor\*\*\*        |
+|                  | sensor        | Winter mode sensor\*\*\*                 |
+|                  | sensor        | Shopping mode sensor\*\*\*               |
+|                  | sensor        | Vacation mode sensor\*\*\*               |
+|                  | sensor        | Door open count sensor                   |
+|                  | select        | Freezer temperature level select         |
+|                  | select        | Refrigerator temperature level select    |
+|                  | select        | Partial freezer temperature level select |
+|                  | switch        | Stop ice making switch                   |
+|                  | switch        | Quick ice making switch                  |
+|                  | binary_sensor | Defrosting status sensor                 |
+|                  | binary_sensor | ECONAVI status sensor                    |
+|                  | binary_sensor | nanoe status sensor                      |
+
 
 \*Only available if the feature is supported.
+
+\*\*Only tested with NR-D611XGS
+
+\*\*\*These settings should be configurable in the Panasonic App, but are currently read-only in this integration.
 
 Note: Ensure the latest Home Assistant is installed or some entities might not be available.
 

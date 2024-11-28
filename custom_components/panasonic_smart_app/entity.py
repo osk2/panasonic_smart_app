@@ -1,11 +1,10 @@
-from datetime import timedelta
 from abc import ABC, abstractmethod
+
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import (
-    DOMAIN,
-    MANUFACTURER,
-)
+from .const import DOMAIN, MANUFACTURER
+from .smartApp import SmartApp
+
 
 class PanasonicBaseEntity(CoordinatorEntity, ABC):
     def __init__(
@@ -16,7 +15,7 @@ class PanasonicBaseEntity(CoordinatorEntity, ABC):
         device,
     ):
         super().__init__(coordinator)
-        self.client = client
+        self.client: SmartApp = client
         self.device = device
         self.index = index
 

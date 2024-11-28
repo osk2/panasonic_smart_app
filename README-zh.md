@@ -49,39 +49,61 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 ### 可用的實體
 
-| 裝置類型 | 實體類型      | 備註           |
-| -------- | ------------- | -------------- |
-| 冷氣     | climate       |                |
-|          | number        | 定時開機\*     |
-|          | number        | 定時關機       |
-|          | sensor        | 室外溫度偵測器 |
-|          | sensor        | PM2.5 偵測器\* |
-|          | switch        | nanoe 開關\*   |
-|          | switch        | ECONAVI 開關\* |
-|          | switch        | 操控聲音開關\* |
-|          | switch        | 急速模式開關\* |
-|          | switch        | 自體淨開關\*   |
-|          | switch        | 乾燥防霉開關\* |
-|          | switch        | 舒眠模式開關\* |
-|          | select        | 動向感應模式\* |
-|          | select        | 機體燈光模式\* |
-| 除濕機   | humidifier    |                |
-|          | number        | 定時開機\*     |
-|          | number        | 定時關機       |
-|          | select        | 風量設定       |
-|          | sensor        | 環境溼度偵測器 |
-|          | sensor        | PM2.5 偵測器\* |
-|          | binary_sensor | 水箱滿水偵測器 |
-| 洗衣機   | sensor        | 洗衣時間偵測器 |
-|          | sensor        | 運轉狀態偵測器 |
-|          | sensor        | 洗衣模式偵測器 |
-|          | sensor        | 洗衣行程偵測器 |
-| 空氣清淨機 | switch        | 電源開關     |
-|          | select        | 風量設定\*     |
-|          | switch        | nanoeX 開關\*  |
-|          | sensor        | PM2.5 偵測器   |
+| 裝置類型   | 實體類型      | 備註                       |
+| ---------- | ------------- | -------------------------- |
+| 通用       | sensor        | 用電量偵測器\*             |
+|            | sensor        | 碳排量偵測器\*             |
+| 冷氣       | climate       |                            |
+|            | number        | 定時開機\*                 |
+|            | number        | 定時關機                   |
+|            | sensor        | 室外溫度偵測器             |
+|            | sensor        | PM2.5 偵測器\*             |
+|            | switch        | nanoe 開關\*               |
+|            | switch        | ECONAVI 開關\*             |
+|            | switch        | 操控聲音開關\*             |
+|            | switch        | 急速模式開關\*             |
+|            | switch        | 自體淨開關\*               |
+|            | switch        | 乾燥防霉開關\*             |
+|            | switch        | 舒眠模式開關\*             |
+|            | select        | 動向感應模式\*             |
+|            | select        | 機體燈光模式\*             |
+| 除濕機     | humidifier    |                            |
+|            | number        | 定時開機\*                 |
+|            | number        | 定時關機                   |
+|            | select        | 風量設定                   |
+|            | sensor        | 環境溼度偵測器             |
+|            | sensor        | PM2.5 偵測器\*             |
+|            | binary_sensor | 水箱滿水偵測器             |
+| 洗衣機     | sensor        | 洗衣時間偵測器             |
+|            | sensor        | 運轉狀態偵測器             |
+|            | sensor        | 洗衣模式偵測器             |
+|            | sensor        | 洗衣行程偵測器             |
+| 空氣清淨機 | switch        | 電源開關                   |
+|            | select        | 風量設定\*                 |
+|            | switch        | nanoeX 開關\*              |
+|            | sensor        | PM2.5 偵測器               |
+| 電冰箱\**  | sensor        | 冷凍庫溫度偵測器           |
+|            | sensor        | 冰藏庫溫度偵測器           |
+|            | sensor        | 微凍結溫度偵測器           |
+|            | sensor        | 新鮮急凍結等級偵測器\*\*\* |
+|            | sensor        | 冬季模式偵測器\*\*\*       |
+|            | sensor        | 購物模式偵測器\*\*\*       |
+|            | sensor        | 假日模式偵測器\*\*\*       |
+|            | sensor        | 開門次數偵測器             |
+|            | select        | 冷凍庫溫度等級設定         |
+|            | select        | 冰藏庫溫度等級設定         |
+|            | select        | 微凍結溫度等級設定         |
+|            | select        | 製冰停止開關               |
+|            | select        | 快速製冰開關               |
+|            | binary_sensor | 除霜狀態偵測器             |
+|            | binary_sensor | ECONAVI 狀態偵測器         |
+|            | binary_sensor | nanoe 狀態偵測器           |
 
 \*僅在裝置支援的情況下可用
+
+\*\*只在 NR-D611XGS 上測試過
+
+\*\*\*這些設定可以在 Panasonic App 中調整，但目前在這個整合套件中是唯讀的
 
 註：請確保 Home Assistant 為最新版，否則部分實體可能無法使用
 

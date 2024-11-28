@@ -18,7 +18,7 @@ def get_device_info():
     return url
 
 
-def get_energy_report():
+def get_info():
     url = f"{BASE_URL}/UserGetInfo"
     return url
 

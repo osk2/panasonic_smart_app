@@ -157,9 +157,16 @@ class SmartApp(object):
         return result
 
     async def get_device_with_info(self, status_code_mapping: dict):
+        # Call APIs concurrently
+        get_device_task = asyncio.create_task(self.get_devices())
+        get_energy_report_task = asyncio.create_task(self.get_energy_report())
+        get_co2_report_task = asyncio.create_task(self.get_co2_report())
+        get_ref_open_door_report_task = asyncio.create_task(self.get_ref_open_door_report())
 
-        devices = await self.get_devices() or []
-        energy_report = await self.get_energy_report()
+        devices = await get_device_task or []
+        energy_report = await get_energy_report_task
+        co2_report = await get_co2_report_task
+        ref_open_door_report = await get_ref_open_door_report_task
 
         async def get_device_overview(gwid: str):
             all_device_overview = await self.get_overview() or {}
@@ -173,7 +180,11 @@ class SmartApp(object):
         for device in devices:
             device_type = int(device.get("DeviceType"))
             gwid = device.get("GWID")
+
             device["energy"] = energy_report.get(gwid)
+            device["co2"] = co2_report.get(gwid)
+            device["ref_open_door"] = ref_open_door_report.get(gwid)
+
             if device_type in status_code_mapping.keys():
                 status_codes = status_code_mapping[device_type]
                 device["status"] = {}
@@ -196,7 +207,7 @@ class SmartApp(object):
 
         return devices
 
-    async def get_energy_report(self):
+    async def get_energy_report(self) -> dict[str, float]:
         headers = {"cptoken": self._cp_token}
         payload = {
             "name": "Power",
@@ -207,13 +218,113 @@ class SmartApp(object):
         response = await self.request(
             method="POST",
             headers=headers,
-            endpoint=urls.get_energy_report(),
+            endpoint=urls.get_info(),
             data=payload,
         )
         result = {}
         for device in response.get("GwList"):
             result[device.get("GwID")] = float(device.get("Total_kwh"))
         return result
+
+    async def get_co2_report(self) -> dict[str, float]:
+        """Get CO2 report for current month"""
+        headers = {"cptoken": self._cp_token}
+        payload = {
+            "name": "CO2",
+            "from": datetime.today().replace(day=1).strftime("%Y/%m/%d"),
+            "unit": "day",
+            "max_num": 31,
+        }
+        response = await self.request(
+            method="POST",
+            headers=headers,
+            endpoint=urls.get_info(),
+            data=payload,
+        )
+
+        try:
+            gw_list = response["GwList"]
+        except KeyError:
+            _LOGGER.info("No CO2 data available")
+            return {}
+
+        result = {}
+        for index, device in enumerate(gw_list):
+            try:
+                gw_id = device["GwID"]
+            except KeyError:
+                _LOGGER.info(f"No CO2 data available for device {index}")
+                continue
+
+            try:
+                co2 = float(device["Total_kg"])
+            except KeyError:
+                _LOGGER.info(f"No CO2 data available for device {index}")
+                continue
+            except ValueError:
+                _LOGGER.warning(
+                    f"Invalid CO2 data {device['Total_kg']} for device {index}"
+                )
+                continue
+
+            result[gw_id] = co2
+
+        return result
+
+    async def get_ref_open_door_report(self) -> dict[str, int]:
+        """Get refrigerator open door report for current month"""
+
+        # TODO: Response from "Other" may contain reports other than
+        #       Ref_OpenDoor_Total. Make it more generic to handle
+        #       other reports when we know what they are.
+
+        headers = {"cptoken": self._cp_token}
+        payload = {
+            "name": "Other",
+            "from": datetime.today().replace(day=1).strftime("%Y/%m/%d"),
+            "unit": "day",
+            "max_num": 31,
+        }
+        response = await self.request(
+            method="POST",
+            headers=headers,
+            endpoint=urls.get_info(),
+            data=payload,
+        )
+
+        try:
+            gw_list = response["GwList"]
+        except KeyError:
+            _LOGGER.info("No refrigerator open door data available")
+            return {}
+
+        report = {}
+        for index, device in enumerate(gw_list):
+            try:
+                gw_id = device["GwID"]
+            except KeyError:
+                _LOGGER.info(
+                    f"No refrigerator open door data available for device {index}"
+                )
+                continue
+
+            try:
+                open_door = int(device["Ref_OpenDoor_Total"])
+            except KeyError:
+                _LOGGER.info(
+                    f"No refrigerator open door data available for device {index}"
+                )
+                continue
+            except ValueError:
+                _LOGGER.warning(
+                    "Invalid refrigerator open door data "
+                    f"{device['Ref_OpenDoor_Total']} for device {index}"
+                )
+                continue
+
+            report[gw_id] = open_door
+
+        return report
 
     @tryApiStatus
     async def set_command(self, deviceId=None, command=0, value=0):

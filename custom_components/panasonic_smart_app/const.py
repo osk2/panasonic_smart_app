@@ -16,6 +16,7 @@ MANUFACTURER = "Panasonic"
 DEFAULT_NAME = "Panasonic Smart Application"
 
 DEVICE_TYPE_AC = 1
+DEVICE_TYPE_REFRIGERATOR = 2
 DEVICE_TYPE_WASHING_MACHINE = 3
 DEVICE_TYPE_DEHUMIDIFIER = 4
 DEVICE_TYPE_PURIFIER = 8
@@ -54,6 +55,23 @@ DEVICE_STATUS_CODES = {
         "0x1F",  # AC indicator light
         "0x37",  # AC PM2.5
     ],
+    DEVICE_TYPE_REFRIGERATOR: [
+        "0x00",  # Refrigerator freezer temperature setting
+        "0x01",  # Refrigerator refrigerator temperature setting
+        "0x57",  # Refrigerator partial freezing temperature setting
+        "0x03",  # Refrigerator freezer temperature display
+        "0x05",  # Refrigerator refrigerator temperature display
+        "0x58",  # Refrigerator partial freezing temperature display
+        "0x50",  # Refrigerator defrosting status
+        "0x0C",  # Refrigerator ECO status
+        "0x61",  # Refrigerator nanoe status
+        "0x52",  # Refrigerator stop ice making status
+        "0x53",  # Refrigerator quick ice making status
+        "0x56",  # Refrigerator rapid freezing status
+        "0x5A",  # Refrigerator winter mode
+        "0x5B",  # Refrigerator shopping mode
+        "0x5C",  # Refrigerator vacation mode
+    ],
     DEVICE_TYPE_DEHUMIDIFIER: [
         "0x00",  # Dehumidifier power status
         "0x01",  # Dehumidifier operation mode
@@ -70,15 +88,15 @@ DEVICE_STATUS_CODES = {
         "0x0E",  # Dehumidifier fan mode
     ],
     DEVICE_TYPE_WASHING_MACHINE: [
-        "0x13", # Washing machine remaining washing time
-        "0x14", # Washing machine timer
-        "0x15", # Washing machine remaining time to trigger timer
-        "0x41", # Washing machine timer for japan model
-        "0x50", # Washing machine status
-        "0x54", # Washing machine current mode
-        "0x55", # Washing machine current cycle
-        "0x61", # Washing machine dryer delay
-        "0x64", # Washing machine cycle
+        "0x13",  # Washing machine remaining washing time
+        "0x14",  # Washing machine timer
+        "0x15",  # Washing machine remaining time to trigger timer
+        "0x41",  # Washing machine timer for japan model
+        "0x50",  # Washing machine status
+        "0x54",  # Washing machine current mode
+        "0x55",  # Washing machine current cycle
+        "0x61",  # Washing machine dryer delay
+        "0x64",  # Washing machine cycle
     ],
     DEVICE_TYPE_PURIFIER: [
         "0x00",  # Purifier power status
@@ -142,6 +160,7 @@ ICON_BUZZER = "mdi:volume-high"
 ICON_TURBO = "mdi:clock-fast"
 ICON_FAN = "mdi:fan"
 ICON_ENERGY = "mdi:flash"
+ICON_REFRIGERATOR = "mdi:fridge"
 ICON_MOLD_PREVENTION = "mdi:weather-windy"
 ICON_SLEEP = "mdi:sleep"
 ICON_CLEAN = "mdi:broom"
@@ -154,6 +173,18 @@ ICON_WASHING_MACHINE = "mdi:washing-machine"
 ICON_LIST = "mdi:order-bool-descending-variant"
 ICON_PURIFIER = "mdi:air-purifier"
 ICON_BUZZER = "mdi:volume-high"
+ICON_DEFROSTING = "mdi:car-defrost-rear"
+ICON_STOP_ICE_MAKING = "mdi:snowflake-off"
+ICON_QUICK_ICE_MAKING = "mdi:snowflake-variant"
+ICON_REFRIGERATOR_FREEZER = "mdi:snowflake"
+ICON_REFRIGERATOR_REFRIGERATOR = "mdi:fridge"
+ICON_REFRIGERATOR_PARTIAL_FREEZING = "mdi:food-steak"
+ICON_REFRIGERATOR_RAPID_FREEZING = "mdi:snowflake-alert"
+ICON_REFRIGERATOR_WINTER_MODE = "mdi:snowflake"
+ICON_REFRIGERATOR_SHOPPING_MODE = "mdi:cart"
+ICON_REFRIGERATOR_VACATION_MODE = "mdi:beach"
+
+ICON_CO2_FOOTPRINT = "mdi:molecule-co2"
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
@@ -177,6 +208,13 @@ LABEL_WASHING_MACHINE_COUNTDOWN = "剩餘洗衣時間"
 LABEL_WASHING_MACHINE_STATUS = "運轉狀態"
 LABEL_WASHING_MACHINE_CYCLE = "目前行程"
 LABEL_WASHING_MACHINE_MODE = "目前模式"
+LABEL_REFRIGERATOR_FREEZER_TEMPERATURE_DISPLAY = "冷凍溫度"
+LABEL_REFRIGERATOR_REFRIGERATOR_TEMPERATURE_DISPLAY = "冷藏溫度"
+LABEL_REFRIGERATOR_PARTIAL_FREEZING_TEMPERATURE_DISPLAY = "微凍結溫度"
+LABEL_REFRIGERATOR_DEFROSTING_STATUS = "除霜中"
+LABEL_REFRIGERATOR_STOP_ICE_MAKING = "製冰停止"
+LABEL_REFRIGERATOR_QUICK_ICE_MAKING = "快速製冰"
+LABEL_REFRIGERATOR_RAPID_FREEZING_STATUS = "新鮮急凍結"
 LABEL_OUTDOOR_TEMPERATURE = "室外溫度"
 LABEL_PURIFIER_FAN_LEVEL = "風量設定"
 LABEL_PM25 = "PM2.5"
@@ -186,6 +224,8 @@ LABEL_ECONAVI = "ECONAVI"
 LABEL_BUZZER = "操作提示音"
 LABEL_TURBO = "急速"
 LABEL_ENERGY = "本月耗電量"
+LABEL_REFRIGERATOR_OPEN_DOOR = "本月開門次數"
+LABEL_CO2_FOOTPRINT = "本月碳排放"
 LABEL_POWER = "電源"
 
 UNIT_HOUR = "小時"

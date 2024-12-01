@@ -1,12 +1,14 @@
-from datetime import timedelta
 import logging
-from homeassistant.components.switch import SwitchEntity
+from abc import ABC, abstractmethod
+
+from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
 from homeassistant.const import STATE_UNAVAILABLE
 
 from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
     DEVICE_TYPE_AC,
+    DEVICE_TYPE_REFRIGERATOR,
     DEVICE_TYPE_DEHUMIDIFIER,
     DEVICE_TYPE_PURIFIER,
     DATA_CLIENT,
@@ -22,6 +24,8 @@ from .const import (
     LABEL_CLIMATE_CLEAN,
     LABEL_POWER,
     LABEL_DEHUMIDIFIER_BUZZER,
+    LABEL_REFRIGERATOR_STOP_ICE_MAKING,
+    LABEL_REFRIGERATOR_QUICK_ICE_MAKING,
     ICON_NANOE,
     ICON_NANOEX,
     ICON_ECONAVI,
@@ -31,7 +35,8 @@ from .const import (
     ICON_MOLD_PREVENTION,
     ICON_CLEAN,
     ICON_PURIFIER,
-    ICON_BUZZER,
+    ICON_STOP_ICE_MAKING,
+    ICON_QUICK_ICE_MAKING,
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -161,6 +166,21 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         device,
                     )
                 )
+
+        if device_type == DEVICE_TYPE_REFRIGERATOR:
+            for switch_type in (
+                PanasonicRefrigeratorStopIceMakingSwitch,
+                PanasonicRefrigeratorQuickIceMakingSwitch,
+            ):
+                if switch_type.command_type in device["status"]:
+                    switches.append(
+                        switch_type(
+                            coordinator,
+                            index,
+                            client,
+                            device,
+                        )
+                    )
 
     async_add_entities(switches, True)
 
@@ -625,3 +645,84 @@ class PanasonicDehumidifierBuzzer(PanasonicBaseEntity, SwitchEntity):
         await self.client.set_command(self.auth, 0x80 + 0x18, 1) # invert
         await self.coordinator.async_request_refresh()
 
+
+class PanasonicRefrigeratorSwitchABC(PanasonicBaseEntity, SwitchEntity, ABC):
+    """Abstract class for switches of Panasonic refrigerator."""
+
+    @property
+    @abstractmethod
+    def icon(self) -> str:
+        """Icon of this entity."""
+
+    @property
+    @abstractmethod
+    def command_name(self) -> str:
+        """Command name from Panasonic UserGetRegisteredGwList2 API. Used for label."""
+
+    @property
+    @abstractmethod
+    def command_type(self) -> str:
+        """
+        Command type from Panasonic UserGetRegisteredGwList2 API. Used to get and set
+        the status.
+        """
+
+    @property
+    def device_class(self) -> SwitchDeviceClass:
+        return SwitchDeviceClass.SWITCH
+
+    @property
+    def is_on(self) -> bool | None:
+        status = self.coordinator.data[self.index]["status"]
+
+        try:
+            _is_on = int(status[self.command_type]) == 1
+        except (KeyError, ValueError):
+            _LOGGER.exception(f"Error while getting status for {self.label}")
+            return None
+
+        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+
+        return _is_on
+
+    async def async_turn_on(self, **_kwargs) -> None:
+        """Turn on the switch."""
+        _LOGGER.debug(f"[{self.label}] Turning on")
+
+        await self.client.set_command(
+            deviceId=self.auth,
+            command=int(self.command_type, 16),
+            value=1,
+        )
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **_kwargs) -> None:
+        """Turn off the switch."""
+        _LOGGER.debug(f"[{self.label}] Turning off")
+
+        await self.client.set_command(
+            deviceId=self.auth,
+            command=int(self.command_type, 16),
+            value=0,
+        )
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def label(self) -> str:
+        return f"{self.nickname} {self.command_name}"
+
+
+class PanasonicRefrigeratorStopIceMakingSwitch(PanasonicRefrigeratorSwitchABC):
+    """Stop ice making switch of Panasonic refrigerator."""
+
+    command_name = LABEL_REFRIGERATOR_STOP_ICE_MAKING
+    command_type = "0x52"
+    icon = ICON_STOP_ICE_MAKING
+
+
+class PanasonicRefrigeratorQuickIceMakingSwitch(PanasonicRefrigeratorSwitchABC):
+    """Quick ice making switch of Panasonic refrigerator."""
+
+    command_name = LABEL_REFRIGERATOR_QUICK_ICE_MAKING
+    command_type = "0x53"
+    icon = ICON_QUICK_ICE_MAKING

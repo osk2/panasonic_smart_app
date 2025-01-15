@@ -14,9 +14,9 @@ Home Assistant 的 [Panasonic Smart App](https://play.google.com/store/apps/deta
 
 本整合套件僅支援 Panasonic Smart App，若你使用的是 Panasonic Comfort Cloud，請改用 [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc)
 
-| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) |
-| :------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
-|                                                    ✅ 支援                                                     |                                                       ❌ 不支援                                                        |
+| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) | ![smart-app-plus-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-plus-icon.jpg) |
+| :--: | :--: | :--: |
+| ✅ 支援 | ❌ 不支援 | ❌ 不支援 |
 
 本專案修改自 [PhantasWeng](https://github.com/PhantasWeng/) 開發的 [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app)，主要差異為：
 

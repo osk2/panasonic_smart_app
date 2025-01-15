@@ -16,9 +16,9 @@ This integration allows you to control your Panasonic appliances.
 
 Only Panasonic Smart App is supported. If you are using Panasonic Comfort Cloud. Use [sockless-coding/panasonic_cc](https://github.com/sockless-coding/panasonic_cc) instead.
 
-| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) |
-| :------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
-|                                                  ✅ Supported                                                  |                                                     ❌ Unsupported                                                     |
+| ![smart-app-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-icon.png) | ![comfort-cloud-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/comfort-cloud-icon.png) | ![smart-app-plus-icon](https://raw.githubusercontent.com/osk2/panasonic_smart_app/master/assets/smart-app-plus-icon.jpg) |
+| :--: | :--: | :--: |
+| ✅ Supported | ❌ Unsupported | ❌ Unsupported |
 
 This project is forked from [PhantasWeng's](https://github.com/PhantasWeng/) [panasonic_smart_app](https://github.com/PhantasWeng/panasonic_smart_app). Main differences are:
 

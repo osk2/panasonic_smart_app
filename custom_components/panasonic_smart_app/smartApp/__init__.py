@@ -79,7 +79,7 @@ class SmartApp(object):
         _LOGGER.info("Attemping to login...")
         data = {"MemId": self.account, "PW": self.password, "AppToken": APP_TOKEN}
         response = await self.request(
-            method="POST", headers={}, endpoint=urls.login(), data=data
+            method="POST", headers={}, endpoint=urls.login(), data=data, log=False
         )
 
         self._refresh_token = response["RefreshToken"]
@@ -344,6 +344,7 @@ class SmartApp(object):
         endpoint: str,
         params=None,
         data=None,
+        log=True,
     ):
         """Shared request method"""
 
@@ -351,9 +352,10 @@ class SmartApp(object):
         request_id = self.last_request_id + 1
         self.last_request_id = request_id
         headers["user-agent"] = USER_AGENT
-        _LOGGER.debug(
-            f"Making #{request_id} request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
-        )
+        if log:
+            _LOGGER.debug(
+                f"Making #{request_id} request to {endpoint} with headers {headers} and data {data}, proxy: {self._proxy}"
+            )
         try:
             response = await self._session.request(
                 method,
@@ -379,12 +381,13 @@ class SmartApp(object):
         if response.status == HTTPStatus.OK:
             try:
                 resp = await response.json()
-                _LOGGER.debug(
-                    "Succeed to access #%d API. Returned" " %d: %s",
-                    request_id,
-                    response.status,
-                    await response.text(),
-                )
+                if log:
+                    _LOGGER.debug(
+                        "Succeed to access #%d API. Returned" " %d: %s",
+                        request_id,
+                        response.status,
+                        await response.text(),
+                    )
             except:
                 resp = {}
         elif response.status == HTTPStatus.EXPECTATION_FAILED:

@@ -100,7 +100,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                  | binary_sensor | Defrosting status sensor                 |
 |                  | binary_sensor | ECONAVI status sensor                    |
 |                  | binary_sensor | nanoe status sensor                      |
-
+| ERV              | climate       |                                          |
 
 \*Only available if the feature is supported.
 

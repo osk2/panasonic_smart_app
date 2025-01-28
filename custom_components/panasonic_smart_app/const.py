@@ -20,6 +20,7 @@ DEVICE_TYPE_REFRIGERATOR = 2
 DEVICE_TYPE_WASHING_MACHINE = 3
 DEVICE_TYPE_DEHUMIDIFIER = 4
 DEVICE_TYPE_PURIFIER = 8
+DEVICE_TYPE_ERV = 14
 
 DATA_CLIENT = "client"
 DATA_COORDINATOR = "coordinator"
@@ -103,6 +104,11 @@ DEVICE_STATUS_CODES = {
         "0x01",  # Purifier fan level
         "0x07",  # Purifier nanoeX
         "0x50",  # Purifier PM 2.5
+    ],
+    DEVICE_TYPE_ERV: [
+        "0x00",  # ERV power status
+        "0x15",  # ERV operation mode
+        "0x56",  # ERV fan level
     ],
 }
 
@@ -227,6 +233,7 @@ LABEL_ENERGY = "本月耗電量"
 LABEL_REFRIGERATOR_OPEN_DOOR = "本月開門次數"
 LABEL_CO2_FOOTPRINT = "本月碳排放"
 LABEL_POWER = "電源"
+LABEL_ERV = ""
 
 UNIT_HOUR = "小時"
 UNIT_MINUTE = "分鐘"

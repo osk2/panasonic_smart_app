@@ -13,6 +13,7 @@ from .entity import PanasonicBaseEntity
 from .const import (
     DOMAIN,
     DEVICE_TYPE_AC,
+    DEVICE_TYPE_ERV,
     DATA_CLIENT,
     DATA_COORDINATOR,
     CLIMATE_AVAILABLE_MODE,
@@ -21,6 +22,7 @@ from .const import (
     CLIMATE_AVAILABLE_FAN_MODE,
     CLIMATE_TEMPERATURE_STEP,
     LABEL_CLIMATE,
+    LABEL_ERV,
 )
 
 _LOGGER = logging.getLogger(__package__)
@@ -51,16 +53,22 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 )
             )
 
+        if int(device.get("DeviceType")) == DEVICE_TYPE_ERV:
+            climate.append(
+                PanasonicERV(
+                    coordinator,
+                    index,
+                    client,
+                    device,
+                )
+            )
+
     async_add_entities(climate, True)
 
     return True
 
 
 class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
-
-    """ Can be removed after 2025.1 is released"""
-    _enable_turn_on_off_backwards_compatibility = False
-
     @property
     def available(self) -> bool:
         status = self.coordinator.data[self.index]["status"]
@@ -278,3 +286,127 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
     def target_temperature_step(self) -> float:
         """ Return temperature step """
         return CLIMATE_TEMPERATURE_STEP
+
+
+
+class PanasonicERV(PanasonicBaseEntity, ClimateEntity):
+    @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        return status.get("0x00", None) != None
+
+    @property
+    def label(self) -> str:
+        return f"{self.nickname} {LABEL_ERV}"
+    
+    @property
+    def temperature_unit(self) -> str:
+        return UnitOfTemperature.CELSIUS
+
+    @property
+    def supported_features(self) -> int:
+        features = (
+            ClimateEntityFeature.TURN_ON
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.PRESET_MODE
+            | ClimateEntityFeature.FAN_MODE
+        )
+        return features
+    
+    @property
+    def hvac_mode(self) -> str:
+        status = self.coordinator.data[self.index]["status"]
+        _is_on = bool(int(status.get("0x00", 0)))
+        if not _is_on:
+            _LOGGER.debug(f"[{self.label}] hvac_mode: off")
+            return HVACMode.OFF
+        else:
+            _LOGGER.debug(f"[{self.label}] hvac_mode: fan_only")
+            return HVACMode.FAN_ONLY
+
+    @property
+    def hvac_modes(self) -> list:
+        return [HVACMode.OFF, HVACMode.FAN_ONLY]
+
+    async def async_set_hvac_mode(self, hvac_mode) -> None:
+        _LOGGER.debug(f"[{self.label}] set_hvac_mode: {hvac_mode}")
+
+        if hvac_mode == HVACMode.OFF:
+            await self.client.set_command(self.auth, 0, 0)
+        elif hvac_mode == HVACMode.FAN_ONLY:
+            await self.client.set_command(self.auth, 0, 1)
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def preset_mode(self) -> str:
+        status = self.coordinator.data[self.index]["status"]
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x15", self.commands)
+        )[0]["Parameters"]
+        _raw_preset_mode = int(status.get("0x15"))
+        _preset_mode = list(filter(lambda m: m[1] == _raw_preset_mode, raw_mode_list))[0][0]
+        _LOGGER.debug(f"[{self.label}] preset_mode: {_preset_mode}")
+
+        return _preset_mode
+
+    @property
+    def preset_modes(self) -> list:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x15", self.commands)
+        )[0]["Parameters"]
+
+        def mode_extractor(mode):
+            return mode[0]
+
+        _preset_modes = list(map(mode_extractor, raw_mode_list))
+
+        _LOGGER.debug(f"[{self.label}] preset_modes: {_preset_modes}")
+        return _preset_modes
+
+    async def set_preset_mode(self, preset_mode) -> None:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x15", self.commands)
+        )[0]["Parameters"]
+        target_option  = list(filter(lambda m: m[0] == preset_mode, raw_mode_list))
+        if len(target_option) > 0:
+            _LOGGER.debug(f"[{self.label}] set_preset_mode: {preset_mode}")
+            mode_id = target_option[0][1]
+            await self.client.set_command(self.auth, 21, mode_id)
+            await self.coordinator.async_request_refresh()
+
+
+    @property
+    def fan_mode(self) -> str:
+        status = self.coordinator.data[self.index]["status"]
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x56", self.commands)
+        )[0]["Parameters"]
+        _raw_fan_mode = int(status.get("0x56", 0))
+        _fan_mode = list(filter(lambda m: m[1] == _raw_fan_mode, raw_mode_list))[0][0]
+        _LOGGER.debug(f"[{self.label}] fan_mode: {_fan_mode}")
+        return _fan_mode
+
+    @property
+    def fan_modes(self) -> list:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x56", self.commands)
+        )[0]["Parameters"]
+
+        def mode_extractor(mode):
+            return mode[0]
+
+        _fan_modes = list(map(mode_extractor, raw_mode_list))
+        _LOGGER.debug(f"[{self.label}] fan_modes: {_fan_modes}")
+        return _fan_modes
+
+    async def async_set_fan_mode(self, fan_mode) -> None:
+        raw_mode_list = list(
+            filter(lambda c: c["CommandType"] == "0x56", self.commands)
+        )[0]["Parameters"]
+        target_option  = list(filter(lambda m: m[0] == fan_mode, raw_mode_list))
+        if len(target_option) > 0:
+            _LOGGER.debug(f"[{self.label}] Set fan mode to {fan_mode}")
+            mode_id = mode_id[0][1]
+            await self.client.set_command(self.auth, 86, mode_id)
+            await self.coordinator.async_request_refresh()
+

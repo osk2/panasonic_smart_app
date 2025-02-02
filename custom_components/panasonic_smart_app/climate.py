@@ -182,11 +182,11 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         _LOGGER.debug(f"[{self.label}] preset_modes: {_preset_modes}")
         return _preset_modes
 
-    async def set_preset_mode(self, preset_mode) -> None:
+    async def async_set_preset_mode(self, preset_mode) -> None:
         status = self.coordinator.data[self.index]["status"]
         _is_on = bool(int(status.get("0x00", 0)))
 
-        _LOGGER.debug(f"[{self.label}] set_preset_mode: {preset_mode}")
+        _LOGGER.debug(f"[{self.label}] Set preset mode to: {preset_mode}")
 
         value = getKeyFromDict(CLIMATE_AVAILABLE_PRESET, preset_mode)
         self.client.set_command(self.auth, 1, value)
@@ -363,13 +363,13 @@ class PanasonicERV(PanasonicBaseEntity, ClimateEntity):
         _LOGGER.debug(f"[{self.label}] preset_modes: {_preset_modes}")
         return _preset_modes
 
-    async def set_preset_mode(self, preset_mode) -> None:
+    async def async_set_preset_mode(self, preset_mode) -> None:
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x15", self.commands)
         )[0]["Parameters"]
-        target_option  = list(filter(lambda m: m[0] == preset_mode, raw_mode_list))
+        target_option = list(filter(lambda m: m[0] == preset_mode, raw_mode_list))
         if len(target_option) > 0:
-            _LOGGER.debug(f"[{self.label}] set_preset_mode: {preset_mode}")
+            _LOGGER.debug(f"[{self.label}] Set preset mode to: {preset_mode}")
             mode_id = target_option[0][1]
             await self.client.set_command(self.auth, 21, mode_id)
             await self.coordinator.async_request_refresh()
@@ -406,7 +406,6 @@ class PanasonicERV(PanasonicBaseEntity, ClimateEntity):
         target_option  = list(filter(lambda m: m[0] == fan_mode, raw_mode_list))
         if len(target_option) > 0:
             _LOGGER.debug(f"[{self.label}] Set fan mode to {fan_mode}")
-            mode_id = mode_id[0][1]
+            mode_id = target_option[0][1]
             await self.client.set_command(self.auth, 86, mode_id)
             await self.coordinator.async_request_refresh()
-

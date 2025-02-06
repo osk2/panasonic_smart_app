@@ -47,7 +47,7 @@ Copy `custom_components/panasonic_smart_app` into your `custom_components/`.
 
 ### Supported Devices
 
-See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smart_app/discussions/42) for detail of supported devices.
+See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smart_app/discussions/42) for details of supported devices.
 
 ### Available Entities
 
@@ -87,10 +87,10 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 | Refrigerator\*\* | sensor        | Freezer temperature sensor               |
 |                  | sensor        | Refrigerator temperature sensor          |
 |                  | sensor        | Partial freezer temperature sensor       |
-|                  | sensor        | Rapid freezing level sensor\*\*\*        |
-|                  | sensor        | Winter mode sensor\*\*\*                 |
-|                  | sensor        | Shopping mode sensor\*\*\*               |
-|                  | sensor        | Vacation mode sensor\*\*\*               |
+|                  | sensor        | Rapid freezing level sensor              |
+|                  | sensor        | Winter mode sensor                       |
+|                  | sensor        | Shopping mode sensor                     |
+|                  | sensor        | Vacation mode sensor                     |
 |                  | sensor        | Door open count sensor                   |
 |                  | select        | Freezer temperature level select         |
 |                  | select        | Refrigerator temperature level select    |
@@ -106,15 +106,17 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 
 \*\*Only tested with NR-D611XGS
 
-\*\*\*These settings should be configurable in the Panasonic App, but are currently read-only in this integration.
-
 Note: Ensure the latest Home Assistant is installed or some entities might not be available.
 
 For missing entities, open an issue or submit a PR 💪
 
-### Enable Logs
+### How To Enable Debug Logging?
 
-⚠️ Logs may contain some sensitive information. Be very careful before you post logs.
+#### Recommended
+
+Click "Enable debug logging" on the integration overview page
+
+#### Manually
 
 Add the following configs to `configuration.yaml`:
 

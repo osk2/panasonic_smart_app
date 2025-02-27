@@ -88,6 +88,7 @@ DEVICE_STATUS_CODES = {
         "0x0A",  # Dehumidifier tank status
         "0x04",  # Dehumidifier target humidity
         "0x0E",  # Dehumidifier fan mode
+        "0x56",  # Dehumidifier PM1.0
     ],
     DEVICE_TYPE_WASHING_MACHINE: [
         "0x13",  # Washing machine remaining washing time

@@ -120,6 +120,15 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                         device,
                     )
                 )
+            if "0x56" in device_status:
+                sensors.append(
+                    PanasonicDehumidifierPM10Sensor(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
+                )
 
         if device_type == DEVICE_TYPE_AC:
             if "0x21" in device_status:
@@ -245,6 +254,49 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     def unit_of_measurement(self) -> str:
         return PERCENTAGE
 
+class PanasonicPM10Sensor(PanasonicBaseEntity, SensorEntity, ABC):
+    """Base class for PM1.0 sensor."""
+
+    @property
+    def command_type(self) -> str:
+        """Command type for PM1.0 sensor."""
+        return "0x56"  # Correct command type
+
+    @property
+    def label(self) -> str:
+        """Ensure correct label for PM1.0."""
+        return f"{self.nickname} PM1.0"
+
+    @property
+    def icon(self) -> str:
+        """Use the same icon as PM2.5 or customize if needed."""
+        return ICON_PM25
+
+    @property
+    def device_class(self) -> str:
+        """Define PM1.0 as an air quality sensor (instead of PM2.5)."""
+        return SensorDeviceClass.PM1
+
+    @property
+    def state(self) -> int:
+        """Retrieve and return the PM1.0 value from the device."""
+        status = self.coordinator.data[self.index]["status"]
+        _is_on = bool(int(status.get("0x00", 0)))
+        if not _is_on:
+            return STATE_UNAVAILABLE
+        _pm10 = float(status.get(self.command_type, -1))
+        _LOGGER.debug(f"[{self.label}] state: {_pm10}")
+        return _pm10
+
+    @property
+    def state_class(self) -> str:
+        """Ensure Home Assistant treats this as a measurement sensor."""
+        return STATE_MEASUREMENT
+
+    @property
+    def unit_of_measurement(self) -> str:
+        """Ensure correct unit of measurement."""
+        return CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 
 class PanasonicPM25Sensor(PanasonicBaseEntity, SensorEntity, ABC):
 

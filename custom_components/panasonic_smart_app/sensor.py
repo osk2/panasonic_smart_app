@@ -254,7 +254,7 @@ class PanasonicHumiditySensor(PanasonicBaseEntity, SensorEntity):
     def unit_of_measurement(self) -> str:
         return PERCENTAGE
 
-class PanasonicPM10Sensor(PanasonicBaseEntity, SensorEntity, ABC):
+class PanasonicDehumidifierPM10Sensor(PanasonicBaseEntity, SensorEntity, ABC):
     """Base class for PM1.0 sensor."""
 
     @property

@@ -112,6 +112,9 @@ DEVICE_STATUS_CODES = {
         "0x15",  # ERV operation mode
         "0x56",  # ERV fan level
     ],
+    DEVICE_TYPE_SWITCH: [
+        "0x70",  # Switch power status
+    ],
 }
 
 DEHUMIDIFIER_MAX_HUMD = 70
@@ -196,6 +199,7 @@ ICON_CO2_FOOTPRINT = "mdi:molecule-co2"
 
 LABEL_DEHUMIDIFIER = ""
 LABEL_CLIMATE = ""
+LABEL_SMART_SWITCH = "智慧開關"
 LABEL_TANK = "水箱滿水"
 LABEL_HUMIDITY = "環境溼度"
 LABEL_DEHUMIDIFIER_BUZZER = "操作提示音"

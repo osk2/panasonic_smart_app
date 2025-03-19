@@ -11,9 +11,11 @@ from .const import (
     DEVICE_TYPE_REFRIGERATOR,
     DEVICE_TYPE_DEHUMIDIFIER,
     DEVICE_TYPE_PURIFIER,
+    DEVICE_TYPE_SWITCH,
     DATA_CLIENT,
     DATA_COORDINATOR,
     DEVICE_CLASS_SWITCH,
+    LABEL_SMART_SWITCH,
     LABEL_NANOE,
     LABEL_NANOEX,
     LABEL_ECONAVI,
@@ -61,7 +63,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
         )
 
         if device_type == DEVICE_TYPE_AC:
-
+            # Process AC device switches
             if "0x08" in command_types:
                 switches.append(
                     PanasonicACNanoe(
@@ -126,7 +128,8 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     )
                 )
 
-        if device_type == DEVICE_TYPE_PURIFIER:
+        elif device_type == DEVICE_TYPE_PURIFIER:
+            # Process purifier device switches
             if "0x00" in command_types:
                 switches.append(
                     PanasonicPurifierPower(
@@ -146,7 +149,8 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     )
                 )
 
-        if device_type == DEVICE_TYPE_DEHUMIDIFIER:
+        elif device_type == DEVICE_TYPE_DEHUMIDIFIER:
+            # Process dehumidifier device switches
             if "0x0d" in command_types:
                 switches.append(
                     PanasonicDehumidifierNanoeX(
@@ -167,7 +171,8 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                     )
                 )
 
-        if device_type == DEVICE_TYPE_REFRIGERATOR:
+        elif device_type == DEVICE_TYPE_REFRIGERATOR:
+            # Process refrigerator device switches
             for switch_type in (
                 PanasonicRefrigeratorStopIceMakingSwitch,
                 PanasonicRefrigeratorQuickIceMakingSwitch,
@@ -180,6 +185,26 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                             client,
                             device,
                         )
+                    )
+
+        elif device_type == DEVICE_TYPE_SWITCH:
+            # Process smart switch device with sub-devices
+            if "Devices" in device and isinstance(device["Devices"], list):
+                for sub_device in device["Devices"]:
+                    switch_device = device.copy()
+                    switch_device["SubDevice"] = sub_device
+                    switches.append(
+                        PanasonicSmartSwitch(
+                            coordinator,
+                            index,
+                            client,
+                            switch_device,
+                        )
+                    )
+                    _LOGGER.debug(
+                        "Added smart switch: %s - Circuit %s", 
+                        device.get("NickName", ""),
+                        sub_device.get("Name", f"Circuit {sub_device['DeviceID']}")
                     )
 
     async_add_entities(switches, True)
@@ -215,16 +240,16 @@ class PanasonicACNanoe(PanasonicBaseEntity, SwitchEntity):
         if _nanoe_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_nanoe_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on nanoe")
+        _LOGGER.debug("[%s] Turning on nanoe", self.label)
         await self.client.set_command(self.auth, 136, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off nanoe")
+        _LOGGER.debug("[%s] Turning off nanoe", self.label)
         await self.client.set_command(self.auth, 136, 0)
         await self.coordinator.async_request_refresh()
 
@@ -257,16 +282,16 @@ class PanasonicACEconavi(PanasonicBaseEntity, SwitchEntity):
         if _nanoe_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_nanoe_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on ECONAVI")
+        _LOGGER.debug("[%s] Turning on ECONAVI", self.label)
         await self.client.set_command(self.auth, 155, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off ECONAVI")
+        _LOGGER.debug("[%s] Turning off ECONAVI", self.label)
         await self.client.set_command(self.auth, 155, 0)
         await self.coordinator.async_request_refresh()
 
@@ -299,16 +324,16 @@ class PanasonicACBuzzer(PanasonicBaseEntity, SwitchEntity):
         if _buzzer_status == None:
             return STATE_UNAVAILABLE
         _is_on = not bool(int(_buzzer_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on buzzer")
+        _LOGGER.debug("[%s] Turning on buzzer", self.label)
         await self.client.set_command(self.auth, 30, 0)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off buzzer")
+        _LOGGER.debug("[%s] Turning off buzzer", self.label)
         await self.client.set_command(self.auth, 30, 1)
         await self.coordinator.async_request_refresh()
 
@@ -341,16 +366,16 @@ class PanasonicACTurbo(PanasonicBaseEntity, SwitchEntity):
         if _turbo_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_turbo_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on turbo mode")
+        _LOGGER.debug("[%s] Turning on turbo mode", self.label)
         await self.client.set_command(self.auth, 154, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off turbo mode")
+        _LOGGER.debug("[%s] Turning off turbo mode", self.label)
         await self.client.set_command(self.auth, 154, 0)
         await self.coordinator.async_request_refresh()
 
@@ -383,16 +408,16 @@ class PanasonicACSleepMode(PanasonicBaseEntity, SwitchEntity):
         if _sleep_mode_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_sleep_mode_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on sleep mode")
+        _LOGGER.debug("[%s] Turning on sleep mode", self.label)
         await self.client.set_command(self.auth, 5, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off sleep mode")
+        _LOGGER.debug("[%s] Turning off sleep mode", self.label)
         await self.client.set_command(self.auth, 5, 0)
         await self.coordinator.async_request_refresh()
 
@@ -425,16 +450,16 @@ class PanasonicACMoldPrevention(PanasonicBaseEntity, SwitchEntity):
         if _mold_prevention_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_mold_prevention_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on mold prevention")
+        _LOGGER.debug("[%s] Turning on mold prevention", self.label)
         await self.client.set_command(self.auth, 23, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off mold prevention")
+        _LOGGER.debug("[%s] Turning off mold prevention", self.label)
         await self.client.set_command(self.auth, 23, 0)
         await self.coordinator.async_request_refresh()
 
@@ -467,16 +492,16 @@ class PanasonicACSelfClean(PanasonicBaseEntity, SwitchEntity):
         if _self_clean_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_self_clean_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on self clean")
+        _LOGGER.debug("[%s] Turning on self clean", self.label)
         await self.client.set_command(self.auth, 24, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off self clean")
+        _LOGGER.debug("[%s] Turning off self clean", self.label)
         await self.client.set_command(self.auth, 24, 0)
         await self.coordinator.async_request_refresh()
 
@@ -508,16 +533,16 @@ class PanasonicPurifierPower(PanasonicBaseEntity, SwitchEntity):
         if _power_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_power_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on nanoeX")
+        _LOGGER.debug("[%s] Turning on nanoeX", self.label)
         await self.client.set_command(self.auth, 128, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off nanoeX")
+        _LOGGER.debug("[%s] Turning off nanoeX", self.label)
         await self.client.set_command(self.auth, 128, 0)
         await self.coordinator.async_request_refresh()
 
@@ -551,16 +576,16 @@ class PanasonicPurifierNanoeX(PanasonicBaseEntity, SwitchEntity):
         if _nanoe_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_nanoe_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on nanoeX")
+        _LOGGER.debug("[%s] Turning on nanoeX", self.label)
         await self.client.set_command(self.auth, 135, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off nanoeX")
+        _LOGGER.debug("[%s] Turning off nanoeX", self.label)
         await self.client.set_command(self.auth, 135, 0)
         await self.coordinator.async_request_refresh()
 
@@ -592,16 +617,16 @@ class PanasonicDehumidifierNanoeX(PanasonicBaseEntity, SwitchEntity):
         if _nanoe_status == None:
             return STATE_UNAVAILABLE
         _is_on = bool(int(_nanoe_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
         return _is_on
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on nanoeX")
+        _LOGGER.debug("[%s] Turning on nanoeX", self.label)
         await self.client.set_command(self.auth, 0x80 + 0x0D, 1)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off nanoeX")
+        _LOGGER.debug("[%s] Turning off nanoeX", self.label)
         await self.client.set_command(self.auth, 0x80 + 0x0D, 0)
         await self.coordinator.async_request_refresh()
 
@@ -632,16 +657,16 @@ class PanasonicDehumidifierBuzzer(PanasonicBaseEntity, SwitchEntity):
         if _buzzer_status == None:
             return STATE_UNAVAILABLE
         _is_off = not bool(int(_buzzer_status))
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_off}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_off)
         return _is_off
 
     async def async_turn_on(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning on Dehumidifier buzzer")
+        _LOGGER.debug("[%s] Turning on Dehumidifier buzzer", self.label)
         await self.client.set_command(self.auth, 0x80 + 0x18, 0) # invert
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self) -> None:
-        _LOGGER.debug(f"[{self.label}] Turning off Dehumidifier buzzer")
+        _LOGGER.debug("[%s] Turning off Dehumidifier buzzer", self.label)
         await self.client.set_command(self.auth, 0x80 + 0x18, 1) # invert
         await self.coordinator.async_request_refresh()
 
@@ -678,16 +703,16 @@ class PanasonicRefrigeratorSwitchABC(PanasonicBaseEntity, SwitchEntity, ABC):
         try:
             _is_on = int(status[self.command_type]) == 1
         except (KeyError, ValueError):
-            _LOGGER.exception(f"Error while getting status for {self.label}")
+            _LOGGER.exception("Error while getting status for %s", self.label)
             return None
 
-        _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")
+        _LOGGER.debug("[%s] is_on: %s", self.label, _is_on)
 
         return _is_on
 
     async def async_turn_on(self, **_kwargs) -> None:
         """Turn on the switch."""
-        _LOGGER.debug(f"[{self.label}] Turning on")
+        _LOGGER.debug("[%s] Turning on", self.label)
 
         await self.client.set_command(
             deviceId=self.auth,
@@ -698,7 +723,7 @@ class PanasonicRefrigeratorSwitchABC(PanasonicBaseEntity, SwitchEntity, ABC):
 
     async def async_turn_off(self, **_kwargs) -> None:
         """Turn off the switch."""
-        _LOGGER.debug(f"[{self.label}] Turning off")
+        _LOGGER.debug("[%s] Turning off", self.label)
 
         await self.client.set_command(
             deviceId=self.auth,
@@ -726,3 +751,61 @@ class PanasonicRefrigeratorQuickIceMakingSwitch(PanasonicRefrigeratorSwitchABC):
     command_name = LABEL_REFRIGERATOR_QUICK_ICE_MAKING
     command_type = "0x53"
     icon = ICON_QUICK_ICE_MAKING
+
+
+class PanasonicSmartSwitch(PanasonicBaseEntity, SwitchEntity):
+    """Panasonic Smart switch"""
+
+    def __init__(self, coordinator, index, client, device):
+        super().__init__(coordinator, index, client, device)
+        # Store the sub-device info separately for easy access
+        self.sub_device = device.get("SubDevice", {})
+
+    @property
+    def icon(self) -> str:
+        return "mdi:light-switch"
+
+    @property
+    def device_class(self) -> SwitchDeviceClass:
+        return SwitchDeviceClass.SWITCH
+
+    @property
+    def is_on(self) -> bool:
+        device_status = self.coordinator.data[self.index]["status"]
+        # Get total circuit status from 0x70
+        circuit_status = int(device_status.get("0x70", "0"), 16)
+        # The device index in Devices array corresponds to bit position
+        # e.g. device 1 = bit 0, device 2 = bit 1, etc.
+        device_bit = 1 << (self.sub_device["DeviceID"] - 1)
+        status = bool(circuit_status & device_bit)
+        _LOGGER.debug("[%s] is_on: %s", self.label, status)
+        return status
+
+    async def async_turn_on(self, **_kwargs) -> None:
+        """ turn on switch """
+        _LOGGER.debug("[%s] Turning on switch %d", self.label, self.sub_device["DeviceID"])
+        # 0x70 command controls all circuits, need to maintain other states
+        device_status = self.coordinator.data[self.index]["status"]
+        current_status = int(device_status.get("0x70", "0"), 16)
+        device_bit = 1 << (self.sub_device["DeviceID"] - 1)
+        new_status = current_status | device_bit  # Set device bit to 1
+        await self.client.set_command(self.auth, 0x70, new_status)
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **_kwargs) -> None:
+        """ turn off switch """
+        _LOGGER.debug("[%s] Turning off switch %d", self.label, self.sub_device["DeviceID"])
+        # 0x70 command controls all circuits, need to maintain other states
+        device_status = self.coordinator.data[self.index]["status"]
+        current_status = int(device_status.get("0x70", "0"), 16)
+        device_bit = 1 << (self.sub_device["DeviceID"] - 1)
+        new_status = current_status & ~device_bit  # Clear device bit to 0
+        await self.client.set_command(self.auth, 0x70, new_status)
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def label(self) -> str:
+        sub_device_name = self.sub_device.get('Name')
+        if not sub_device_name:
+            sub_device_name = LABEL_SMART_SWITCH
+        return f"{self.nickname} {sub_device_name}"

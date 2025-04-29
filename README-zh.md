@@ -30,6 +30,8 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 ### 透過 HACS 安裝 (建議)
 
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=osk2&repository=panasonic_smart_app&category=integration)
+
 在 HACS 中搜尋 `Panasonic Smart App` 並安裝
 
 ### 手動安裝

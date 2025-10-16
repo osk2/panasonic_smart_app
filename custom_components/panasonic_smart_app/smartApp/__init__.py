@@ -25,6 +25,7 @@ from .const import (
     EXCEPTION_INVALID_REFRESH_TOKEN,
     EXCEPTION_DEVICE_JP_INFO,
     EXCEPTION_DEVICE_JP_FAILED,
+    DEHUMIDIFIER_COMMANDTYPES_PARAMETERS_XLATE_LOOKUP,
 )
 from .utils import chunks
 from . import urls
@@ -107,6 +108,40 @@ class SmartApp(object):
 
         self._devices = response["GwList"]
         self._commands = response["CommandList"]
+
+        try:
+            # walk through 'CommandList' as an actual list so we can change the contents in-place
+            for ci in range(0, len(self._commands)):
+                if self._commands[ci]["JSON"][0]["DeviceType"] == 4: #DEVICE_TYPE_DEHUMIDIFIER:
+                    # walk through ...['list'] as an actual list so we can change the contents in-place
+                    for li in range(0, len(self._commands[ci]["JSON"][0]["list"])):
+                        ctype = self._commands[ci]["JSON"][0]["list"][li]["CommandType"]
+                        cname = self._commands[ci]["JSON"][0]["list"][li]["CommandName"] # pre-translation name
+
+                        # find the entry in the translation lookup table that matches the 'CommandType'
+                        xlate_lookup = next(filter(lambda x: x["type"] == ctype.lower(), DEHUMIDIFIER_COMMANDTYPES_PARAMETERS_XLATE_LOOKUP), None)
+
+                        if (xlate_lookup is not None):
+                            # overwrite 'CommandName' with the translation we were able to find
+                            self._commands[ci]["JSON"][0]["list"][li]["CommandName"] = xlate_lookup["name"]
+                            _LOGGER.debug(f"Translating: type:'{ctype}' name:'{cname}' => '{xlate_lookup['name']}'")
+
+                            # walk through ...['Parameters'] as an actual list so we can change the contents in-place
+                            for pi in range(0, len(self._commands[ci]["JSON"][0]["list"][li]["Parameters"])):
+                                pvalue = self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][0] # pre-translation name for the parameter value
+                                penum = self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][1]
+
+                                # find the entry in the translation lookup table entry that matched with the 'CommandType' and  'Parameter' enum
+                                param_xlate_lookup = next(filter(lambda x: x[1] == penum, xlate_lookup["parameters"]), None)
+
+                                if (param_xlate_lookup is not None):
+                                    # overwrite the name of the parameter value with the translation we were able to find
+                                    self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][0] = param_xlate_lookup[0]
+                                    _LOGGER.debug(f"Translating: parameter:['{pvalue}', '{penum}'] => ['{self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][0]}', '{self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][1]}']")
+
+            _LOGGER.debug(f"After translating: self._commands={self._commands}")
+        except Exception as e:
+            _LOGGER.error(f"While trying to translate command and parameter values: {e}")
 
         return self._devices
 

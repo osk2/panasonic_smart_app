@@ -19,6 +19,7 @@ from .const import (
     LABEL_CLIMATE_MOTION_DETECTION,
     LABEL_CLIMATE_INDICATOR,
     ICON_FAN,
+    ICON_FAN_POSITION,
     ICON_LIGHT,
     ICON_MOTION_SENSOR,
     ICON_REFRIGERATOR_FREEZER,
@@ -188,7 +189,7 @@ class PanasonoicDehumidifierFanPositionSelect(PanasonicBaseEntity, SelectEntity)
 
     @property
     def icon(self) -> str:
-        return ICON_FAN
+        return ICON_FAN_POSITION
 
     @property
     def options(self) -> list:

@@ -63,9 +63,9 @@ DEHUMIDIFIER_COMMANDTYPES_PARAMETERS_XLATE_LOOKUP = [
   },
   { "type": "0x0e", "name": "Fan speed", "parameters": [
       [ "Auto",   0 ],
-      [ "Silent", 1 ],
-      [ "Normal", 2 ],
-      [ "High",   3 ],
+      [ "Silent", "靜音" ],
+      [ "Normal", "標準" ],
+      [ "High",   "急速" ],
     ],
   },
   { "type": "0x18", "name": "Buzzer", "parameters": [

@@ -134,6 +134,9 @@ class SmartApp(object):
                                 # find the entry in the translation lookup table entry that matched with the 'CommandType' and  'Parameter' enum
                                 param_xlate_lookup = next(filter(lambda x: x[1] == penum, xlate_lookup["parameters"]), None)
 
+                                if (param_xlate_lookup is None):
+                                    param_xlate_lookup = next(filter(lambda x: x[1] == pvalue, xlate_lookup["parameters"]), None)
+
                                 if (param_xlate_lookup is not None):
                                     # overwrite the name of the parameter value with the translation we were able to find
                                     self._commands[ci]["JSON"][0]["list"][li]["Parameters"][pi][0] = param_xlate_lookup[0]

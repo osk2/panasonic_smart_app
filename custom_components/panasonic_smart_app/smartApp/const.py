@@ -33,7 +33,7 @@ DEHUMIDIFIER_COMMANDTYPES_PARAMETERS_XLATE_LOOKUP = [
       [ "Air purification",             7 ],
       [ "AI comfort",                   8 ],
       [ "Energy saving",                9 ],
-      [ "Quick dehumidication",         10 ],
+      [ "Quick dehumidification",         10 ],
       [ "Silent dehumidification",      11 ],
       [ "Shoe drying",                  12 ],
     ],

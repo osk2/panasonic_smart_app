@@ -1,4 +1,6 @@
 """ Panasonic Smart App API """
+import json
+import os
 from typing import Literal
 from datetime import datetime
 from collections import defaultdict
@@ -149,7 +151,17 @@ class SmartApp(object):
         return self._devices
 
     def get_commands(self):
-        return self._commands
+
+        built_in_commands = []
+        try:
+            current_dir = os.path.dirname(__file__)
+            file_path = os.path.join(current_dir, "..", "commands", "command_list.json")
+            with open(file_path, "r", encoding="utf-8") as file:
+                built_in_commands = json.load(file).get("CommandList", [])
+        except Exception as e:
+            _LOGGER.warning(f"Failed to load local commands: {e}")
+
+        return self._commands + built_in_commands
 
     @tryApiStatus
     async def get_device_info(

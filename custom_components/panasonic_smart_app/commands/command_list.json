@@ -1,0 +1,3934 @@
+{
+  "CommandList": [
+    {
+      "ModelType": "VX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "VX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x54",
+              "CommandName": "監測防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x56",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x59",
+              "CommandName": "語音控制",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "PX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "PX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x17",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "QX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "QX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x17",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "RX-N",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "RX-N",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "監測防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "LJV",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "LJV",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoe",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "UX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "UX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x54",
+              "CommandName": "監測防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x56",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "UJ",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "UJ",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "監測防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "PU",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "PU",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x17",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "LX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "LX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x17",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoe",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "LJ",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "LJ",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoe",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "GX",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "GX",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "J",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "J",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "濾網重置",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "SX-DUCT",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "SX-DUCT",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "J-DUCT",
+      "JSON": [
+        {
+          "DeviceType": 1,
+          "DeviceName": "冷氣機",
+          "ModelType": "J-DUCT",
+          "ProtocalType": "SAA",
+          "ProtocalVersion": "4",
+          "Timestamp": "20251124175300",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "停止",
+                  0
+                ],
+                [
+                  "運轉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "運轉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "冷氣",
+                  0
+                ],
+                [
+                  "除濕",
+                  1
+                ],
+                [
+                  "清淨",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ],
+                [
+                  "暖氣",
+                  4
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x03",
+              "CommandName": "溫度設定",
+              "ParameterType": "range",
+              "ParameterUnit": "度",
+              "Parameters": [
+                [
+                  "Min",
+                  16
+                ],
+                [
+                  "Max",
+                  30
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "風量",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0b",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0c",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [
+                [
+                  "Min",
+                  0
+                ],
+                [
+                  "Max",
+                  1440
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "自體淨",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x05",
+              "CommandName": "睡眠",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x17",
+              "CommandName": "乾燥防霉",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1e",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "開啟",
+                  0
+                ],
+                [
+                  "關閉",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x0f",
+              "CommandName": "上下風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  5
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x11",
+              "CommandName": "左右風向",
+              "ParameterType": "rangeA",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "Auto",
+                  0
+                ],
+                [
+                  "Min",
+                  1
+                ],
+                [
+                  "Max",
+                  7
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1a",
+              "CommandName": "急速",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x19",
+              "CommandName": "動向感應",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關",
+                  0
+                ],
+                [
+                  "對人",
+                  1
+                ],
+                [
+                  "不對人",
+                  2
+                ],
+                [
+                  "自動",
+                  3
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1f",
+              "CommandName": "機體燈光",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "亮",
+                  0
+                ],
+                [
+                  "暗",
+                  1
+                ],
+                [
+                  "ECO燈滅",
+                  2
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x1b",
+              "CommandName": "ECONAVI",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            },
+            {
+              "CommandType": "0x08",
+              "CommandName": "nanoeX",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                [
+                  "關閉",
+                  0
+                ],
+                [
+                  "開啟",
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

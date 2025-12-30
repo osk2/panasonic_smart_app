@@ -59,6 +59,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                 | switch        | nanoeX switch\*                |
 |                 | sensor        | PM2.5 sensor                   |
 | ERV             | climate       |                                |
+| Smart Switches  | switch        | Individual circuit switches    |
 
 \*Only available if the feature is supported.
 

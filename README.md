@@ -103,6 +103,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 |                  | binary_sensor | ECONAVI status sensor                    |
 |                  | binary_sensor | nanoe status sensor                      |
 | ERV              | climate       |                                          |
+| Smart Switches   | switch        | Individual circuit switches              |
 
 \*Only available if the feature is supported.
 

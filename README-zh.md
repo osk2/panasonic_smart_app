@@ -101,6 +101,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 |            | binary_sensor | ECONAVI 狀態偵測器        |
 |            | binary_sensor | nanoe 狀態偵測器          |
 | 全熱交換器   | climate       |                         |
+| 智慧開關     | switch        | 個別迴路開關               |
 
 \*僅在裝置支援的情況下可用
 

@@ -772,7 +772,6 @@ class PanasonicSmartSwitch(PanasonicBaseEntity, SwitchEntity):
     @property
     def is_on(self) -> bool:
         device_status = self.coordinator.data[self.index]["status"]
-        # Get total circuit status from 0x70
         circuit_status = int(device_status.get("0x70", "0"), 16)
         # The device index in Devices array corresponds to bit position
         # e.g. device 1 = bit 0, device 2 = bit 1, etc.
@@ -781,26 +780,18 @@ class PanasonicSmartSwitch(PanasonicBaseEntity, SwitchEntity):
         _LOGGER.debug("[%s] is_on: %s", self.label, status)
         return status
 
-    async def async_turn_on(self, **_kwargs) -> None:
+    async def async_turn_on(self) -> None:
         """ turn on switch """
         _LOGGER.debug("[%s] Turning on switch %d", self.label, self.sub_device["DeviceID"])
-        # 0x70 command controls all circuits, need to maintain other states
-        device_status = self.coordinator.data[self.index]["status"]
-        current_status = int(device_status.get("0x70", "0"), 16)
-        device_bit = 1 << (self.sub_device["DeviceID"] - 1)
-        new_status = current_status | device_bit  # Set device bit to 1
-        await self.client.set_command(self.auth, 0x70, new_status)
+        device_id = self.sub_device["DeviceID"]
+        await self.client.set_command(self.auth, 0, 1, device_id)
         await self.coordinator.async_request_refresh()
 
-    async def async_turn_off(self, **_kwargs) -> None:
+    async def async_turn_off(self) -> None:
         """ turn off switch """
         _LOGGER.debug("[%s] Turning off switch %d", self.label, self.sub_device["DeviceID"])
-        # 0x70 command controls all circuits, need to maintain other states
-        device_status = self.coordinator.data[self.index]["status"]
-        current_status = int(device_status.get("0x70", "0"), 16)
-        device_bit = 1 << (self.sub_device["DeviceID"] - 1)
-        new_status = current_status & ~device_bit  # Clear device bit to 0
-        await self.client.set_command(self.auth, 0x70, new_status)
+        device_id = self.sub_device["DeviceID"]
+        await self.client.set_command(self.auth, 0, 0, device_id)
         await self.coordinator.async_request_refresh()
 
     @property

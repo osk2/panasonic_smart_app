@@ -10,5 +10,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/osk2/panasonic_smart_app/issues",
   "requirements": [],
-  "version": "2.13.0"
+  "version": "2.13.1"
 }

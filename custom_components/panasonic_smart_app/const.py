@@ -114,6 +114,13 @@ DEVICE_STATUS_CODES = {
     ],
     DEVICE_TYPE_SWITCH: [
         "0x70",  # Switch power status
+        "0x71",  # Switch 1 schedule on timer
+        "0x72",  # Switch 1 schedule off timer
+        "0x73",  # Switch maintainance mode
+        "0x74",  # Switch 2 schedule on timer
+        "0x75",  # Switch 2 schedule off timer
+        "0x76",  # Switch 3 schedule on timer
+        "0x77",  # Switch 3 schedule off timer
     ],
 }
 

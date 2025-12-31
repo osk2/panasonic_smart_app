@@ -161,7 +161,13 @@ class SmartApp(object):
         except Exception as e:
             _LOGGER.warning(f"Failed to load local commands: {e}")
 
-        return self._commands + built_in_commands
+        existing_model_types = {cmd.get("ModelType") for cmd in self._commands}
+        filtered_built_in_commands = [
+            cmd for cmd in built_in_commands
+            if cmd.get("ModelType") not in existing_model_types
+        ]
+
+        return self._commands + filtered_built_in_commands
 
     @tryApiStatus
     async def get_device_info(
@@ -377,9 +383,9 @@ class SmartApp(object):
         return report
 
     @tryApiStatus
-    async def set_command(self, deviceId=None, command=0, value=0):
-        headers = {"cptoken": self._cp_token, "auth": deviceId}
-        payload = {"DeviceID": 1, "CommandType": command, "Value": value}
+    async def set_command(self, auth=None, command=0, value=0, deviceId=1):
+        headers = {"cptoken": self._cp_token, "auth": auth}
+        payload = {"DeviceID": deviceId, "CommandType": command, "Value": value}
 
         await self.request(
             method="GET", headers=headers, endpoint=urls.set_command(), params=payload

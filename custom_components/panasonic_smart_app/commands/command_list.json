@@ -4874,6 +4874,134 @@
           ]
         }
       ]
+    },
+    {
+      "ModelType": "LHW",
+      "JSON": [
+        {
+          "DeviceName": "空氣清淨機",
+          "DeviceType": 8,
+          "ModelType": "LHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202203280900",
+          "list": [
+            {
+              "CommandName": "電源",
+              "CommandType": "0x00",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandName": "風量",
+              "CommandType": "0x01",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["弱", 2], ["中", 3], ["強", 4]]
+            },
+            {
+              "CommandName": "時間到關",
+              "CommandType": "0x53",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [["Min", 0], ["Max", 1440]]
+            },
+            {
+              "CommandName": "nanoeX",
+              "CommandType": "0x07",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "PM25 Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x52",
+              "CommandName": "Nioi Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "LHW-40",
+      "JSON": [
+        {
+          "DeviceName": "空氣清淨機",
+          "DeviceType": 8,
+          "ModelType": "LHW-40",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202203280900",
+          "list": [
+            {
+              "CommandName": "電源",
+              "CommandType": "0x00",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandName": "風量",
+              "CommandType": "0x01",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["弱", 2], ["中", 3], ["強", 4]]
+            },
+            {
+              "CommandName": "時間到關",
+              "CommandType": "0x53",
+              "ParameterType": "range",
+              "ParameterUnit": "分鐘",
+              "Parameters": [["Min", 0], ["Max", 1440]]
+            },
+            {
+              "CommandName": "nanoeX",
+              "CommandType": "0x07",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "PM25 Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x52",
+              "CommandName": "Nioi Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

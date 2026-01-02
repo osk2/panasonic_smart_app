@@ -3929,6 +3929,951 @@
           ]
         }
       ]
+    },
+    {
+      "ModelType": "JHW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "JHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["防霉抑菌", 2],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["濕度設定", 6],
+                ["空氣清淨", 7]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3], ["下吹", 4]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoeX(脫臭)",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "異味偵測",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x58",
+              "CommandName": "AI舒適",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x56",
+              "CommandName": "PM1.0",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x52",
+              "CommandName": "PM Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "EHW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "EHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["空氣清淨", 7]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoe",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "GHW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "GHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["防霉抑菌", 2],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["濕度設定", 6],
+                ["空氣清淨", 7]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3], ["下吹", 4]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoeX(脫臭)",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "JHV2",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "JHV2",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["防霉抑菌", 2],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["濕度設定", 6],
+                ["空氣清淨", 7]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3], ["下吹", 4]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoeX(脫臭)",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "異味偵測",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x58",
+              "CommandName": "AI舒適",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x53",
+              "CommandName": "PM2.5",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x56",
+              "CommandName": "PM1.0",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x52",
+              "CommandName": "PM Level",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "MHW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "MHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["濕度設定", 6]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoeX(脫臭)",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "異味偵測",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x58",
+              "CommandName": "AI舒適",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "NHW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "NHW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {
+              "CommandType": "0x00",
+              "CommandName": "電源",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["停止", 0], ["運轉", 1]]
+            },
+            {
+              "CommandType": "0x01",
+              "CommandName": "功能選擇",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["連續除濕", 0],
+                ["自動除濕", 1],
+                ["衣物乾燥", 4],
+                ["保持乾燥", 5],
+                ["濕度設定", 6]
+              ]
+            },
+            {
+              "CommandType": "0x04",
+              "CommandName": "濕度設定",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [
+                ["40%", 0],
+                ["45%", 1],
+                ["50%", 2],
+                ["55%", 3],
+                ["60%", 4],
+                ["65%", 5],
+                ["70%", 6]
+              ]
+            },
+            {
+              "CommandType": "0x0E",
+              "CommandName": "風量",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]
+            },
+            {
+              "CommandType": "0x09",
+              "CommandName": "風向",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]
+            },
+            {
+              "CommandType": "0x18",
+              "CommandName": "操作提示音",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["開啟", 0], ["關閉", 1]]
+            },
+            {
+              "CommandType": "0x02",
+              "CommandName": "時間到關",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x55",
+              "CommandName": "時間到開",
+              "ParameterType": "range",
+              "ParameterUnit": "小時",
+              "Parameters": [["Min", 0], ["Max", 12]]
+            },
+            {
+              "CommandType": "0x0D",
+              "CommandName": "nanoeX(脫臭)",
+              "ParameterType": "enum",
+              "ParameterUnit": "",
+              "Parameters": [["關閉", 0], ["開啟", 1]]
+            },
+            {
+              "CommandType": "0x50",
+              "CommandName": "錯誤訊息警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x51",
+              "CommandName": "異味偵測",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x07",
+              "CommandName": "室內濕度",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x0a",
+              "CommandName": "滿水警告",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            },
+            {
+              "CommandType": "0x58",
+              "CommandName": "AI舒適",
+              "ParameterType": "",
+              "ParameterUnit": "",
+              "Parameters": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "NNW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "NNW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
+            {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
+            {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},
+            {"CommandType": "0x18", "CommandName": "操作提示音", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["開啟", 0], ["關閉", 1]]},
+            {"CommandType": "0x02", "CommandName": "時間到關", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x55", "CommandName": "時間到開", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x0D", "CommandName": "nanoeX(脫臭)", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x50", "CommandName": "錯誤訊息警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x51", "CommandName": "異味偵測", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x07", "CommandName": "室內濕度", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x0a", "CommandName": "滿水警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x53", "CommandName": "PM2.5", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x56", "CommandName": "PM1.0", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x58", "CommandName": "AI舒適", "ParameterType": "", "ParameterUnit": "", "Parameters": []}
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "NNW-L",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "NNW-L",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
+            {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
+            {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},
+            {"CommandType": "0x18", "CommandName": "操作提示音", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["開啟", 0], ["關閉", 1]]},
+            {"CommandType": "0x02", "CommandName": "時間到關", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x55", "CommandName": "時間到開", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x0D", "CommandName": "nanoeX(脫臭)", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x50", "CommandName": "錯誤訊息警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x07", "CommandName": "室內濕度", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x0a", "CommandName": "滿水警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x5A", "CommandName": "衣物乾燥模式", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x5B", "CommandName": "衣物乾燥時間", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 1], ["Max", 8]]}
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "NXW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "NXW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
+            {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
+            {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},
+            {"CommandType": "0x18", "CommandName": "操作提示音", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["開啟", 0], ["關閉", 1]]},
+            {"CommandType": "0x02", "CommandName": "時間到關", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x55", "CommandName": "時間到開", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x0D", "CommandName": "nanoeX(脫臭)", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x50", "CommandName": "錯誤訊息警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x51", "CommandName": "異味偵測", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x07", "CommandName": "室內濕度", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x0a", "CommandName": "滿水警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x53", "CommandName": "PM2.5", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x56", "CommandName": "PM1.0", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x58", "CommandName": "AI舒適", "ParameterType": "", "ParameterUnit": "", "Parameters": []}
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "LXW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "LXW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
+            {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
+            {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},
+            {"CommandType": "0x18", "CommandName": "操作提示音", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["開啟", 0], ["關閉", 1]]},
+            {"CommandType": "0x02", "CommandName": "時間到關", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x55", "CommandName": "時間到開", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x0D", "CommandName": "nanoeX(脫臭)", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x50", "CommandName": "錯誤訊息警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x07", "CommandName": "室內濕度", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x0a", "CommandName": "滿水警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []}
+          ]
+        }
+      ]
+    },
+    {
+      "ModelType": "CXW",
+      "JSON": [
+        {
+          "DeviceType": 4,
+          "DeviceName": "除濕機",
+          "ModelType": "CXW",
+          "ProtocalType": "SAANET",
+          "ProtocalVersion": "4",
+          "Timestamp": "202108170829",
+          "list": [
+            {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
+            {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
+            {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},
+            {"CommandType": "0x18", "CommandName": "操作提示音", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["開啟", 0], ["關閉", 1]]},
+            {"CommandType": "0x02", "CommandName": "時間到關", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x55", "CommandName": "時間到開", "ParameterType": "range", "ParameterUnit": "小時", "Parameters": [["Min", 0], ["Max", 12]]},
+            {"CommandType": "0x0D", "CommandName": "nanoeX(脫臭)", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["關閉", 0], ["開啟", 1]]},
+            {"CommandType": "0x50", "CommandName": "錯誤訊息警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x51", "CommandName": "異味偵測", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x07", "CommandName": "室內濕度", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x0a", "CommandName": "滿水警告", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x53", "CommandName": "PM2.5", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x56", "CommandName": "PM1.0", "ParameterType": "", "ParameterUnit": "", "Parameters": []},
+            {"CommandType": "0x58", "CommandName": "AI舒適", "ParameterType": "", "ParameterUnit": "", "Parameters": []}
+          ]
+        }
+      ]
     }
   ]
 }

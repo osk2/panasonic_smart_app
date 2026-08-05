@@ -21,7 +21,8 @@ from .const import (
     LABEL_ECONAVI,
     LABEL_NANOE,
 )
-from .entity import PanasonicBaseEntity
+from .entity import PanasonicBaseEntity, set_registry_entity_disabled
+from .refrigerator import decode_binary_status
 
 _LOGGER = logging.getLogger(__package__)
 
@@ -51,14 +52,28 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 PanasonicRefrigeratorNanoeSensor,
             ):
                 if sensor_type.command_type in device["status"]:
-                    sensors.append(
-                        sensor_type(
-                            coordinator,
-                            index,
-                            client,
-                            device,
-                        )
+                    sensor = sensor_type(
+                        coordinator,
+                        index,
+                        client,
+                        device,
                     )
+                    unsupported = (
+                        sensor_type is PanasonicRefrigeratorNanoeSensor
+                        and decode_binary_status(
+                            device["status"].get(sensor_type.command_type)
+                        )
+                        is None
+                    )
+                    if sensor_type is PanasonicRefrigeratorNanoeSensor:
+                        set_registry_entity_disabled(
+                            hass,
+                            "binary_sensor",
+                            sensor,
+                            disabled=unsupported,
+                        )
+                    if not unsupported:
+                        sensors.append(sensor)
 
     async_add_entities(sensors, True)
 
@@ -114,13 +129,24 @@ class PanasonicRefrigeratorBinarySensorABC(
         return f"{self.nickname} {self.command_name}"
 
     @property
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        return (
+            super().available
+            and decode_binary_status(status.get(self.command_type)) is not None
+        )
+
+    @property
     def is_on(self) -> bool | None:
         status = self.coordinator.data[self.index]["status"]
 
-        try:
-            _is_on = int(status[self.command_type]) == 1
-        except (KeyError, ValueError):
-            _LOGGER.exception(f"Error while getting status for {self.label}")
+        _is_on = decode_binary_status(status.get(self.command_type))
+        if _is_on is None:
+            _LOGGER.debug(
+                "[%s] Binary status is unavailable (raw value: %r)",
+                self.label,
+                status.get(self.command_type),
+            )
             return None
 
         _LOGGER.debug(f"[{self.label}] is_on: {_is_on}")

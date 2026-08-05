@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
 from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.exceptions import HomeAssistantError
 
 from .entity import PanasonicBaseEntity
 from .const import (
@@ -714,22 +715,26 @@ class PanasonicRefrigeratorSwitchABC(PanasonicBaseEntity, SwitchEntity, ABC):
         """Turn on the switch."""
         _LOGGER.debug("[%s] Turning on", self.label)
 
-        await self.client.set_command(
-            deviceId=self.auth,
+        command_succeeded = await self.client.set_command(
+            auth=self.auth,
             command=int(self.command_type, 16),
             value=1,
         )
+        if command_succeeded is not True:
+            raise HomeAssistantError(f"Failed to turn on {self.label}")
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_kwargs) -> None:
         """Turn off the switch."""
         _LOGGER.debug("[%s] Turning off", self.label)
 
-        await self.client.set_command(
-            deviceId=self.auth,
+        command_succeeded = await self.client.set_command(
+            auth=self.auth,
             command=int(self.command_type, 16),
             value=0,
         )
+        if command_succeeded is not True:
+            raise HomeAssistantError(f"Failed to turn off {self.label}")
         await self.coordinator.async_request_refresh()
 
     @property

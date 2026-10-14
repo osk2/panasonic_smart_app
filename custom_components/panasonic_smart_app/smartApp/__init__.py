@@ -219,19 +219,24 @@ class SmartApp(object):
         get_ref_open_door_report_task = asyncio.create_task(self.get_ref_open_door_report())
 
         devices = await get_device_task or []
-        energy_report = await get_energy_report_task
-        co2_report = await get_co2_report_task
-        ref_open_door_report = await get_ref_open_door_report_task
+        energy_report = await get_energy_report_task or {}
+        co2_report = await get_co2_report_task or {}
+        ref_open_door_report = await get_ref_open_door_report_task or {}
 
-        async def get_device_overview(gwid: str):
+        async def get_device_overview(gwid: str, retries: int = 3):
             all_device_overview = await self.get_overview() or {}
             device_overview = all_device_overview.get(gwid, {})
-            if device_overview and "" in list(dict(device_overview).values()):
+            if (
+                retries > 0
+                and device_overview
+                and "" in list(dict(device_overview).values())
+            ):
                 """ Retry if API return empty status for current device """
-                return await get_device_overview(gwid)
+                return await get_device_overview(gwid, retries - 1)
             else:
                 return device_overview
 
+        rate_limited = False
         for device in devices:
             device_type = int(device.get("DeviceType"))
             gwid = device.get("GWID")
@@ -239,29 +244,32 @@ class SmartApp(object):
             device["energy"] = energy_report.get(gwid)
             device["co2"] = co2_report.get(gwid)
             device["ref_open_door"] = ref_open_door_report.get(gwid)
+            # Every device gets a status dict, so one failing device
+            # can never leave the others without the key
+            device["status"] = {}
 
             if device_type in status_code_mapping.keys():
                 status_codes = status_code_mapping[device_type]
-                device["status"] = {}
                 try:
+                    if rate_limited:
+                        raise PanasonicExceedRateLimit
                     info = await self.get_device_info(device.get("Auth"), gwid, status_codes)
-                    device["status"].update(info)
+                    device["status"].update(info or {})
                 except PanasonicExceedRateLimit:
-                    _LOGGER.warning(
-                        "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
-                    )
+                    if not rate_limited:
+                        _LOGGER.warning(
+                            "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
+                        )
+                    rate_limited = True
                     overview = await get_device_overview(gwid)
-                    target_device = list(
-                        filter(lambda d: d["GWID"] == gwid, self._devices)
-                    )
                     _LOGGER.debug(
-                        f"[{target_device[0]['NickName']}] overview: {overview}"
+                        f"[{device.get('NickName')}] overview: {overview}"
                     )
                     device["status"].update(overview)
-                    break
 
         return devices
 
+    @tryApiStatus
     async def get_energy_report(self) -> dict[str, float]:
         headers = {"cptoken": self._cp_token}
         payload = {
@@ -277,10 +285,14 @@ class SmartApp(object):
             data=payload,
         )
         result = {}
-        for device in response.get("GwList"):
-            result[device.get("GwID")] = float(device.get("Total_kwh"))
+        for device in response.get("GwList") or []:
+            try:
+                result[device.get("GwID")] = float(device.get("Total_kwh"))
+            except (TypeError, ValueError):
+                _LOGGER.info(f"No energy data available for {device.get('GwID')}")
         return result
 
+    @tryApiStatus
     async def get_co2_report(self) -> dict[str, float]:
         """Get CO2 report for current month"""
         headers = {"cptoken": self._cp_token}
@@ -326,6 +338,7 @@ class SmartApp(object):
 
         return result
 
+    @tryApiStatus
     async def get_ref_open_door_report(self) -> dict[str, int]:
         """Get refrigerator open door report for current month"""
 

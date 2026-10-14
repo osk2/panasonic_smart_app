@@ -15,6 +15,7 @@ from .exceptions import (
     PanasonicLoginFailed,
     PanasonicDeviceOffline,
     PanasonicExceedRateLimit,
+    PanasonicIncompleteUpdate,
 )
 from .const import (
     APP_TOKEN,
@@ -34,7 +35,7 @@ from . import urls
 _LOGGER = logging.getLogger(__name__)
 
 
-def tryApiStatus(func):
+def tryApiStatus(func, failure_result=dict):
     async def wrapper_call(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
@@ -52,9 +53,15 @@ def tryApiStatus(func):
             Exception,
         ) as exception:
             _LOGGER.warning(exception)
-            return {}
+            return failure_result()
 
     return wrapper_call
+
+
+def tryApiReport(func):
+    """ Like tryApiStatus, but a failed call returns None instead of {}, so that
+    "the report call failed" can be told apart from "the report is empty" """
+    return tryApiStatus(func, failure_result=lambda: None)
 
 
 def delay(func):
@@ -76,6 +83,7 @@ class SmartApp(object):
         self._devices = []
         self._commands = []
         self.last_request_id = 0
+        self._first_update_done = False
 
     async def login(self):
         _LOGGER.info("Attemping to login...")
@@ -219,22 +227,57 @@ class SmartApp(object):
         get_ref_open_door_report_task = asyncio.create_task(self.get_ref_open_door_report())
 
         devices = await get_device_task or []
-        energy_report = await get_energy_report_task or {}
-        co2_report = await get_co2_report_task or {}
-        ref_open_door_report = await get_ref_open_door_report_task or {}
+        energy_report = await get_energy_report_task
+        co2_report = await get_co2_report_task
+        ref_open_door_report = await get_ref_open_door_report_task
 
-        async def get_device_overview(gwid: str, retries: int = 3):
-            all_device_overview = await self.get_overview() or {}
-            device_overview = all_device_overview.get(gwid, {})
-            if (
-                retries > 0
-                and device_overview
+        failed_reports = [
+            name
+            for name, report in (
+                ("energy", energy_report),
+                ("co2", co2_report),
+                ("ref_open_door", ref_open_door_report),
+            )
+            if report is None
+        ]
+        if failed_reports and not self._first_update_done:
+            # sensor.py only creates the energy / CO2 / open-door sensors if the
+            # first update has data for them and never looks again, so let HA
+            # retry the setup instead of silently losing those sensors.
+            raise PanasonicIncompleteUpdate(
+                f"Report API failed during the first update ({', '.join(failed_reports)}), will retry setup"
+            )
+        energy_report = energy_report or {}
+        co2_report = co2_report or {}
+        ref_open_door_report = ref_open_door_report or {}
+
+        # The overview API answers for the whole account, so it is fetched once
+        # per update and shared by every device that needs the fallback.
+        overview = {"data": None, "failed": False, "refetches_left": 3}
+
+        async def fetch_overview():
+            try:
+                overview["data"] = await self.get_overview() or {}
+            except Exception as exception:
+                # Includes a second PanasonicExceedRateLimit: keep what we have
+                _LOGGER.warning(f"Overview API unavailable: {exception!r}")
+                overview["failed"] = True
+
+        async def get_device_overview(gwid: str):
+            if overview["data"] is None and not overview["failed"]:
+                await fetch_overview()
+            device_overview = (overview["data"] or {}).get(gwid, {})
+            while (
+                device_overview
                 and "" in list(dict(device_overview).values())
+                and overview["refetches_left"] > 0
+                and not overview["failed"]
             ):
                 """ Retry if API return empty status for current device """
-                return await get_device_overview(gwid, retries - 1)
-            else:
-                return device_overview
+                overview["refetches_left"] -= 1
+                await fetch_overview()
+                device_overview = (overview["data"] or {}).get(gwid, {})
+            return device_overview
 
         rate_limited = False
         for device in devices:
@@ -261,15 +304,20 @@ class SmartApp(object):
                             "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
                         )
                     rate_limited = True
-                    overview = await get_device_overview(gwid)
+                    device_overview = await get_device_overview(gwid)
                     _LOGGER.debug(
-                        f"[{device.get('NickName')}] overview: {overview}"
+                        f"[{device.get('NickName')}] overview: {device_overview}"
                     )
-                    device["status"].update(overview)
+                    device["status"].update(device_overview)
 
+        if overview["failed"] and not self._first_update_done:
+            raise PanasonicIncompleteUpdate(
+                "Overview API failed during the first update, will retry setup"
+            )
+        self._first_update_done = True
         return devices
 
-    @tryApiStatus
+    @tryApiReport
     async def get_energy_report(self) -> dict[str, float]:
         headers = {"cptoken": self._cp_token}
         payload = {
@@ -292,7 +340,7 @@ class SmartApp(object):
                 _LOGGER.info(f"No energy data available for {device.get('GwID')}")
         return result
 
-    @tryApiStatus
+    @tryApiReport
     async def get_co2_report(self) -> dict[str, float]:
         """Get CO2 report for current month"""
         headers = {"cptoken": self._cp_token}
@@ -338,7 +386,7 @@ class SmartApp(object):
 
         return result
 
-    @tryApiStatus
+    @tryApiReport
     async def get_ref_open_door_report(self) -> dict[str, int]:
         """Get refrigerator open door report for current month"""
 

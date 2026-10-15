@@ -39,11 +39,18 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
 
     for index, device in enumerate(devices):
         device_type = int(device.get("DeviceType"))
-        current_device_commands = [
+        matched_commands = [
             command
             for command in commands
             if command["ModelType"] == device.get("ModelType")
-        ][0]["JSON"][0]["list"]
+        ]
+        if not matched_commands:
+            _LOGGER.warning(
+                f"No command list for \"{device.get('NickName')}\" "
+                f"(ModelType {device.get('ModelType')}), skipping it"
+            )
+            continue
+        current_device_commands = matched_commands[0]["JSON"][0]["list"]
         command_types = list(
             map(lambda c: c["CommandType"].lower(), current_device_commands)
         )
@@ -97,7 +104,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 PanasonicRefrigeratorRefrigeratorTemperatureSelect,
                 PanasonicRefrigeratorPartialFreezingTemperatureSelect,
             ):
-                if select_type.command_type in device["status"]:
+                if select_type.command_type in device.get("status", {}):
                     select.append(
                         select_type(
                             coordinator,

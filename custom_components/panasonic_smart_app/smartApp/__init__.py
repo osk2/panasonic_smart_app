@@ -37,13 +37,16 @@ _LOGGER = logging.getLogger(__name__)
 
 def tryApiStatus(func, failure_result=dict):
     async def wrapper_call(*args, **kwargs):
+        # Remember which credentials this call went out with, so that a stale
+        # response can tell whether somebody else has already renewed them
+        auth_generation = args[0]._auth_generation
         try:
             return await func(*args, **kwargs)
         except PanasonicTokenExpired:
-            await args[0].refresh_token()
+            await args[0].recover_auth(auth_generation, refresh=True)
             return await func(*args, **kwargs)
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
-            await args[0].login()
+            await args[0].recover_auth(auth_generation, refresh=False)
             return await func(*args, **kwargs)
         except PanasonicExceedRateLimit:
             """ Fallback to use overview API """
@@ -84,6 +87,46 @@ class SmartApp(object):
         self._commands = []
         self.last_request_id = 0
         self._first_update_done = False
+        # Bumped every time refresh / login has renewed the tokens
+        self._auth_generation = 0
+        self._auth_recovery = None
+
+    async def recover_auth(self, seen_generation, refresh):
+        """ Renew the tokens once for any number of concurrent callers.
+
+        get_device_with_info() fires several requests at the same time, so an
+        expired token makes all of them fail together. Only the first one runs
+        refresh / login (the others wait for that same attempt, and share its
+        result); a caller whose request went out before the tokens were
+        renewed just retries with the new ones. """
+        if self._auth_generation != seen_generation:
+            return
+        if self._auth_recovery is None:
+            task = asyncio.ensure_future(self._recover_auth(refresh))
+            # Nobody may be left waiting for it: don't warn about an unread error
+            task.add_done_callback(lambda t: t.cancelled() or t.exception())
+            self._auth_recovery = task
+        # Shielded, so one waiter being cancelled doesn't cancel it for the rest
+        await asyncio.shield(self._auth_recovery)
+
+    async def _recover_auth(self, refresh):
+        try:
+            if refresh:
+                try:
+                    await self.refresh_token()
+                except (
+                    PanasonicRefreshTokenNotFound,
+                    PanasonicTokenExpired,
+                    PanasonicInvalidRefreshToken,
+                    PanasonicLoginFailed,
+                ) as exception:
+                    _LOGGER.info(f"Refresh token failed ({exception!r}), trying login")
+                    await self.login()
+            else:
+                await self.login()
+            self._auth_generation += 1
+        finally:
+            self._auth_recovery = None
 
     async def login(self):
         _LOGGER.info("Attemping to login...")

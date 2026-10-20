@@ -76,15 +76,16 @@ class PanasonicDehumidifier(PanasonicBaseEntity, HumidifierEntity):
         return DEHUMIDIFIER_MIN_HUMD
 
     @property
-    def mode(self) -> str:
+    def mode(self) -> str | None:
         status = self.coordinator.data[self.index]["status"]
         raw_mode_list = list(
             filter(lambda c: c["CommandType"] == "0x01", self.commands)
         )[0]["Parameters"]
-        target_mode = list(
-            filter(lambda m: m[1] == int(status.get("0x01") or 0), raw_mode_list)
-        )[0]
-        _mode = target_mode[0] if len(target_mode) > 0 else ""
+        target_mode = next(
+            (m for m in raw_mode_list if m[1] == int(status.get("0x01") or 0)),
+            None,
+        )
+        _mode = target_mode[0] if target_mode else None
         _LOGGER.debug(f"[{self.label}] _mode: {_mode}")
         return _mode
 

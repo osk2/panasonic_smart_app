@@ -111,6 +111,19 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 註：請確保 Home Assistant 為最新版，否則部分實體可能無法使用
 
+最低需要 Home Assistant 2024.12.0。支援的冷氣機型會在 climate 實體中提供兩軸風向：
+`swing_mode` 控制上下風向，`swing_horizontal_mode` 控制左右風向。
+左右風向選項依機型命令定義產生；範圍型機種提供「自動」與「位置 1」至該機型的最大位置，
+位置編號不代表角度。自動化範例：
+
+```yaml
+action: climate.set_swing_horizontal_mode
+target:
+  entity_id: climate.your_ac
+data:
+  swing_horizontal_mode: "位置 4"
+```
+
 更多實體支援請至 [Issue](https://github.com/osk2/panasonic_smart_app/issues) 頁面許願，也歡迎發送 PR 💪
 
 ### 如何啟用除錯紀錄？

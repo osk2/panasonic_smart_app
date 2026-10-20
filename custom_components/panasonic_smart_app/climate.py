@@ -8,6 +8,7 @@ from homeassistant.const import (
     UnitOfTemperature,
     ATTR_TEMPERATURE,
 )
+from homeassistant.exceptions import HomeAssistantError
 
 from .entity import PanasonicBaseEntity
 from .const import (
@@ -98,6 +99,8 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
             features |= ClimateEntityFeature.SWING_MODE
         if _fan_mode:
             features |= ClimateEntityFeature.FAN_MODE
+        if self.swing_horizontal_modes:
+            features |= ClimateEntityFeature.SWING_HORIZONTAL_MODE
 
         return features
 
@@ -233,6 +236,57 @@ class PanasonicClimate(PanasonicBaseEntity, ClimateEntity):
         _LOGGER.debug(f"[{self.label}] Set swing mode to {swing_mode}")
         mode_id = int(getKeyFromDict(CLIMATE_AVAILABLE_SWING_MODE, swing_mode))
         await self.client.set_command(self.auth, 143, mode_id)
+        await self.coordinator.async_request_refresh()
+
+    def _horizontal_swing_options(self) -> dict[str, int]:
+        """Build horizontal positions from the model's API or built-in commands."""
+        command = next(
+            (c for c in self.commands if c["CommandType"].lower() == "0x11"),
+            None,
+        )
+        if command is None:
+            return {}
+
+        try:
+            parameters = {name: int(value) for name, value in command["Parameters"]}
+            if command["ParameterType"] == "enum":
+                return parameters
+            if command["ParameterType"] == "rangeA":
+                minimum, maximum = parameters["Min"], parameters["Max"]
+                if minimum > maximum:
+                    return {}
+                options = {"自動": parameters["Auto"]}
+                options.update(
+                    {f"位置 {value}": value for value in range(minimum, maximum + 1)}
+                )
+                return options
+        except (KeyError, TypeError, ValueError):
+            _LOGGER.warning("Invalid horizontal swing command for %s", self.model)
+        return {}
+
+    @property
+    def swing_horizontal_mode(self) -> str | None:
+        """Return the horizontal position, or unknown if status is unavailable."""
+        status = self.coordinator.data[self.index]["status"]
+        try:
+            value = int(status.get("0x11"))
+        except (TypeError, ValueError):
+            return None
+        return getKeyFromDict(self._horizontal_swing_options(), value)
+
+    @property
+    def swing_horizontal_modes(self) -> list[str]:
+        """Return the horizontal positions supported by this model."""
+        return list(self._horizontal_swing_options())
+
+    async def async_set_swing_horizontal_mode(self, swing_horizontal_mode: str) -> None:
+        """Set horizontal airflow without changing the vertical position."""
+        options = self._horizontal_swing_options()
+        if swing_horizontal_mode not in options:
+            raise HomeAssistantError(
+                f"Unsupported horizontal swing mode: {swing_horizontal_mode}"
+            )
+        await self.client.set_command(self.auth, 0x91, options[swing_horizontal_mode])
         await self.coordinator.async_request_refresh()
 
     @property

@@ -41,7 +41,7 @@ DEVICE_STATUS_CODES = {
         "0x04",  # AC current termperature
         "0x03",  # AC target temperature
         "0x02",  # AC fan level
-        "0x0F",  # AC fan position (horizontal)
+        "0x0F",  # AC fan position (vertical / up-down)
         "0x21",  # AC outdoor temperature
         "0x0B",  # AC on timer
         "0x0C",  # AC off timer
@@ -52,7 +52,7 @@ DEVICE_STATUS_CODES = {
         "0x18",  # AC self clean
         "0x05",  # AC sleep mode
         "0x17",  # AC mold prevention
-        "0x11",  # AC fan position (vertical)
+        "0x11",  # AC fan position (horizontal / left-right)
         "0x19",  # AC motion detection
         "0x1F",  # AC indicator light
         "0x37",  # AC PM2.5

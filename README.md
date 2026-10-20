@@ -115,6 +115,20 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 
 Note: Ensure the latest Home Assistant is installed or some entities might not be available.
 
+Requires Home Assistant 2024.12.0 or newer. On supported AC models, the climate
+entity exposes up/down airflow through `swing_mode` and left/right airflow through
+`swing_horizontal_mode`. Horizontal options come from the model's command list;
+range-based models use `自動` (auto) and `位置 1` through the model's maximum position.
+These position numbers do not represent angles. For example:
+
+```yaml
+action: climate.set_swing_horizontal_mode
+target:
+  entity_id: climate.your_ac
+data:
+  swing_horizontal_mode: "位置 4"
+```
+
 For missing entities, open an issue or submit a PR 💪
 
 ### How To Enable Debug Logging?

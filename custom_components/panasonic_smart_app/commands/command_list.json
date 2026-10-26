@@ -5755,7 +5755,7 @@
           "Timestamp": "202108170829",
           "list": [
             {"CommandType": "0x00", "CommandName": "電源", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["停止", 0], ["運轉", 1]]},
-            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6]]},
+            {"CommandType": "0x01", "CommandName": "功能選擇", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["連續除濕", 0], ["自動除濕", 1], ["衣物乾燥", 4], ["保持乾燥", 5], ["濕度設定", 6], ["智慧節能", 9]]},
             {"CommandType": "0x04", "CommandName": "濕度設定", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["40%", 0], ["45%", 1], ["50%", 2], ["55%", 3], ["60%", 4], ["65%", 5], ["70%", 6]]},
             {"CommandType": "0x0E", "CommandName": "風量", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["自動", 0], ["靜音", 1], ["標準", 2], ["急速", 3]]},
             {"CommandType": "0x09", "CommandName": "風向", "ParameterType": "enum", "ParameterUnit": "", "Parameters": [["固定", 0], ["下方向", 1], ["上方向", 2], ["廣角", 3]]},

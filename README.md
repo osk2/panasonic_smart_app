@@ -113,7 +113,7 @@ See [支援的裝置 / Supported devices](https://github.com/osk2/panasonic_smar
 
 \*\*Only tested with NR-D611XGS
 
-Note: Ensure the latest Home Assistant is installed or some entities might not be available.
+Note: Requires Home Assistant 2024.12.0 or newer, otherwise some entities might not be available.
 
 For missing entities, open an issue or submit a PR 💪
 

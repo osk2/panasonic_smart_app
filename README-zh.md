@@ -109,7 +109,7 @@ _完整的實體清單請見 [可用的實體](#可用的實體)_
 
 \*\*只在 NR-D611XGS 上測試過
 
-註：請確保 Home Assistant 為最新版，否則部分實體可能無法使用
+註：最低需要 Home Assistant 2024.12.0，否則部分實體可能無法使用
 
 更多實體支援請至 [Issue](https://github.com/osk2/panasonic_smart_app/issues) 頁面許願，也歡迎發送 PR 💪
 

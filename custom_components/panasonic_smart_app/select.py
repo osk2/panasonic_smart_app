@@ -460,11 +460,15 @@ class PanasonoicRefrigeratorTemperatureSelectABC(PanasonicBaseEntity, SelectEnti
 
         for parameter in self._this_command()["Parameters"]:
             if parameter[0] == option:
-                await self.client.set_command(
-                    deviceId=self.auth,
+                command_succeeded = await self.client.set_command(
+                    auth=self.auth,
                     command=int(self.command_type, 16),
                     value=parameter[1],
                 )
+                if command_succeeded is not True:
+                    raise HomeAssistantError(
+                        f"Failed to set {self.label} to {option}"
+                    )
                 await self.coordinator.async_request_refresh()
                 return
 

@@ -16,7 +16,8 @@ from homeassistant.const import (
 )
 from homeassistant.exceptions import HomeAssistantError
 
-from .entity import PanasonicBaseEntity
+from .entity import PanasonicBaseEntity, set_registry_entity_disabled
+from .refrigerator import decode_temperature
 from .const import (
     DOMAIN,
     DEVICE_TYPE_DEHUMIDIFIER,
@@ -155,6 +156,30 @@ async def async_setup_entry(hass, entry, async_add_entities) -> bool:
                 PananocisRefrigeratorFreezerTemperatureSensor,
                 PananocisRefrigeratorRefrigeratorTemperatureSensor,
                 PananocisRefrigeratorPartialFreezingTemperatureSensor,
+            ):
+                if sensor_type.command_type in device_status:
+                    sensor = sensor_type(
+                        coordinator,
+                        index,
+                        client,
+                        device,
+                    )
+                    unsupported = (
+                        decode_temperature(
+                            device["status"].get(sensor_type.command_type)
+                        )
+                        is None
+                    )
+                    set_registry_entity_disabled(
+                        hass,
+                        "sensor",
+                        sensor,
+                        disabled=unsupported,
+                    )
+                    if not unsupported:
+                        sensors.append(sensor)
+
+            for sensor_type in (
                 PananocisRefrigeratorRapidFreezingSensor,
                 PananocisRefrigeratorWinterModeSensor,
                 PananocisRefrigeratorShoppingModeSensor,
@@ -643,22 +668,25 @@ class PananocisRefrigeratorTemperatureSensorABC(PanasonicBaseEntity, SensorEntit
         return SensorDeviceClass.TEMPERATURE
 
     @property
-    def native_value(self) -> int:
+    def available(self) -> bool:
+        status = self.coordinator.data[self.index]["status"]
+        return (
+            super().available
+            and decode_temperature(status.get(self.command_type)) is not None
+        )
+
+    @property
+    def native_value(self) -> int | None:
         status = self.coordinator.data[self.index]["status"]
 
-        try:
-            unsigned_temperature = int(status[self.command_type])
-        except (KeyError, ValueError):
-            _LOGGER.exception(
-                f"[{self.label}] Unable to get temperature from status: {status}"
+        signed_temperature = decode_temperature(status.get(self.command_type))
+        if signed_temperature is None:
+            _LOGGER.debug(
+                "[%s] Temperature is unavailable (raw value: %r)",
+                self.label,
+                status.get(self.command_type),
             )
-            return STATE_UNAVAILABLE
-
-        signed_temperature = (
-            unsigned_temperature
-            if unsigned_temperature < 128
-            else unsigned_temperature - 256
-        )
+            return None
 
         _LOGGER.debug(f"[{self.label}] state: {signed_temperature}")
 

@@ -15,6 +15,7 @@ from .exceptions import (
     PanasonicLoginFailed,
     PanasonicDeviceOffline,
     PanasonicExceedRateLimit,
+    PanasonicIncompleteUpdate,
 )
 from .const import (
     APP_TOKEN,
@@ -34,15 +35,18 @@ from . import urls
 _LOGGER = logging.getLogger(__name__)
 
 
-def tryApiStatus(func):
+def tryApiStatus(func, failure_result=dict):
     async def wrapper_call(*args, **kwargs):
+        # Remember which credentials this call went out with, so that a stale
+        # response can tell whether somebody else has already renewed them
+        auth_generation = args[0]._auth_generation
         try:
             return await func(*args, **kwargs)
         except PanasonicTokenExpired:
-            await args[0].refresh_token()
+            await args[0].recover_auth(auth_generation, refresh=True)
             return await func(*args, **kwargs)
         except (PanasonicInvalidRefreshToken, PanasonicLoginFailed):
-            await args[0].login()
+            await args[0].recover_auth(auth_generation, refresh=False)
             return await func(*args, **kwargs)
         except PanasonicExceedRateLimit:
             """ Fallback to use overview API """
@@ -52,9 +56,15 @@ def tryApiStatus(func):
             Exception,
         ) as exception:
             _LOGGER.warning(exception)
-            return {}
+            return failure_result()
 
     return wrapper_call
+
+
+def tryApiReport(func):
+    """ Like tryApiStatus, but a failed call returns None instead of {}, so that
+    "the report call failed" can be told apart from "the report is empty" """
+    return tryApiStatus(func, failure_result=lambda: None)
 
 
 def delay(func):
@@ -76,6 +86,47 @@ class SmartApp(object):
         self._devices = []
         self._commands = []
         self.last_request_id = 0
+        self._first_update_done = False
+        # Bumped every time refresh / login has renewed the tokens
+        self._auth_generation = 0
+        self._auth_recovery = None
+
+    async def recover_auth(self, seen_generation, refresh):
+        """ Renew the tokens once for any number of concurrent callers.
+
+        get_device_with_info() fires several requests at the same time, so an
+        expired token makes all of them fail together. Only the first one runs
+        refresh / login (the others wait for that same attempt, and share its
+        result); a caller whose request went out before the tokens were
+        renewed just retries with the new ones. """
+        if self._auth_generation != seen_generation:
+            return
+        if self._auth_recovery is None:
+            task = asyncio.ensure_future(self._recover_auth(refresh))
+            # Nobody may be left waiting for it: don't warn about an unread error
+            task.add_done_callback(lambda t: t.cancelled() or t.exception())
+            self._auth_recovery = task
+        # Shielded, so one waiter being cancelled doesn't cancel it for the rest
+        await asyncio.shield(self._auth_recovery)
+
+    async def _recover_auth(self, refresh):
+        try:
+            if refresh:
+                try:
+                    await self.refresh_token()
+                except (
+                    PanasonicRefreshTokenNotFound,
+                    PanasonicTokenExpired,
+                    PanasonicInvalidRefreshToken,
+                    PanasonicLoginFailed,
+                ) as exception:
+                    _LOGGER.info(f"Refresh token failed ({exception!r}), trying login")
+                    await self.login()
+            else:
+                await self.login()
+            self._auth_generation += 1
+        finally:
+            self._auth_recovery = None
 
     async def login(self):
         _LOGGER.info("Attemping to login...")
@@ -223,15 +274,55 @@ class SmartApp(object):
         co2_report = await get_co2_report_task
         ref_open_door_report = await get_ref_open_door_report_task
 
-        async def get_device_overview(gwid: str):
-            all_device_overview = await self.get_overview() or {}
-            device_overview = all_device_overview.get(gwid, {})
-            if device_overview and "" in list(dict(device_overview).values()):
-                """ Retry if API return empty status for current device """
-                return await get_device_overview(gwid)
-            else:
-                return device_overview
+        failed_reports = [
+            name
+            for name, report in (
+                ("energy", energy_report),
+                ("co2", co2_report),
+                ("ref_open_door", ref_open_door_report),
+            )
+            if report is None
+        ]
+        if failed_reports and not self._first_update_done:
+            # sensor.py only creates the energy / CO2 / open-door sensors if the
+            # first update has data for them and never looks again, so let HA
+            # retry the setup instead of silently losing those sensors.
+            raise PanasonicIncompleteUpdate(
+                f"Report API failed during the first update ({', '.join(failed_reports)}), will retry setup"
+            )
+        energy_report = energy_report or {}
+        co2_report = co2_report or {}
+        ref_open_door_report = ref_open_door_report or {}
 
+        # The overview API answers for the whole account, so it is fetched once
+        # per update and shared by every device that needs the fallback.
+        overview = {"data": None, "failed": False, "refetches_left": 3}
+
+        async def fetch_overview():
+            try:
+                overview["data"] = await self.get_overview() or {}
+            except Exception as exception:
+                # Includes a second PanasonicExceedRateLimit: keep what we have
+                _LOGGER.warning(f"Overview API unavailable: {exception!r}")
+                overview["failed"] = True
+
+        async def get_device_overview(gwid: str):
+            if overview["data"] is None and not overview["failed"]:
+                await fetch_overview()
+            device_overview = (overview["data"] or {}).get(gwid, {})
+            while (
+                device_overview
+                and "" in list(dict(device_overview).values())
+                and overview["refetches_left"] > 0
+                and not overview["failed"]
+            ):
+                """ Retry if API return empty status for current device """
+                overview["refetches_left"] -= 1
+                await fetch_overview()
+                device_overview = (overview["data"] or {}).get(gwid, {})
+            return device_overview
+
+        rate_limited = False
         for device in devices:
             device_type = int(device.get("DeviceType"))
             gwid = device.get("GWID")
@@ -239,29 +330,37 @@ class SmartApp(object):
             device["energy"] = energy_report.get(gwid)
             device["co2"] = co2_report.get(gwid)
             device["ref_open_door"] = ref_open_door_report.get(gwid)
+            # Every device gets a status dict, so one failing device
+            # can never leave the others without the key
+            device["status"] = {}
 
             if device_type in status_code_mapping.keys():
                 status_codes = status_code_mapping[device_type]
-                device["status"] = {}
                 try:
+                    if rate_limited:
+                        raise PanasonicExceedRateLimit
                     info = await self.get_device_info(device.get("Auth"), gwid, status_codes)
-                    device["status"].update(info)
+                    device["status"].update(info or {})
                 except PanasonicExceedRateLimit:
-                    _LOGGER.warning(
-                        "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
-                    )
-                    overview = await get_device_overview(gwid)
-                    target_device = list(
-                        filter(lambda d: d["GWID"] == gwid, self._devices)
-                    )
+                    if not rate_limited:
+                        _LOGGER.warning(
+                            "超量使用 API，功能將受限制，詳見 https://github.com/osk2/panasonic_smart_app/discussions/31"
+                        )
+                    rate_limited = True
+                    device_overview = await get_device_overview(gwid)
                     _LOGGER.debug(
-                        f"[{target_device[0]['NickName']}] overview: {overview}"
+                        f"[{device.get('NickName')}] overview: {device_overview}"
                     )
-                    device["status"].update(overview)
-                    break
+                    device["status"].update(device_overview)
 
+        if overview["failed"] and not self._first_update_done:
+            raise PanasonicIncompleteUpdate(
+                "Overview API failed during the first update, will retry setup"
+            )
+        self._first_update_done = True
         return devices
 
+    @tryApiReport
     async def get_energy_report(self) -> dict[str, float]:
         headers = {"cptoken": self._cp_token}
         payload = {
@@ -277,10 +376,14 @@ class SmartApp(object):
             data=payload,
         )
         result = {}
-        for device in response.get("GwList"):
-            result[device.get("GwID")] = float(device.get("Total_kwh"))
+        for device in response.get("GwList") or []:
+            try:
+                result[device.get("GwID")] = float(device.get("Total_kwh"))
+            except (TypeError, ValueError):
+                _LOGGER.info(f"No energy data available for {device.get('GwID')}")
         return result
 
+    @tryApiReport
     async def get_co2_report(self) -> dict[str, float]:
         """Get CO2 report for current month"""
         headers = {"cptoken": self._cp_token}
@@ -326,6 +429,7 @@ class SmartApp(object):
 
         return result
 
+    @tryApiReport
     async def get_ref_open_door_report(self) -> dict[str, int]:
         """Get refrigerator open door report for current month"""
 

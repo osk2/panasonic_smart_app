@@ -41,3 +41,13 @@ class PanasonicExceedRateLimit(PanasonicBaseException):
     ):
         super().__init__(message)
         self.message = message
+
+
+class PanasonicIncompleteUpdate(PanasonicBaseException):
+    """ The first update is missing account-level data, so setup should be retried """
+
+    def __init__(
+        self, message="Incomplete data during the first update. Setup will be retried."
+    ):
+        super().__init__(message)
+        self.message = message

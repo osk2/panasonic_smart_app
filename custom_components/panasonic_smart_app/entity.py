@@ -1,9 +1,31 @@
 from abc import ABC, abstractmethod
 
+from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.entity_registry import RegistryEntryDisabler
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, MANUFACTURER
 from .smartApp import SmartApp
+
+
+def set_registry_entity_disabled(hass, domain: str, entity, *, disabled: bool) -> None:
+    """Disable unsupported entities without overriding a user's preference."""
+    registry = er.async_get(hass)
+    entity_id = registry.async_get_entity_id(domain, DOMAIN, entity.unique_id)
+    if entity_id is None:
+        return
+
+    entry = registry.async_get(entity_id)
+    if entry is None:
+        return
+
+    if disabled and entry.disabled_by is None:
+        registry.async_update_entity(
+            entity_id,
+            disabled_by=RegistryEntryDisabler.INTEGRATION,
+        )
+    elif not disabled and entry.disabled_by == RegistryEntryDisabler.INTEGRATION:
+        registry.async_update_entity(entity_id, disabled_by=None)
 
 
 class PanasonicBaseEntity(CoordinatorEntity, ABC):
